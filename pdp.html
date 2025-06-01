@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Política de Privacidad | InkArt</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #111111;
+            --color-secondary: #6CB4C1;
+            --color-accent: #f8f9fa;
+            --color-text: #333333;
+            --color-light: #f5f5f5;
+            --color-dark: #222222;
+            --color-gold: #c0a062;
+            --color-border: #e0e0e0;
+            --transition-speed: 0.4s;
+            --menu-bg: rgba(255, 255, 255, 0.98);
+        }
+        
+        /* Dark Mode Variables */
+        .dark-mode {
+            --color-primary: #f0f0f0;
+            --color-secondary: #5da7b6;
+            --color-accent: #1a1a1a;
+            --color-text: #e0e0e0;
+            --color-light: #121212;
+            --color-dark: #f5f5f5;
+            --color-gold: #c0a062;
+            --color-border: #333333;
+            --menu-bg: rgba(18, 18, 18, 0.95);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', 'Segoe UI', sans-serif;
+            transition: background-color var(--transition-speed), color var(--transition-speed), border-color var(--transition-speed);
+        }
+        
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background-color: var(--color-light);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+        
+        /* Header con Menú Hamburguesa */
+        header {
+            background-color: rgba(255, 255, 255, 0.98);
+            padding: 1.5rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid var(--color-border);
+            transition: background-color 0.3s ease;
+        }
+        
+        .dark-mode header {
+            background-color: rgba(18, 18, 18, 0.98);
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        header.scrolled {
+            background-color: rgba(255, 255, 255, 0.98) !important;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark-mode header.scrolled {
+            background-color: rgba(18, 18, 18, 0.98) !important;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            letter-spacing: 1px;
+            font-family: 'Oswald', sans-serif;
+        }
+        
+        .logo-text span {
+            color: var(--color-secondary);
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .theme-toggle {
+            background: transparent;
+            border: none;
+            color: var(--color-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .theme-toggle:hover {
+            color: var(--color-secondary);
+            background: rgba(108, 180, 193, 0.1);
+        }
+        
+        .menu-btn {
+            background: transparent;
+            border: none;
+            color: var(--color-primary);
+            font-size: 1.8rem;
+            cursor: pointer;
+            z-index: 1001;
+            transition: all 0.3s;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .menu-btn:hover {
+            color: var(--color-secondary);
+            background: rgba(108, 180, 193, 0.1);
+        }
+        
+        .nav-links {
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100vh;
+            width: 100%;
+            max-width: 300px;
+            background: var(--menu-bg);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transform: translateX(100%);
+            transition: transform 0.5s ease-in-out;
+            z-index: 1000;
+            box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
+            border-left: 1px solid var(--color-border);
+        }
+        
+        .nav-links.active {
+            transform: translateX(0);
+        }
+        
+        .nav-links ul {
+            list-style: none;
+            text-align: left;
+            width: 100%;
+            padding: 0 2rem;
+        }
+        
+        .nav-links ul li {
+            margin: 1.8rem 0;
+            opacity: 0;
+            transform: translateX(20px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        
+        .nav-links.active ul li {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .nav-links ul li:nth-child(1) { transition-delay: 0.1s; }
+        .nav-links ul li:nth-child(2) { transition-delay: 0.2s; }
+        .nav-links ul li:nth-child(3) { transition-delay: 0.3s; }
+        .nav-links ul li:nth-child(4) { transition-delay: 0.4s; }
+        .nav-links ul li:nth-child(5) { transition-delay: 0.5s; }
+        .nav-links ul li:nth-child(6) { transition-delay: 0.6s; }
+        
+        .nav-links ul li a {
+            text-decoration: none;
+            color: var(--color-primary);
+            font-weight: 600;
+            font-size: 1.4rem;
+            transition: color 0.3s;
+            position: relative;
+            padding: 0.7rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links ul li a i {
+            width: 30px;
+            text-align: center;
+            font-size: 1.3rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .nav-links ul li a:hover {
+            color: var(--color-secondary);
+            background: rgba(108, 180, 193, 0.1);
+        }
+        
+        .nav-links ul li a:hover i {
+            transform: translateX(5px);
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            color: var(--color-primary);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .close-btn:hover {
+            color: var(--color-secondary);
+            background: rgba(108, 180, 193, 0.1);
+            transform: rotate(90deg);
+        }
+        
+        /* Hero Section para política */
+        .privacy-hero {
+            height: 60vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(to top, rgba(255, 255, 255, 0.5), rgba(245, 245, 245, 0.95)),
+                        url('https://raw.githubusercontent.com/Klypper21/Formulario/refs/heads/main/Tattoo_ARtist-768x1152.jpg.webp') no-repeat center center/cover;
+            padding: 0 5%;
+            overflow: hidden;
+            margin-top: 80px;
+        }
+        
+        .dark-mode .privacy-hero {
+            background: linear-gradient(to top, rgba(18, 18, 18, 0.7), rgba(18, 18, 18, 0.9)),
+                        url('https://raw.githubusercontent.com/Klypper21/Formulario/refs/heads/main/Tattoo_ARtist-768x1152.jpg.webp') no-repeat center center/cover;
+        }
+        
+        .privacy-hero-content {
+            text-align: center;
+            max-width: 800px;
+            z-index: 10;
+            padding-top: 20px;
+        }
+        
+        .privacy-hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            line-height: 1.2;
+            font-weight: 800;
+            color: var(--color-primary);
+        }
+        
+        .dark-mode .privacy-hero h1 {
+            color: var(--color-dark);
+        }
+        
+        .privacy-hero p {
+            font-size: 1.2rem;
+            margin-bottom: 2.5rem;
+            color: #555;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .dark-mode .privacy-hero p {
+            color: #bbb;
+        }
+        
+        /* Contenido de Política */
+        .privacy-content {
+            padding: 6rem 5%;
+            background-color: white;
+            position: relative;
+        }
+        
+        .dark-mode .privacy-content {
+            background-color: #1a1a1a;
+        }
+        
+        .privacy-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+            font-weight: 700;
+            color: var(--color-primary);
+        }
+        
+        .dark-mode .section-title {
+            color: var(--color-dark);
+        }
+        
+        .section-title:after {
+            content: '';
+            position: absolute;
+            width: 80px;
+            height: 3px;
+            background-color: var(--color-secondary);
+            bottom: -10px;
+            left: 0;
+            border-radius: 2px;
+        }
+        
+        .privacy-section {
+            margin-bottom: 3rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        .privacy-section:last-child {
+            border-bottom: none;
+        }
+        
+        .privacy-section h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+            color: var(--color-secondary);
+        }
+        
+        .privacy-section p {
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+        
+        .privacy-section ul {
+            margin-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .privacy-section ul li {
+            margin-bottom: 0.8rem;
+        }
+        
+        .highlight-box {
+            background-color: rgba(108, 180, 193, 0.1);
+            border-left: 4px solid var(--color-secondary);
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .highlight-box p {
+            margin-bottom: 0;
+        }
+        
+        .date-updated {
+            font-size: 0.9rem;
+            color: #777;
+            font-style: italic;
+            margin-top: 3rem;
+            text-align: right;
+        }
+        
+        .dark-mode .date-updated {
+            color: #999;
+        }
+        
+        /* Nuevo Footer Moderno */
+        footer {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f8fafc;
+            padding: 4rem 5% 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .dark-mode footer {
+            background: linear-gradient(135deg, #0a0f1d 0%, #141b2d 100%);
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            padding-bottom: 3rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .footer-column {
+            margin-bottom: 2rem;
+        }
+        
+        .footer-logo {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 1rem;
+            font-family: 'Oswald', sans-serif;
+            display: inline-block;
+        }
+        
+        .footer-logo span {
+            color: #6CB4C1;
+        }
+        
+        .footer-description {
+            color: #cbd5e1;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        
+        .footer-title {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            color: white;
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-title:after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 2px;
+            background-color: #6CB4C1;
+            bottom: 0;
+            left: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+            list-style: none;
+        }
+        
+        .footer-links li a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .footer-links li a i {
+            margin-right: 10px;
+            color: #6CB4C1;
+            font-size: 0.9rem;
+            transition: transform 0.3s;
+        }
+        
+        .footer-links li a:hover {
+            color: #6CB4C1;
+        }
+        
+        .footer-links li a:hover i {
+            transform: translateX(5px);
+        }
+        
+        .footer-contact li {
+            margin-bottom: 1rem;
+            list-style: none;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .footer-contact li i {
+            margin-right: 10px;
+            color: #6CB4C1;
+            font-size: 1.1rem;
+            margin-top: 4px;
+        }
+        
+        .footer-contact li span {
+            color: #cbd5e1;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        
+        .footer-hours li {
+            margin-bottom: 0.8rem;
+            list-style: none;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .footer-hours li i {
+            margin-right: 10px;
+            color: #6CB4C1;
+            font-size: 1.1rem;
+            margin-top: 4px;
+        }
+        
+        .footer-hours li span {
+            color: #cbd5e1;
+            font-size: 1rem;
+        }
+        
+        
+        .footer-social-icons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .footer-social-icons .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.2rem;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .footer-social-icons .social-icon:hover {
+            background: #6CB4C1;
+            transform: translateY(-5px);
+            border-color: #6CB4C1;
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem 0;
+            text-align: center;
+        }
+        
+        .copyright {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        
+        
+        .footer-pattern {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            opacity: 0.03;
+            width: 50%;
+            height: auto;
+            z-index: 1;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .privacy-hero {
+                height: 50vh;
+            }
+            
+            .privacy-hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .nav-links {
+                width: 100%;
+                max-width: 100%;
+            }
+            
+            .privacy-section h3 {
+                font-size: 1.5rem;
+            }
+            
+            .footer-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .footer-column {
+                margin-bottom: 0;
+            }
+            
+            .footer-title {
+                margin-top: 1.5rem;
+            }
+            
+        }
+        
+        @media (max-width: 480px) {
+            .privacy-hero {
+                height: 40vh;
+            }
+            
+            .privacy-hero h1 {
+                font-size: 2rem;
+            }
+            
+            .privacy-hero p {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .nav-links ul li a {
+                font-size: 1.3rem;
+            }
+            
+            .privacy-section h3 {
+                font-size: 1.3rem;
+            }
+            
+            .footer-logo {
+                font-size: 2rem;
+            }
+            
+            .social-icon {
+                width: 45px;
+                height: 45px;
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header con Menú Hamburguesa -->
+    <header>
+        <div class="logo">
+            <div class="logo-text">Ink<span>Art</span></div>
+        </div>
+        <div class="header-right">
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="menu-btn" id="menuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <nav class="nav-links">
+            <button class="close-btn" id="closeBtn">
+                <i class="fas fa-times"></i>
+            </button>
+            <ul>
+                <li><a href="index.html"><i class="fas fa-home"></i> Inicio</a></li>
+                <li><a href="index.html#sobre-mi"><i class="fas fa-user"></i> Sobre Mí</a></li>
+                <li><a href="index.html#higiene"><i class="fas fa-hand-sparkles"></i> Higiene</a></li>
+                <li><a href="index.html#galeria"><i class="fas fa-images"></i> Galería</a></li>
+                <li><a href="index.html#reservas"><i class="fas fa-calendar-check"></i> Reservas</a></li>
+                <li><a href="index.html#contacto"><i class="fas fa-envelope"></i> Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section para política -->
+    <section class="privacy-hero">
+        <div class="privacy-hero-content">
+            <h1>Política de Privacidad</h1>
+            <p>Transparencia y seguridad en el manejo de tus datos personales</p>
+        </div>
+    </section>
+
+    <!-- Contenido de Política -->
+    <section class="privacy-content">
+        <div class="privacy-container">
+            <h2 class="section-title">Nuestro Compromiso con tu Privacidad</h2>
+            
+            <div class="privacy-section">
+                <h3>1. Introducción</h3>
+                <p>En InkArt, valoramos y respetamos tu privacidad. Esta política explica cómo recopilamos, usamos y protegemos la información personal que nos proporcionas a través de nuestro sitio web y durante la prestación de nuestros servicios de tatuajes.</p>
+                <p>Al utilizar nuestros servicios, aceptas las prácticas descritas en esta política. Te recomendamos leer detenidamente este documento para comprender cómo manejamos tus datos personales.</p>
+            </div>
+            
+            <div class="privacy-section">
+                <h3>2. Información que Recopilamos</h3>
+                <p>Recopilamos información que nos proporcionas directamente cuando:</p>
+                <ul>
+                    <li>Solicitas una cita o consulta a través de nuestro sitio web</li>
+                    <li>Te comunicas con nosotros por correo electrónico, WhatsApp o redes sociales</li>
+                    <li>Completas formularios de consentimiento para nuestros servicios</li>
+                    <li>Participas en encuestas o promociones</li>
+                </ul>
+                <p>Los tipos de información que podemos recopilar incluyen:</p>
+                <ul>
+                    <li>Datos de contacto (nombre, dirección de correo electrónico, número de teléfono)</li>
+                    <li>Información demográfica (edad, género cuando sea relevante para el diseño)</li>
+                    <li>Detalles sobre tus preferencias de tatuajes (diseños, ubicación, tamaño)</li>
+                    <li>Información de salud relevante para el procedimiento de tatuaje</li>
+                </ul>
+            </div>
+            
+            <div class="privacy-section">
+                <h3>3. Cómo Utilizamos tu Información</h3>
+                <p>Utilizamos la información que recopilamos para los siguientes fines:</p>
+                <ul>
+                    <li>Proporcionar nuestros servicios de tatuaje y gestionar citas</li>
+                    <li>Personalizar diseños según tus preferencias</li>
+                    <li>Comunicarnos contigo sobre tu cita o consulta</li>
+                    <li>Mejorar nuestros servicios y experiencia del cliente</li>
+                    <li>Cumplir con obligaciones legales y regulatorias</li>
+                    <li>Enviar comunicaciones de marketing (solo con tu consentimiento explícito)</li>
+                </ul>
+                
+                <div class="highlight-box">
+                    <p><strong>Importante:</strong> Nunca compartiremos tu información médica o de salud con terceros sin tu consentimiento explícito, excepto cuando sea requerido por ley o para proteger tu seguridad.</p>
+                </div>
+            </div>
+            
+            <div class="privacy-section">
+                <h3>4. Compartir Información con Terceros</h3>
+                <p>Respetamos tu privacidad y no vendemos ni alquilamos tu información personal a terceros. Sin embargo, en ciertas circunstancias, podemos compartir información con:</p>
+                <ul>
+                    <li>Proveedores de servicios que nos ayudan en nuestras operaciones (sistemas de gestión de citas, procesadores de pagos)</li>
+                    <li>Autoridades legales cuando sea necesario para cumplir con la ley o proteger nuestros derechos</li>
+                    <li>Otros profesionales médicos en caso de emergencia relacionada con el procedimiento de tatuaje</li>
+                </ul>
+                <p>Nos aseguramos de que cualquier tercero con el que compartamos información cumpla con estándares adecuados de protección de datos.</p>
+            </div>
+            
+            <div class="privacy-section">
+                <h3>5. Seguridad de los Datos</h3>
+                <p>Implementamos medidas técnicas y organizativas apropiadas para proteger tu información personal contra acceso no autorizado, pérdida o destrucción. Estas medidas incluyen:</p>
+                <ul>
+                    <li>Almacenamiento seguro de registros físicos en áreas restringidas</li>
+                    <li>Protección de sistemas digitales con firewalls y encriptación</li>
+                    <li>Acceso restringido a información personal solo para personal autorizado</li>
+                    <li>Destrucción segura de documentos cuando ya no son necesarios</li>
+                </ul>
+                <p>A pesar de nuestras medidas de seguridad, debes ser consciente de que ninguna transmisión por Internet o método de almacenamiento electrónico es 100% seguro.</p>
+            </div>
+            
+            <div class="privacy-section">
+                <h3>6. Tus Derechos</h3>
+                <p>Como titular de tus datos personales, tienes derechos que puedes ejercer en cualquier momento:</p>
+                <ul>
+                    <li><strong>Acceso:</strong> Solicitar copia de la información que tenemos sobre ti</li>
+                    <li><strong>Rectificación:</strong> Solicitar corrección de información inexacta</li>
+                    <li><strong>Eliminación:</strong> Solicitar eliminación de tu información personal</li>
+                    <li><strong>Limitación:</strong> Solicitar restricción en el procesamiento de tus datos</li>
+                    <li><strong>Portabilidad:</strong> Solicitar transferencia de tus datos a otro proveedor</li>
+                    <li><strong>Oposición:</strong> Oponerte al procesamiento de tus datos en ciertas circunstancias</li>
+                </ul>
+                <p>Para ejercer cualquiera de estos derechos, por favor contáctanos a través de los medios proporcionados al final de esta política.</p>
+            </div>
+            
+            <div class="privacy-section">
+                <h3>7. Cookies y Tecnologías Similares</h3>
+                <p>Nuestro sitio web utiliza cookies para mejorar tu experiencia de navegación. Las cookies son pequeños archivos de texto que se almacenan en tu dispositivo cuando visitas nuestro sitio. Utilizamos cookies para:</p>
+                <ul>
+                    <li>Recordar tus preferencias (como el modo oscuro)</li>
+                    <li>Analizar el tráfico y uso del sitio web</li>
+                    <li>Personalizar contenido</li>
+                </ul>
+                <p>Puedes gestionar tus preferencias de cookies a través de la configuración de tu navegador. Ten en cuenta que deshabilitar cookies puede afectar la funcionalidad de nuestro sitio web.</p>
+            </div>
+            
+            <div class="privacy-section">
+                <h3>8. Cambios a esta Política</h3>
+                <p>Podemos actualizar esta política de privacidad periódicamente para reflejar cambios en nuestras prácticas o requisitos legales. Te notificaremos sobre cambios significativos a través de nuestro sitio web o por correo electrónico cuando sea apropiado.</p>
+                <p>Te recomendamos revisar esta política regularmente para estar informado sobre cómo protegemos tu información.</p>
+            </div>
+            
+            <div class="privacy-section">
+                <h3>9. Contacto</h3>
+                <p>Si tienes preguntas, comentarios o inquietudes sobre esta política de privacidad o sobre cómo manejamos tus datos personales, no dudes en contactarnos:</p>
+                <ul>
+                    <li><strong>Correo electrónico:</strong> josielsalabarria.02@gmail.com</li>
+                    <li><strong>Teléfono/WhatsApp:</strong> +53 55580242</li>
+                    <li><strong>Dirección:</strong> Sancti Spíritus, Cuba</li>
+                </ul>
+                <p>Nos comprometemos a responder a todas las consultas relacionadas con privacidad en un plazo máximo de 30 días.</p>
+            </div>
+            
+            <p class="date-updated">Última actualización: 1 de Junio, 2025</p>
+        </div>
+    </section>
+    
+    <!-- Nuevo Footer Moderno -->
+    <footer id="contacto">
+        <svg class="footer-pattern" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#6CB4C1" d="M50,50 Q100,0 150,50 T250,50 T350,50 T450,50 T450,150 T450,250 T450,350 T450,450 T350,450 T250,450 T150,450 T50,450 T50,350 T50,250 T50,150 T50,50 Z"></path>
+        </svg>
+        
+        <div class="footer-container">
+            <div class="footer-column">
+                <div class="footer-logo">Josiel<span>Salabarría</span></div>
+                <p class="footer-description">Artista tatuador profesional con años de experiencia creando arte único y personalizado en la piel. Cada tatuaje es una historia contada con pasión y técnica.</p>
+                <div class="footer-social-icons">
+                    <a href="https://www.instagram.com/josiel.2002?igsh=MTByYTM4ZHBjY3N6MA%3D%3D&utm_source=qr" class="social-icon">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://wa.me/5355480242" class="social-icon">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="mailto:josielsalabarria.02@gmail.com" class="social-icon">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                    <a href="#" class="social-icon">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h3 class="footer-title">Enlaces Rápidos</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html"><i class="fas fa-chevron-right"></i> Inicio</a></li>
+                    <li><a href="index.html#sobre-mi"><i class="fas fa-chevron-right"></i> Sobre Mí</a></li>
+                    <li><a href="index.html#higiene"><i class="fas fa-chevron-right"></i> Protocolos de Higiene</a></li>
+                    <li><a href="index.html#galeria"><i class="fas fa-chevron-right"></i> Galería de Trabajos</a></li>
+                    <li><a href="index.html#reservas"><i class="fas fa-chevron-right"></i> Reservar Cita</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3 class="footer-title">Información de Contacto</h3>
+                <ul class="footer-contact">
+                    <li>
+                        <i class="fas fa-phone-alt"></i>
+                        <span>+53 55480242</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-envelope"></i>
+                        <span>josielsalabarria.02@gmail.com</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Sancti Spíritus, Cuba</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Citas previa reserva</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3 class="footer-title">Horario de Atención</h3>
+                <ul class="footer-hours">
+                    <li>
+                        <i class="far fa-clock"></i>
+                        <span>Todos los días: 9:00 AM en adelante</span>
+                    </li>
+                </ul>
+                
+                <h3 class="footer-title" style="margin-top: 2rem;">Documentos Legales</h3>
+                <ul class="footer-links">
+                    <li><a href="legal.html"><i class="fas fa-gavel"></i> Aviso Legal</a></li>
+                    <li><a href="pdp.html" style="color: #6CB4C1;"><i class="fas fa-lock"></i> Política de Privacidad</a></li>
+                    <li><a href="terminos.html"><i class="fas fa-file-contract"></i> Términos de Uso</a></li>
+                    <li><a href="cookies.html"><i class="fas fa-cookie-bite"></i> Política de Cookies</a></li>
+                </ul>
+                
+                
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="copyright">
+                &copy; 2025 Josiel Salabarría. Todos los derechos reservados.
+            </div>
+            
+        </div>
+    </footer>
+
+    <script>
+        // Menú Hamburguesa
+        const menuBtn = document.getElementById('menuBtn');
+        const closeBtn = document.getElementById('closeBtn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.add('active');
+            menuBtn.style.display = 'none';
+            document.body.style.overflow = 'hidden';
+        });
+        
+        closeBtn.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+            menuBtn.style.display = 'block';
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Cerrar menú al hacer clic en un enlace
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                menuBtn.style.display = 'block';
+                document.body.style.overflow = 'auto';
+            });
+        });
+        
+        // Smooth scrolling para enlaces de anclaje
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Efecto de desplazamiento del encabezado
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        // Tema Oscuro
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('i');
+        
+        // Verificar preferencia guardada
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            
+            if (document.body.classList.contains('dark-mode')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+        
+        // Animación al desplazar
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = "1";
+                    entry.target.style.transform = "translateY(0)";
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.highlight-box').forEach(box => {
+            observer.observe(box);
+        });
+        
+        
+    </script>
+</body>
+</html>

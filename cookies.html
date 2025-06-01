@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Política de Cookies | Josiel Salabarria | Artista Tatuador</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --color-primary: #111111;
+            --color-secondary: #6CB4C1;
+            --color-accent: #f8f9fa;
+            --color-text: #333333;
+            --color-light: #f5f5f5;
+            --color-dark: #222222;
+            --color-gold: #c0a062;
+            --color-border: #e0e0e0;
+            --transition-speed: 0.4s;
+            --menu-bg: rgba(255, 255, 255, 0.98);
+        }
+        
+        /* Dark Mode Variables */
+        .dark-mode {
+            --color-primary: #f0f0f0;
+            --color-secondary: #5da7b6;
+            --color-accent: #1a1a1a;
+            --color-text: #e0e0e0;
+            --color-light: #121212;
+            --color-dark: #f5f5f5;
+            --color-gold: #c0a062;
+            --color-border: #333333;
+            --menu-bg: rgba(18, 18, 18, 0.95);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Montserrat', 'Segoe UI', sans-serif;
+            transition: background-color var(--transition-speed), color var(--transition-speed), border-color var(--transition-speed);
+        }
+        
+        html, body {
+            width: 100%;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            background-color: var(--color-light);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+        
+        /* Header con Menú Hamburguesa */
+        header {
+            background-color: rgba(255, 255, 255, 0.98);
+            padding: 1.5rem 5%;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid var(--color-border);
+            transition: background-color 0.3s ease;
+        }
+        
+        .dark-mode header {
+            background-color: rgba(18, 18, 18, 0.98);
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        header.scrolled {
+            background-color: rgba(255, 255, 255, 0.98) !important;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .dark-mode header.scrolled {
+            background-color: rgba(18, 18, 18, 0.98) !important;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo-text {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            letter-spacing: 1px;
+            font-family: 'Oswald', sans-serif;
+        }
+        
+        .logo-text span {
+            color: var(--color-secondary);
+        }
+        
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .theme-toggle {
+            background: transparent;
+            border: none;
+            color: var(--color-primary);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .theme-toggle:hover {
+            color: var(--color-secondary);
+            background: rgba(108, 180, 193, 0.1);
+        }
+        
+        .menu-btn {
+            background: transparent;
+            border: none;
+            color: var(--color-primary);
+            font-size: 1.8rem;
+            cursor: pointer;
+            z-index: 1001;
+            transition: all 0.3s;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .menu-btn:hover {
+            color: var(--color-secondary);
+            background: rgba(108, 180, 193, 0.1);
+        }
+        
+        .nav-links {
+            position: fixed;
+            top: 0;
+            right: 0;
+            height: 100vh;
+            width: 100%;
+            max-width: 300px;
+            background: var(--menu-bg);
+            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transform: translateX(100%);
+            transition: transform 0.5s ease-in-out;
+            z-index: 1000;
+            box-shadow: -5px 0 25px rgba(0, 0, 0, 0.1);
+            border-left: 1px solid var(--color-border);
+        }
+        
+        .nav-links.active {
+            transform: translateX(0);
+        }
+        
+        .nav-links ul {
+            list-style: none;
+            text-align: left;
+            width: 100%;
+            padding: 0 2rem;
+        }
+        
+        .nav-links ul li {
+            margin: 1.8rem 0;
+            opacity: 0;
+            transform: translateX(20px);
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
+        
+        .nav-links.active ul li {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .nav-links ul li:nth-child(1) { transition-delay: 0.1s; }
+        .nav-links ul li:nth-child(2) { transition-delay: 0.2s; }
+        .nav-links ul li:nth-child(3) { transition-delay: 0.3s; }
+        .nav-links ul li:nth-child(4) { transition-delay: 0.4s; }
+        .nav-links ul li:nth-child(5) { transition-delay: 0.5s; }
+        .nav-links ul li:nth-child(6) { transition-delay: 0.6s; }
+        
+        .nav-links ul li a {
+            text-decoration: none;
+            color: var(--color-primary);
+            font-weight: 600;
+            font-size: 1.4rem;
+            transition: color 0.3s;
+            position: relative;
+            padding: 0.7rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-links ul li a i {
+            width: 30px;
+            text-align: center;
+            font-size: 1.3rem;
+            transition: transform 0.3s ease;
+        }
+        
+        .nav-links ul li a:hover {
+            color: var(--color-secondary);
+            background: rgba(108, 180, 193, 0.1);
+        }
+        
+        .nav-links ul li a:hover i {
+            transform: translateX(5px);
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: transparent;
+            border: none;
+            color: var(--color-primary);
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+        
+        .close-btn:hover {
+            color: var(--color-secondary);
+            background: rgba(108, 180, 193, 0.1);
+            transform: rotate(90deg);
+        }
+        
+        /* Política de Cookies Section */
+        .policy-container {
+            max-width: 1000px;
+            margin: 120px auto 3rem;
+            padding: 0 5%;
+        }
+        
+        .policy-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+        
+        .policy-header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 1rem;
+            color: var(--color-primary);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .policy-header h1:after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 3px;
+            background-color: var(--color-secondary);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .policy-header p {
+            color: var(--color-text);
+            font-size: 1.1rem;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .dark-mode .policy-header p {
+            color: #bbb;
+        }
+        
+        .policy-content {
+            background-color: white;
+            padding: 3rem;
+            border-radius: 0;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--color-border);
+        }
+        
+        .dark-mode .policy-content {
+            background-color: #1a1a1a;
+            border-color: var(--color-border);
+        }
+        
+        .policy-section {
+            margin-bottom: 2.5rem;
+        }
+        
+        .policy-section h2 {
+            font-size: 1.8rem;
+            color: var(--color-secondary);
+            margin-bottom: 1.2rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .policy-section h2:after {
+            content: '';
+            position: absolute;
+            width: 60px;
+            height: 2px;
+            background-color: var(--color-secondary);
+            bottom: 0;
+            left: 0;
+        }
+        
+        .policy-section p {
+            margin-bottom: 1.2rem;
+            line-height: 1.8;
+            color: var(--color-text);
+        }
+        
+        .dark-mode .policy-section p {
+            color: #e0e0e0;
+        }
+        
+        .policy-list {
+            margin: 1.5rem 0;
+            padding-left: 1.5rem;
+        }
+        
+        .policy-list li {
+            margin-bottom: 0.8rem;
+            line-height: 1.7;
+            color: var(--color-text);
+        }
+        
+        .dark-mode .policy-list li {
+            color: #e0e0e0;
+        }
+        
+        .cookie-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.5rem 0;
+        }
+        
+        .cookie-table th, .cookie-table td {
+            border: 1px solid var(--color-border);
+            padding: 12px 15px;
+            text-align: left;
+        }
+        
+        .cookie-table th {
+            background-color: var(--color-secondary);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .dark-mode .cookie-table th {
+            background-color: #5da7b6;
+        }
+        
+        .cookie-table tr:nth-child(even) {
+            background-color: rgba(108, 180, 193, 0.05);
+        }
+        
+        .dark-mode .cookie-table tr:nth-child(even) {
+            background-color: rgba(93, 167, 182, 0.1);
+        }
+        
+        .cookie-controls {
+            background-color: rgba(108, 180, 193, 0.1);
+            padding: 1.5rem;
+            border-radius: 5px;
+            margin: 2rem 0;
+            border-left: 3px solid var(--color-secondary);
+        }
+        
+        .cookie-controls h3 {
+            margin-bottom: 1rem;
+            color: var(--color-secondary);
+        }
+        
+        .cookie-controls p {
+            margin-bottom: 1.2rem;
+        }
+        
+        .cookie-btn {
+            display: inline-block;
+            background: var(--color-secondary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.8rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            border-radius: 0;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-right: 10px;
+        }
+        
+        .cookie-btn:hover {
+            background: var(--color-primary);
+        }
+        
+        .policy-update {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--color-border);
+            font-style: italic;
+            color: #666;
+        }
+        
+        .dark-mode .policy-update {
+            color: #aaa;
+        }
+        
+        /* Nuevo Footer Moderno */
+        footer {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: #f8fafc;
+            padding: 4rem 5% 0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .dark-mode footer {
+            background: linear-gradient(135deg, #0a0f1d 0%, #141b2d 100%);
+        }
+        
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            padding-bottom: 3rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .footer-column {
+            margin-bottom: 2rem;
+        }
+        
+        .footer-logo {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 1rem;
+            font-family: 'Oswald', sans-serif;
+            display: inline-block;
+        }
+        
+        .footer-logo span {
+            color: #6CB4C1;
+        }
+        
+        .footer-description {
+            color: #cbd5e1;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        
+        .footer-title {
+            font-size: 1.4rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            color: white;
+            padding-bottom: 0.5rem;
+        }
+        
+        .footer-title:after {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 2px;
+            background-color: #6CB4C1;
+            bottom: 0;
+            left: 0;
+        }
+        
+        .footer-links li {
+            margin-bottom: 0.8rem;
+            list-style: none;
+        }
+        
+        .footer-links li a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: all 0.3s;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+        }
+        
+        .footer-links li a i {
+            margin-right: 10px;
+            color: #6CB4C1;
+            font-size: 0.9rem;
+            transition: transform 0.3s;
+        }
+        
+        .footer-links li a:hover {
+            color: #6CB4C1;
+        }
+        
+        .footer-links li a:hover i {
+            transform: translateX(5px);
+        }
+        
+        .footer-contact li {
+            margin-bottom: 1rem;
+            list-style: none;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .footer-contact li i {
+            margin-right: 10px;
+            color: #6CB4C1;
+            font-size: 1.1rem;
+            margin-top: 4px;
+        }
+        
+        .footer-contact li span {
+            color: #cbd5e1;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+        
+        .footer-hours li {
+            margin-bottom: 0.8rem;
+            list-style: none;
+            display: flex;
+            align-items: flex-start;
+        }
+        
+        .footer-hours li i {
+            margin-right: 10px;
+            color: #6CB4C1;
+            font-size: 1.1rem;
+            margin-top: 4px;
+        }
+        
+        .footer-hours li span {
+            color: #cbd5e1;
+            font-size: 1rem;
+        }
+        
+        .footer-social-icons {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .footer-social-icons .social-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.2rem;
+            text-decoration: none;
+            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .footer-social-icons .social-icon:hover {
+            background: #6CB4C1;
+            transform: translateY(-5px);
+            border-color: #6CB4C1;
+        }
+        
+        .footer-bottom {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem 0;
+            text-align: center;
+        }
+        
+        .copyright {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        
+        
+        .footer-pattern {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            opacity: 0.03;
+            width: 50%;
+            height: auto;
+            z-index: 1;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .policy-header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .policy-content {
+                padding: 2rem;
+            }
+            
+            .policy-section h2 {
+                font-size: 1.6rem;
+            }
+            
+            .policy-container {
+                margin-top: 100px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .policy-header h1 {
+                font-size: 2rem;
+            }
+            
+            .policy-content {
+                padding: 1.5rem;
+            }
+            
+            .policy-section h2 {
+                font-size: 1.4rem;
+            }
+            
+            .cookie-table {
+                display: block;
+                overflow-x: auto;
+            }
+            
+            .cookie-btn {
+                display: block;
+                width: 100%;
+                margin-bottom: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header con Menú Hamburguesa -->
+    <header>
+        <div class="logo">
+            <div class="logo-text">Ink<span>Art</span></div>
+        </div>
+        <div class="header-right">
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+            <button class="menu-btn" id="menuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <nav class="nav-links">
+            <button class="close-btn" id="closeBtn">
+                <i class="fas fa-times"></i>
+            </button>
+            <ul>
+                <li><a href="index.html#inicio"><i class="fas fa-home"></i> Inicio</a></li>
+                <li><a href="index.html#sobre-mi"><i class="fas fa-user"></i> Sobre Mí</a></li>
+                <li><a href="index.html#higiene"><i class="fas fa-hand-sparkles"></i> Higiene</a></li>
+                <li><a href="index.html#galeria"><i class="fas fa-images"></i> Galería</a></li>
+                <li><a href="index.html#reservas"><i class="fas fa-calendar-check"></i> Reservas</a></li>
+                <li><a href="index.html#contacto"><i class="fas fa-envelope"></i> Contacto</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Política de Cookies Section -->
+    <main class="policy-container">
+        <div class="policy-header">
+            <h1>Política de Cookies</h1>
+            <p>En esta página se explica qué son las cookies, cómo las utilizamos en nuestro sitio web y cómo puedes gestionarlas.</p>
+        </div>
+        
+        <div class="policy-content">
+            <div class="policy-section">
+                <h2>¿Qué son las cookies?</h2>
+                <p>Las cookies son pequeños archivos de texto que se almacenan en su dispositivo (ordenador, tablet, teléfono móvil) cuando visita nuestro sitio web. Estas cookies nos permiten reconocer su dispositivo durante su visita o en visitas posteriores.</p>
+                <p>Las cookies no contienen información personal identificable, pero almacenan información sobre su navegación en nuestro sitio que podemos utilizar para mejorar su experiencia de usuario.</p>
+            </div>
+            
+            <div class="policy-section">
+                <h2>Tipos de cookies que utilizamos</h2>
+                <p>En nuestro sitio web utilizamos los siguientes tipos de cookies:</p>
+                
+                <table class="cookie-table">
+                    <thead>
+                        <tr>
+                            <th>Tipo de Cookie</th>
+                            <th>Finalidad</th>
+                            <th>Ejemplos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Cookies esenciales</td>
+                            <td>Son necesarias para el funcionamiento básico del sitio web</td>
+                            <td>Recordar preferencias de idioma, mantener la sesión de usuario</td>
+                        </tr>
+                        <tr>
+                            <td>Cookies de rendimiento</td>
+                            <td>Recopilan información sobre cómo los visitantes usan nuestro sitio</td>
+                            <td>Páginas más visitadas, tiempo de permanencia, tasas de rebote</td>
+                        </tr>
+                        <tr>
+                            <td>Cookies funcionales</td>
+                            <td>Mejoran la funcionalidad y personalización del sitio</td>
+                            <td>Recordar preferencias de tema oscuro, ajustes de tamaño de texto</td>
+                        </tr>
+                        <tr>
+                            <td>Cookies de terceros</td>
+                            <td>Proporcionadas por servicios externos integrados en nuestro sitio</td>
+                            <td>Google Analytics, redes sociales, servicios de mapas</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="policy-section">
+                <h2>Cookies específicas que utilizamos</h2>
+                <p>A continuación detallamos las cookies específicas que utilizamos en nuestro sitio web:</p>
+                
+                <ul class="policy-list">
+                    <li><strong>theme_preference</strong> - Almacena su preferencia de tema (claro/oscuro). Duración: 1 año</li>
+                    <li><strong>cookie_consent</strong> - Registra su aceptación de nuestra política de cookies. Duración: 1 año</li>
+                    <li><strong>_ga</strong> - Cookie de Google Analytics para distinguir usuarios. Duración: 2 años</li>
+                    <li><strong>_gid</strong> - Cookie de Google Analytics para distinguir usuarios. Duración: 24 horas</li>
+                    <li><strong>_gat</strong> - Cookie de Google Analytics para limitar el porcentaje de solicitudes. Duración: 1 minuto</li>
+                </ul>
+            </div>
+            
+            <div class="policy-section">
+                <h2>¿Por qué utilizamos cookies?</h2>
+                <p>Utilizamos cookies por las siguientes razones:</p>
+                
+                <ul class="policy-list">
+                    <li>Para garantizar el correcto funcionamiento técnico del sitio web</li>
+                    <li>Para mejorar y personalizar su experiencia de usuario</li>
+                    <li>Para comprender cómo interactúan los visitantes con nuestro sitio</li>
+                    <li>Para medir la eficacia de nuestras páginas y contenido</li>
+                    <li>Para recordar sus preferencias y configuraciones</li>
+                    <li>Para habilitar funciones de redes sociales</li>
+                </ul>
+            </div>
+            
+            <div class="policy-section">
+                <h2>Control de cookies</h2>
+                <p>Usted puede controlar y/o eliminar las cookies según desee. Puede eliminar todas las cookies que ya están en su dispositivo y configurar la mayoría de los navegadores para impedir que se instalen.</p>
+                
+                <div class="cookie-controls">
+                    <h3>Preferencias actuales de cookies</h3>
+                    <p>Actualmente ha <strong id="cookieStatus">aceptado</strong> el uso de cookies en nuestro sitio.</p>
+                    <button class="cookie-btn" id="acceptCookies">Aceptar todas las cookies</button>
+                    <button class="cookie-btn" id="rejectCookies">Rechazar cookies no esenciales</button>
+                    <button class="cookie-btn" id="manageCookies">Configurar preferencias</button>
+                </div>
+                
+                <p>Para más información sobre cómo gestionar las cookies en diferentes navegadores:</p>
+                <ul class="policy-list">
+                    <li><a href="https://support.google.com/chrome/answer/95647" target="_blank">Google Chrome</a></li>
+                    <li><a href="https://support.mozilla.org/es/kb/habilitar-y-deshabilitar-cookies-sitios-web-rastrear-preferencias" target="_blank">Mozilla Firefox</a></li>
+                    <li><a href="https://support.apple.com/es-es/guide/safari/sfri11471/mac" target="_blank">Apple Safari</a></li>
+                    <li><a href="https://support.microsoft.com/es-es/microsoft-edge/eliminar-las-cookies-en-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09" target="_blank">Microsoft Edge</a></li>
+                </ul>
+            </div>
+            
+            <div class="policy-section">
+                <h2>Cambios en nuestra política de cookies</h2>
+                <p>Nos reservamos el derecho de modificar esta política de cookies en cualquier momento. Cualquier cambio significativo será notificado en nuestro sitio web o mediante otros canales apropiados.</p>
+                <p>Le recomendamos que revise periódicamente esta página para estar al tanto de cualquier actualización.</p>
+            </div>
+            
+            <div class="policy-update">
+                <p><strong>Última actualización:</strong> 1 de junio de 2025</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Nuevo Footer Moderno -->
+    <footer id="contacto">
+        <svg class="footer-pattern" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+            <path fill="#6CB4C1" d="M50,50 Q100,0 150,50 T250,50 T350,50 T450,50 T450,150 T450,250 T450,350 T450,450 T350,450 T250,450 T150,450 T50,450 T50,350 T50,250 T50,150 T50,50 Z"></path>
+        </svg>
+        
+        <div class="footer-container">
+            <div class="footer-column">
+                <div class="footer-logo">Josiel<span>Salabarría</span></div>
+                <p class="footer-description">Artista tatuador profesional con años de experiencia creando arte único y personalizado en la piel. Cada tatuaje es una historia contada con pasión y técnica.</p>
+                <div class="footer-social-icons">
+                    <a href="https://www.instagram.com/josiel.2002?igsh=MTByYTM4ZHBjY3N6MA%3D%3D&utm_source=qr" class="social-icon">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://wa.me/5355480242" class="social-icon">
+                        <i class="fab fa-whatsapp"></i>
+                    </a>
+                    <a href="mailto:josielsalabarria.02@gmail.com" class="social-icon">
+                        <i class="fas fa-envelope"></i>
+                    </a>
+                    <a href="https://www.facebook.com/share/15Cn1Q9rBg/" class="social-icon">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                </div>
+            </div>
+            
+            <div class="footer-column">
+                <h3 class="footer-title">Enlaces Rápidos</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html#inicio"><i class="fas fa-chevron-right"></i> Inicio</a></li>
+                    <li><a href="index.html#sobre-mi"><i class="fas fa-chevron-right"></i> Sobre Mí</a></li>
+                    <li><a href="index.html#higiene"><i class="fas fa-chevron-right"></i> Protocolos de Higiene</a></li>
+                    <li><a href="index.html#galeria"><i class="fas fa-chevron-right"></i> Galería de Trabajos</a></li>
+                    <li><a href="index.html#reservas"><i class="fas fa-chevron-right"></i> Reservar Cita</a></li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3 class="footer-title">Información de Contacto</h3>
+                <ul class="footer-contact">
+                    <li>
+                        <i class="fas fa-phone-alt"></i>
+                        <span>+53 55480242</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-envelope"></i>
+                        <span>josielsalabarria.02@gmail.com</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span>Sancti Spíritus, Cuba</span>
+                    </li>
+                    <li>
+                        <i class="fas fa-calendar-check"></i>
+                        <span>Citas previa reserva</span>
+                    </li>
+                </ul>
+            </div>
+            
+            <div class="footer-column">
+                <h3 class="footer-title">Horario de Atención</h3>
+                <ul class="footer-hours">
+                    <li>
+                        <i class="far fa-clock"></i>
+                        <span>Todos los días: 9:00 AM en adelante</span>
+                    </li>
+                </ul>
+                
+                <h3 class="footer-title" style="margin-top: 2rem;">Documentos Legales</h3>
+                <ul class="footer-links">
+                    <li><a href="legal.html"><i class="fas fa-gavel"></i> Aviso Legal</a></li>
+                    <li><a href="pdp.html"><i class="fas fa-lock"></i> Política de Privacidad</a></li>
+                    <li><a href="terminos.html"><i class="fas fa-file-contract"></i> Términos de Uso</a></li>
+                    <li><a href="cookies.html" style="color: #6CB4C1;"><i class="fas fa-cookie-bite"></i> Política de Cookies</a></li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="copyright">
+                &copy; 2025 Josiel Salabarría. Todos los derechos reservados.
+            </div>
+            
+            
+        </div>
+    </footer>
+
+    <script>
+        // Menú Hamburguesa
+        const menuBtn = document.getElementById('menuBtn');
+        const closeBtn = document.getElementById('closeBtn');
+        const navLinks = document.querySelector('.nav-links');
+        
+        menuBtn.addEventListener('click', () => {
+            navLinks.classList.add('active');
+            menuBtn.style.display = 'none';
+            document.body.style.overflow = 'hidden';
+        });
+        
+        closeBtn.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+            menuBtn.style.display = 'block';
+            document.body.style.overflow = 'auto';
+        });
+        
+        // Cerrar menú al hacer clic en un enlace
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+                menuBtn.style.display = 'block';
+                document.body.style.overflow = 'auto';
+            });
+        });
+        
+        // Smooth scrolling para enlaces de anclaje
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                
+                window.scrollTo({
+                    top: targetElement.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            });
+        });
+        
+        // Efecto de desplazamiento del encabezado
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            const isDarkMode = document.body.classList.contains('dark-mode');
+            
+            if (window.scrollY > 100) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+        
+        // Tema Oscuro
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = themeToggle.querySelector('i');
+        
+        // Verificar preferencia guardada
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            document.body.classList.add('dark-mode');
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            
+            if (document.body.classList.contains('dark-mode')) {
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+                localStorage.setItem('theme', 'dark');
+            } else {
+                themeIcon.classList.remove('fa-sun');
+                themeIcon.classList.add('fa-moon');
+                localStorage.setItem('theme', 'light');
+            }
+        });
+        
+        // Control de cookies
+        const cookieStatus = document.getElementById('cookieStatus');
+        const acceptCookies = document.getElementById('acceptCookies');
+        const rejectCookies = document.getElementById('rejectCookies');
+        const manageCookies = document.getElementById('manageCookies');
+        
+        // Verificar preferencia de cookies
+        const cookieConsent = localStorage.getItem('cookie_consent');
+        
+        if (cookieConsent === 'accepted') {
+            cookieStatus.textContent = 'aceptado';
+        } else if (cookieConsent === 'rejected') {
+            cookieStatus.textContent = 'rechazado';
+        } else {
+            cookieStatus.textContent = 'aceptado';
+            localStorage.setItem('cookie_consent', 'accepted');
+        }
+        
+        // Botones de control de cookies
+        acceptCookies.addEventListener('click', () => {
+            localStorage.setItem('cookie_consent', 'accepted');
+            cookieStatus.textContent = 'aceptado';
+            alert('Gracias por aceptar nuestras cookies. Su preferencia ha sido guardada.');
+        });
+        
+        rejectCookies.addEventListener('click', () => {
+            localStorage.setItem('cookie_consent', 'rejected');
+            cookieStatus.textContent = 'rechazado';
+            alert('Has rechazado las cookies no esenciales. Su preferencia ha sido guardada.');
+        });
+        
+        manageCookies.addEventListener('click', () => {
+            alert('En una implementación completa, esto abriría un panel detallado para configurar preferencias individuales de cookies.');
+        });
+    </script>
+</body>
+</html>
