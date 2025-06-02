@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviso Legal | Josiel Salabarria - Artista Tatuador</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+<body>
+    <!-- Header con Menú Hamburguesa -->
+    <script src="header-include.js"></script>
+
+    <!-- Sección de Aviso Legal -->
+    <section class="legal-section">
+        <div class="legal-container">
+            <h1 class="legal-title">Aviso Legal</h1>
+            
+            <div class="legal-content">
+                <p>En cumplimiento del artículo 10 de la Ley 34/2002, de 11 de julio, de Servicios de la Sociedad de la Información y del Comercio Electrónico (LSSICE), se exponen a continuación los datos identificativos del titular de este sitio web.</p>
+                
+                <h2>1. Identificación del Titular</h2>
+                <p><strong>Titular:</strong> Josiel Salabarría López</p>
+                <p><strong>Actividad:</strong> Artista tatuador profesional</p>
+                
+                <p><strong>Domicilio:</strong> Sancti Spíritus, Cuba</p>
+                <p><strong>Contacto:</strong> </p>
+                <ul>
+                    <li>Teléfono: +53 55480242</li>
+                    <li>Email: josielsalabarria.02@gmail.com</li>
+                </ul>
+                
+                <h2>2. Condiciones de Uso</h2>
+                <p>El acceso y uso de este sitio web atribuye la condición de USUARIO, que acepta, desde dicho acceso y/o uso, las presentes condiciones de uso, siéndole aplicable desde el mismo momento en que accede al sitio web.</p>
+                
+                <h2>3. Propiedad Intelectual e Industrial</h2>
+                <p>Josiel Salabarría es titular de todos los derechos de propiedad intelectual e industrial de su sitio web, así como de los elementos contenidos en el mismo (a título enunciativo, imágenes, sonido, audio, vídeo, software o textos; marcas o logotipos, combinaciones de colores, estructura y diseño, selección de materiales usados, programas de ordenador necesarios para su funcionamiento, acceso y uso, etc.).</p>
+                
+                <p>Quedan expresamente prohibidas la reproducción, la distribución y la comunicación pública, incluida su modalidad de puesta a disposición, de la totalidad o parte de los contenidos de esta página web, con fines comerciales, en cualquier soporte y por cualquier medio técnico, sin la autorización de Josiel Salabarría.</p>
+                
+                <h2>4. Exclusión de Garantías y Responsabilidad</h2>
+                <p>Josiel Salabarría no se hace responsable, en ningún caso, de los daños y perjuicios de cualquier naturaleza que pudieran ocasionar, a título enunciativo: errores u omisiones en los contenidos, falta de disponibilidad del portal o la transmisión de virus o programas maliciosos o lesivos en los contenidos, a pesar de haber adoptado todas las medidas tecnológicas necesarias para evitarlo.</p>
+                
+                <h2>5. Modificaciones</h2>
+                <p>Josiel Salabarría se reserva el derecho de efectuar sin previo aviso las modificaciones que considere oportunas en su sitio web, pudiendo cambiar, suprimir o añadir tanto los contenidos y servicios que se presten a través de la misma como la forma en la que éstos aparezcan presentados o localizados en su sitio web.</p>
+                
+                <h2>6. Enlaces</h2>
+                <p>En el caso de que en este sitio se dispusiesen enlaces o hipervínculos hacía otros sitios de Internet, Josiel Salabarría no ejercerá ningún tipo de control sobre dichos sitios y contenidos.</p>
+                
+                <p>En ningún caso Josiel Salabarría asumirá responsabilidad alguna por los contenidos de algún enlace perteneciente a un sitio web ajeno, ni garantizará la disponibilidad técnica, calidad, fiabilidad, exactitud, amplitud, veracidad, validez y constitucionalidad de cualquier material o información contenida en ninguno de dichos hipervínculos u otros sitios de Internet.</p>
+                
+                <h2>7. Derecho de Exclusión</h2>
+                <p>Josiel Salabarría se reserva el derecho a denegar o retirar el acceso a su sitio web y/o los servicios ofrecidos sin necesidad de preaviso, a instancia propia o de un tercero, a aquellos usuarios que incumplan las presentes Condiciones Generales de Uso.</p>
+                
+                <h2>8. Legislación Aplicable y Jurisdicción</h2>
+                <p>La relación entre Josiel Salabarría y el USUARIO se regirá por la normativa cubana vigente y cualquier controversia se someterá a los Juzgados y tribunales de Sancti Spíritus.</p>
+                
+                <div class="update-date">
+                    <p>Última actualización: 1 de junio de 2025</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Nuevo Footer Moderno -->
+    <script src="footer-include.js"></script>
+
+    <script>
+        
+        // Animación al desplazar
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = "1";
+                    entry.target.style.transform = "translateY(0)";
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.hygiene-card, .contact-card').forEach(card => {
+            observer.observe(card);
+        });
+    </script>
+</body>
+</html>
