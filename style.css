@@ -252,14 +252,14 @@
             align-items: center;
             position: relative;
             background: linear-gradient(to top, rgba(255, 255, 255, 0.5), rgba(245, 245, 245, 0.95)),
-                        url('https://raw.githubusercontent.com/Klypper21/Formulario/refs/heads/main/Tattoo_ARtist-768x1152.jpg.webp') no-repeat center center/cover;
+                        url('https://raw.githubusercontent.com/ink-art-tattoo/Imagenes/refs/heads/main/Tattoo_ARtist-768x1152.jpg.webp') no-repeat center center/cover;
             padding: 0 5%;
             overflow: hidden;
         }
         
         .dark-mode .hero {
             background: linear-gradient(to top, rgba(18, 18, 18, 0.7), rgba(18, 18, 18, 0.9)),
-                        url('https://raw.githubusercontent.com/Klypper21/Formulario/refs/heads/main/Tattoo_ARtist-768x1152.jpg.webp') no-repeat center center/cover;
+                        url('https://raw.githubusercontent.com/ink-art-tattoo/Imagenes/refs/heads/main/Tattoo_ARtist-768x1152.jpg.webp') no-repeat center center/cover;
         }
         
         .hero-content {
@@ -277,7 +277,7 @@
         
         .hero h1 {
             font-size: 3.5rem;
-            
+            margin-bottom: -0.8rem;
             line-height: 1.2;
             font-weight: 800;
             color: var(--color-primary);
@@ -853,7 +853,7 @@
         .booking {
             padding: 6rem 5%;
             background: linear-gradient(to right, rgba(17, 17, 17, 0.9), rgba(34, 34, 34, 0.9)), 
-                        url('https://raw.githubusercontent.com/Klypper21/Formulario/refs/heads/main/Cu%C3%A1nto-gana-un-tatuador.jpg') no-repeat center center/cover;
+                        url('https://raw.githubusercontent.com/ink-art-tattoo/Imagenes/refs/heads/main/Cu%C3%A1nto-gana-un-tatuador.jpg') no-repeat center center/cover;
             text-align: center;
             position: relative;
             color: #fff;
@@ -1414,7 +1414,7 @@
             justify-content: center;
             position: relative;
             background: linear-gradient(to top, rgba(255, 255, 255, 0.5), rgba(245, 245, 245, 0.95)),
-                        url('https://raw.githubusercontent.com/Klypper21/Formulario/refs/heads/main/Tattoo_ARtist-768x1152.jpg.webp') no-repeat center center/cover;
+                        url('https://raw.githubusercontent.com/ink-art-tattoo/Imagenes/refs/heads/main/Tattoo_ARtist-768x1152.jpg.webp') no-repeat center center/cover;
             padding: 0 5%;
             overflow: hidden;
             margin-top: 80px;
@@ -1422,7 +1422,7 @@
         
         .dark-mode .privacy-hero {
             background: linear-gradient(to top, rgba(18, 18, 18, 0.7), rgba(18, 18, 18, 0.9)),
-                        url('https://raw.githubusercontent.com/Klypper21/Formulario/refs/heads/main/Tattoo_ARtist-768x1152.jpg.webp') no-repeat center center/cover;
+                        url('https://raw.githubusercontent.com/ink-art-tattoo/Imagenes/refs/heads/main/Tattoo_ARtist-768x1152.jpg.webp') no-repeat center center/cover;
         }
         
         .privacy-hero-content {
@@ -1693,6 +1693,7 @@
         @media (max-width: 768px) {
             .hero h1 {
                 font-size: 2.5rem;
+                
             }
             
             .section-title {
