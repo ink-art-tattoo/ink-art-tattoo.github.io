@@ -81,15 +81,22 @@
         }
         
         .logo-text {
-            font-size: 1.8rem;
-            font-weight: 700;
+            font-size: 2.5rem;
+            font-weight: 400;
             color: var(--color-primary);
             letter-spacing: 1px;
-            font-family: 'Oswald', sans-serif;
+            font-family: "Jacquard 24", system-ui;
+            font-style: normal;
+;
         }
         
         .logo-text span {
+            margin-left: 0.2rem;
             color: var(--color-secondary);
+            letter-spacing: 1px;
+            font-family: "Jacquard 24", system-ui;
+            font-style: normal;
+
         }
         
         .header-right {
