@@ -275,9 +275,10 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            background: linear-gradient(to top, rgba(255, 255, 255, 0.5), rgba(245, 245, 245, 0.95)),
+            background: linear-gradient(to top, rgba(255, 255, 255, 0.342), rgba(245, 245, 245, 0.788)),
                         url('https://raw.githubusercontent.com/ink-art-tattoo/Imagenes/refs/heads/main/Tattoo_ARtist-768x1152.jpg.webp') no-repeat center center/cover;
             padding: 0 5%;
+            background-attachment: fixed;
             overflow: hidden;
             
         }
@@ -285,7 +286,11 @@
         .dark-mode .hero {
             background: linear-gradient(to top, rgba(18, 18, 18, 0.7), rgba(18, 18, 18, 0.9)),
                         url('https://raw.githubusercontent.com/ink-art-tattoo/Imagenes/refs/heads/main/Tattoo_ARtist-768x1152.jpg.webp') no-repeat center center/cover;
-        }
+                        background-attachment: fixed;
+        
+            }
+
+
         
         .hero-content {
             max-width: 650px;
@@ -395,12 +400,18 @@
         /* Sobre Mí Section */
         .about {
             padding: 6rem 5%;
-            background-color: white;
+            background-color: var(--color-light);
             position: relative;
+                    background-image: url('/imgs/el-fondo-de-papel-arrugado.jpg');
+                    
         }
         
         .dark-mode .about {
-            background-color: #1a1a1a;
+            /* background-color: #1a1a1a;  */
+            background: linear-gradient(to top, rgba(19, 19, 19, 0.267), rgba(12, 12, 12, 0.699)),
+                        url('/imgs/photo-1585511582331-14e7c5f89735.jpeg') no-repeat center center/cover;
+
+            
         }
         
         .about-container {
@@ -410,6 +421,7 @@
             gap: 4rem;
             max-width: 1200px;
             margin: 0 auto;
+            background: linear-gradient(to top, rgba(18, 18, 18, 0.288), rgba(18, 18, 18, 0.9)),
         }
         
         .about-image {
