@@ -1,4 +1,14 @@
 
+    
+    @font-face {
+  font-family: 'Gothice';
+  src: 
+    url('fonts/gothice/gothice_-webfont.woff2') format('woff2'),
+    url('fonts/gothice/gothice_-webfont.woff') format('woff');
+  font-weight: normal; 
+  font-style: normal; 
+}
+    
     :root {
             --color-primary: #111111;
             --color-secondary: #6CB4C1;
@@ -9,7 +19,8 @@
             --color-gold: #c0a062;
             --color-border: #e0e0e0;
             --transition-speed: 0.4s;
-            --menu-bg: rgba(255, 255, 255, 0.98);
+            --menu-bg: rgba(201, 201, 201, 0.95);
+            --transition: all 0.4s ease;
         }
         
         /* Dark Mode Variables */
@@ -22,7 +33,8 @@
             --color-dark: #f5f5f5;
             --color-gold: #c0a062;
             --color-border: #728185;
-            --menu-bg: #121212;
+            --menu-bg: rgba(26, 30, 31, 0.95);
+            --transition: all 0.4s ease;
         }
         
         * {
@@ -44,10 +56,131 @@
             color: var(--color-text);
             line-height: 1.6;
         }
+    
         
+
+        dot-spinner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  --uib-speed: 0.9s;
+  height: 2.8rem;
+  width: 2.8rem;
+  /*animation: float 3s linear infinite;*/
+}
+
+@keyframes float {
+  0% {
+    transform: rotate(0deg) translate(100px) rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg) translate(100px) rotate(-360deg);
+  }
+}
+
+.dot-spinner__dot::before {
+  content: '';
+  height: 20%;
+  width: 20%;
+  border-radius: 50%;
+  background-color: #fff;
+  filter: drop-shadow(0 0 10px rgb(95, 150, 202));
+  box-shadow: -6px -6px 11px #c1c1c1,
+             6px 6px 11px #ffffff;
+  transform: scale(0);
+  opacity: 0.5;
+  animation: pulse0112 calc(var(--uib-speed) * 1.111) ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(18, 31, 53, 0.3);
+}
+
+.dot-spinner__dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100%;
+  width: 100%;
+}
+
+.dot-spinner__dot:nth-child(2) {
+  transform: rotate(45deg);
+}
+
+.dot-spinner__dot:nth-child(2)::before {
+  animation-delay: calc(var(--uib-speed) * -0.875);
+}
+
+.dot-spinner__dot:nth-child(3) {
+  transform: rotate(90deg);
+}
+
+.dot-spinner__dot:nth-child(3)::before {
+  animation-delay: calc(var(--uib-speed) * -0.75);
+}
+
+.dot-spinner__dot:nth-child(4) {
+  transform: rotate(135deg);
+}
+
+.dot-spinner__dot:nth-child(4)::before {
+  animation-delay: calc(var(--uib-speed) * -0.625);
+}
+
+.dot-spinner__dot:nth-child(5) {
+  transform: rotate(180deg);
+}
+
+.dot-spinner__dot:nth-child(5)::before {
+  animation-delay: calc(var(--uib-speed) * -0.5);
+}
+
+.dot-spinner__dot:nth-child(6) {
+  transform: rotate(225deg);
+}
+
+.dot-spinner__dot:nth-child(6)::before {
+  animation-delay: calc(var(--uib-speed) * -0.375);
+}
+
+.dot-spinner__dot:nth-child(7) {
+  transform: rotate(270deg);
+}
+
+.dot-spinner__dot:nth-child(7)::before {
+  animation-delay: calc(var(--uib-speed) * -0.25);
+}
+
+.dot-spinner__dot:nth-child(8) {
+  transform: rotate(315deg);
+}
+
+.dot-spinner__dot:nth-child(8)::before {
+  animation-delay: calc(var(--uib-speed) * -0.125);
+}
+
+@keyframes pulse0112 {
+  0%,
+  100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+
+
+
         /* Header con Menú Hamburguesa */
         header {
-            background-color: rgba(255, 255, 255, 0.98);
+            background-color: rgba(194, 192, 192, 0);
             padding: 1rem 5%;
             position: fixed;
             width: 100%;
@@ -56,23 +189,25 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            box-shadow: 1 2px 15px rgba(0, 0, 0, 0.05);
-            border-bottom: 1px solid var(--color-border);
-            transition: background-color 0.3s ease;
+            transition: all 0.4s ease-in-out;
         }
         
         .dark-mode header {
-            background-color: rgba(18, 18, 18, 0.98);
-            border-bottom: 2px solid var(--color-border);
+            background-color: rgba(18, 18, 18, 0);
         }
         
         header.scrolled {
-            background-color: rgba(255, 255, 255, 0.904) !important;
+            padding: 0.5rem 8%;
+            background-color: rgba(194, 192, 192, 0.733) !important;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px); /* Para Safari */
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            transition: all 0.4s ease-in-out;
         }
         
         .dark-mode header.scrolled {
             background-color: rgba(18, 18, 18, 0.863) !important;
+            
         }
         
         .logo {
@@ -81,22 +216,16 @@
         }
         
         .logo-text {
-            font-size: 2.5rem;
-            font-weight: 400;
+            font-size: 1.8rem;
+            font-weight: 700;
             color: var(--color-primary);
             letter-spacing: 1px;
-            font-family: "Jacquard 24", system-ui;
-            font-style: normal;
-;
+            font-family: 'Gothice', sans-serif;
         }
         
         .logo-text span {
-            margin-left: 0.2rem;
+            font-family: 'Gothice';
             color: var(--color-secondary);
-            letter-spacing: 1px;
-            font-family: "Jacquard 24", system-ui;
-            font-style: normal;
-
         }
         
         .header-right {
@@ -251,17 +380,24 @@
             background: rgba(108, 180, 193, 0.1);
             transform: rotate(90deg);
         }
+
+
         
+
+       
+
         /* Hero Section */
         .hero {
             height: 100vh;
             display: flex;
             align-items: center;
+            justify-content: center;
             position: relative;
             background: linear-gradient(to top, rgba(255, 255, 255, 0.5), rgba(245, 245, 245, 0.95)),
                         url('https://raw.githubusercontent.com/ink-art-tattoo/Imagenes/refs/heads/main/Tattoo_ARtist-768x1152.jpg.webp') no-repeat center center/cover;
             padding: 0 5%;
             overflow: hidden;
+            
         }
         
         .dark-mode .hero {
@@ -273,6 +409,7 @@
             max-width: 650px;
             z-index: 10;
             padding-top: 80px;
+            text-align: center;
         }
 
         #escribiendo {font-size: 3.5rem;
@@ -283,11 +420,15 @@
             }
         
         .hero h1 {
-            font-size: 3.5rem;
+            font-size: 4rem;
             margin-bottom: -0.8rem;
             line-height: 1.2;
             font-weight: 800;
             color: var(--color-primary);
+            font-family: "Righteous", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            text-align: center;
         }
 
         
@@ -295,17 +436,12 @@
             color: var(--color-secondary);
             position: relative;
             display: inline-block;
+            font-family: "Gloria Hallelujah", cursive;
+            font-weight: 400;
+            font-style: normal;
         }
         
-        .typewriter-text::after {
-            content: '';
-            position: absolute;
-            bottom: -5px;
-            left: 0;
-            width: 100%;
-            height: 3px;
-            background: var(--color-secondary);
-        }
+
         
         .cursor {
             display: inline-block;
@@ -317,16 +453,21 @@
             vertical-align: text-bottom;
         }
         
+
+
         @keyframes blink {
             0%, 100% { opacity: 1; }
             50% { opacity: 0; }
         }
+
+
         
         .hero p {
             font-size: 1.2rem;
             margin-bottom: 2.5rem;
             max-width: 600px;
             color: #555;
+            text-align: center;
         }
         
         .dark-mode .hero p {
@@ -348,12 +489,25 @@
             position: relative;
             overflow: hidden;
             border: 1px solid var(--color-primary);
+            
+            
         }
         
         .cta-button:hover {
             background: transparent;
             color: var(--color-primary);
             transform: translateY(-3px);
+        }
+
+         @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         /* Sobre Mí Section */
@@ -448,6 +602,18 @@
             padding: 6rem 5%;
             background-color: var(--color-light);
             position: relative;
+        }
+
+        .hygiene .section-title::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 3px;
+            background-color: var(--color-secondary);
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
         }
         
         .dark-mode .hygiene {
@@ -868,6 +1034,18 @@
         
         .booking .section-title {
             color: #fff !important;
+        }
+
+        .booking .section-title::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 3px;
+            background-color: var(--color-secondary);
+            bottom: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-radius: 2px;
         }
         
         .booking p {
@@ -1697,7 +1875,30 @@
         
         
         /* Responsive Design */
+
+
+         @media (max-width: 992px) {
+            .hero h1 {
+                font-size: 3.5rem;
+            }
+
+            .nav-wn { 
+                display: none !important;
+                }
+
+        }
+
+        
+
         @media (max-width: 768px) {
+
+                   @media (max-width: 768px) {
+            header {
+                padding: 0.8rem 5%;
+            }
+            }
+
+
             .hero h1 {
                 font-size: 2.5rem;
                 
@@ -1706,8 +1907,10 @@
             .section-title {
                 font-size: 2rem;
             }
+
             
             .nav-links {
+                
                 width: 100%;
                 max-width: 100%;
             }
@@ -1815,6 +2018,7 @@
         }
         
         @media (max-width: 480px) {
+
             .hero h1 {
                 font-size: 2rem;
             }
@@ -1826,10 +2030,21 @@
             .section-title {
                 font-size: 1.8rem;
             }
+
+
+
+            .nav-links {
+                
+                font-size: 1.3rem;
+            }
             
             .nav-links ul li a {
                 font-size: 1.3rem;
             }
+
+            
+
+
             
             .contact-card, .hygiene-card {
                 padding: 1.5rem;
@@ -1929,6 +2144,96 @@
             
             .terms-section p, .terms-section li {
                 font-size: 1rem;
+            }
+
+
+            
+            
+        }
+
+        /* Oculta en pantallas de escritorio (ancho mínimo típico: 992px)*/
+@media (min-width: 992px) {
+  .menu-btn {
+    display: none !important;
+  }
+
+
+}
+
+
+
+
+
+        
+        .nav-wn ul {
+            display: flex;
+            list-style: none;
+            height: 100%;
+        }
+        
+        .nav-wn li {
+            position: relative;
+        }
+        
+        .nav-wn a {
+            text-decoration: none;
+            color: var(--text);
+            font-weight: 500;
+            padding: 0rem 1.2rem;
+            display: block;
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .nav-wn a:hover {
+            color: var(--color-secondary);
+        }
+        
+        /* Efecto subrayado animado */
+        .nav-wn a::after {
+            content: '';
+            position: absolute;
+            bottom: 0%;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background: var(--color-secondary);
+            transform: translateX(-50%);
+            transition: var(--transition);
+        }
+        
+        .nav-wn a:hover::after,
+        .nav-wn a.active::after {
+            width: 80%;
+        }
+        
+        .nav-wn a.active {
+            color: var(--primary);
+            font-weight: 600;
+        }
+        
+        
+        /* Responsive */
+        
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                padding: 1rem;
+            }
+            
+            
+            .nav-wn {
+                width: 100%;
+                border-top: 1px solid var(--light-gray);
+            }
+            
+            .nav-wn ul {
+                justify-content: space-around;
+            }
+            
+            .nav-wn a {
+                padding: 1.2rem 0.8rem;
+                font-size: 0.9rem;
             }
             
         }
