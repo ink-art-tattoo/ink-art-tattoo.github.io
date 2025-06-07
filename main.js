@@ -37,7 +37,7 @@ function typeEffect() {
 
 // Iniciar el efecto después de cargar la página
 window.addEventListener('load', () => {
-    setTimeout(typeEffect, 1000);
+    setTimeout(typeEffect, 0);
 
 });
 
