@@ -1,3 +1,0 @@
-User-agent: *
-Allow: /
-Sitemap: https://ink-art-tattoo.github.io/sitemap.txt
