@@ -24,9 +24,21 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cinzel:wght@400;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
         
+        
     </style>
 </head>
 <body>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+    
+    <div class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </div>
+
+
+
     <!-- Header con Menú Hamburguesa -->
      <script src="header-include.js"></script>
     <!-- Hero Section -->
@@ -36,16 +48,19 @@
             <h1 id="escribiendo"><span class="typewriter-text" id="typewriter"></span><span class="cursor"></span></h1>
             <p>Años de experiencia, fusiono técnica profesional con creatividad para crear tatuajes únicos que cuentan tu historia.</p>
             <a href="#reservas" class="cta-button">Reservar una cita</a>
+            <div class="scroll-indicator" id="scrollIndicator">
+                <i class="fas fa-chevron-down"></i>
+            </div>
         </div>
     </section>
 
     <!-- Sobre Mí Section -->
     <section id="sobre-mi" class="about">
         <div class="about-container">
-            <div class="about-image">
+            <div class="about-image hidden-left">
                 <img src="https://raw.githubusercontent.com/ink-art-tattoo/Imagenes/refs/heads/main/FB_IMG_1748604696133.jpg" alt="Josiel Salabarria - Artista Tatuador">
             </div>
-            <div class="about-content">
+            <div class="about-content hidden-right">
                 <h2 class="section-title">Sobre Mí</h2>
                 <p>Mi nombre es Josiel Salabarría, artista tatuador especializado en crear piezas únicas y personalizadas. Con años de experiencia, he desarrollado un estilo distintivo que combina técnicas tradicionales con enfoques contemporáneos.</p>
                 <p>Mi pasión por el arte corporal comenzó desde muy joven, evolucionando de un interés personal a una carrera profesional. Cada tatuaje que creo es una colaboración única con mis clientes, transformando sus ideas e historias en obras de arte permanentes.</p>

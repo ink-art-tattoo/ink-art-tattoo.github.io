@@ -61,7 +61,7 @@ window.addEventListener('load', () => {
 
 
 // Animación al desplazar
-const observer = new IntersectionObserver((entries) => {
+const observacion = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
             entry.target.style.opacity = "1";
@@ -72,7 +72,7 @@ const observer = new IntersectionObserver((entries) => {
 
 
 document.querySelectorAll('.hygiene-card, .contact-card').forEach(card => {
-    observer.observe(card);
+    observacion.observe(card);
 });
 
 
@@ -390,5 +390,47 @@ showItems('all');
                 document.body.style.overflow = 'auto';
             }
         });
+
+
+
+                // Barra de progreso del scroll
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+            
+            // Mostrar/ocultar botón de volver arriba
+            if (winScroll > 500) {
+                document.getElementById('backToTop').classList.add('show');
+            } else {
+                document.getElementById('backToTop').classList.remove('show');
+            }
+        })
+
+                // Botón para volver arriba
+        document.getElementById('backToTop').addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+
+                // Detectar cuando los elementos entran y salen del viewport
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                } else {
+                    entry.target.classList.remove('show');
+                }
+            });
+        }, {
+            threshold: 0.1
+        });
+
+               // Observar todos los elementos con clase 'hidden'
+        const hiddenElements = document.querySelectorAll('.hidden-left, .hidden-right, .hidden-top, .hidden-bottom');
+        hiddenElements.forEach(el => observer.observe(el));
         
        

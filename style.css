@@ -56,6 +56,86 @@
             color: var(--color-text);
             line-height: 1.6;
         }
+
+
+
+                .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            z-index: 1000;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background: var(--color-secondary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            background: var(--color-secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            opacity: 0;
+            transform: translateY(100px);
+            transition: all 0.4s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            z-index: 999;
+        }
+        
+        .back-to-top.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .back-to-top:hover {
+            transform: translateY(-5px);
+        }
+
+
+        /* Animaciones para elementos */
+        .hidden-left {
+            opacity: 0;
+            transform: translateX(-100px) scale(0.95);
+            transition: all 2s ease-in-out;
+        }
+        
+        .hidden-right {
+            opacity: 0;
+            transform: translateX(100px) scale(0.95);
+            transition: all 2s ease-in-out;
+        }
+        
+        .hidden-top {
+            opacity: 0;
+            transform: translateY(-50px) scale(0.95);
+            transition: all 2s ease-in-out;
+        }
+        
+        .hidden-bottom {
+            opacity: 0;
+            transform: translateY(50px) scale(0.95);
+            transition: all 2s ease-in-out;
+        }
+        
+        .show {
+            opacity: 1;
+            transform: translateX(0) translateY(0) scale(1);
+        }
     
         
 
@@ -318,6 +398,8 @@
             text-align: center;
         }
 
+
+
         
         .typewriter-text {
             color: var(--color-secondary);
@@ -338,6 +420,24 @@
             margin-left: 5px;
             animation: blink 0.7s infinite;
             vertical-align: text-bottom;
+        }
+
+
+
+        .scroll-indicator {
+            font-size: 2rem;
+            margin-top: 50px;
+            animation: bounce 2s infinite;
+            transform: translateY(0);
+            opacity: 1;
+            transition: all 0.8s ease 0.2s;
+            color: var(--color-secondary);
+        }
+        
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+            40% {transform: translateY(-20px);}
+            60% {transform: translateY(-10px);}
         }
         
 
@@ -409,7 +509,7 @@
         .dark-mode .about {
             /* background-color: #1a1a1a;  */
             background: linear-gradient(to top, rgba(19, 19, 19, 0.267), rgba(12, 12, 12, 0.699)),
-                        url('/imgs/photo-1585511582331-14e7c5f89735.jpeg') no-repeat center center/cover;
+                        url('/imgs/photo-1585511582331-14e7c5f89735.webp') no-repeat center center/cover;
 
             
         }
@@ -967,7 +1067,7 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
             opacity: 0;
             transform: translateY(20px);
-            animation: fadeInUp 0.8s ease forwards;
+            animation: fadeInUp 2s ease forwards;
         }
         
         .contact-card:nth-child(1) { animation-delay: 0.3s; }
@@ -1790,6 +1890,10 @@
             header {
                 padding: 0.8rem 5%;
             }
+
+            .hidden-left, .hidden-right, .hidden-top, .hidden-bottom {
+                transform: translateY(-50px) scale(0.95);
+            }
             }
 
 
@@ -2131,3 +2235,5 @@
             }
             
         }
+
+       
