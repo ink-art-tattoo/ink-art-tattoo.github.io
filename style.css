@@ -355,8 +355,8 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            background: linear-gradient(to top, rgba(255, 255, 255, 0.342), rgba(245, 245, 245, 0.788)),
-                        url('https://raw.githubusercontent.com/ink-art-tattoo/Imagenes/refs/heads/main/Tattoo_ARtist-768x1152.jpg.webp') no-repeat center center/cover;
+            background: linear-gradient(to top, rgba(255, 255, 255, 0.342), rgba(94, 91, 91, 0.788)),
+                        url('/imgs/fondo-hero.webp') no-repeat center center/cover;
             padding: 0 5%;
             background-attachment: fixed;
             overflow: hidden;
@@ -365,7 +365,7 @@
         
         .dark-mode .hero {
             background: linear-gradient(to top, rgba(18, 18, 18, 0.7), rgba(18, 18, 18, 0.9)),
-                        url('https://raw.githubusercontent.com/ink-art-tattoo/Imagenes/refs/heads/main/Tattoo_ARtist-768x1152.jpg.webp') no-repeat center center/cover;
+                        url('/imgs/fondo-hero.webp') no-repeat center center/cover;
                         background-attachment: fixed;
         
             }
@@ -453,7 +453,7 @@
             font-size: 1.2rem;
             margin-bottom: 2.5rem;
             max-width: 600px;
-            color: #555;
+            color: #1a1818;
             text-align: center;
         }
         
@@ -481,7 +481,7 @@
         }
         
         .cta-button:hover {
-            background: transparent;
+            background: var(--color-secondary);
             color: var(--color-primary);
             transform: translateY(-3px);
         }
