@@ -1,0 +1,14 @@
+# Archivo robots.txt para: tudominio.com
+User-agent: *
+Allow: /
+Disallow: /private/
+Disallow: /admin/
+Disallow: /tmp/
+
+# Especialmente importante: PERMITIR acceso al favicon
+Allow: /favicon.ico
+Allow: /imgs/favicon/
+Allow: /assets/icons/
+
+# Sitemap (reemplaza con tu URL real)
+Sitemap: https://https://ink-art-tattoo.github.io/sitemap.xml
