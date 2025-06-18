@@ -3,13 +3,13 @@
   "short_name": "Ink Art",
   "icons": [
     {
-      "src": "/192x192.png",
+      "src": "/file_00000000713862468f03b8207bf2517e.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "maskable"
     },
     {
-      "src": "/512x512.png",
+      "src": "/file_00000000713862468f03b8207bf2517e.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
