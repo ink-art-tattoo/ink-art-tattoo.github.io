@@ -1,0 +1,1430 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reserva Directa - Inkart Studio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="canonical" href="https://ink-art-tattoo.github.io/">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        :root {
+            --primary: #5da7b6;
+            --secondary: #5da7b6;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --gray: #6c757d;
+            --admin: #5da7b6;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: var(--light);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        
+        .header {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+        }
+        .btn-home {
+            background: var(--secondary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        
+        .btn-home:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--secondary);
+            background: linear-gradient(to right, var(--secondary), #8a2be2);
+        }
+        
+        .header-controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        
+        .header h1 {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-delete {
+            background: #8b0000;
+            color: white;
+        }
+        
+        .btn-admin {
+            background: var(--admin);
+            color: white;
+        }
+        
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--primary);
+        }
+        
+        .btn-danger:hover {
+            box-shadow: 0 5px 15px var(--danger);
+        }
+        
+        .btn-delete:hover {
+            box-shadow: 0 5px 15px #8b0000;
+        }
+        
+        .btn-admin:hover {
+            box-shadow: 0 5px 15px var(--admin);
+        }
+        
+        .btn-whatsapp:hover {
+            box-shadow: 0 5px 15px #25D366;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+        }
+        
+        .calendar-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .calendar-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .calendar-nav {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .calendar-nav button {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .calendar-nav button:hover {
+            background: var(--primary);
+        }
+        
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .calendar-day-header {
+            text-align: center;
+            padding: 15px 0;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .calendar-day {
+            background: rgba(255, 255, 255, 0.08);
+            height: 80px;
+            border-radius: 12px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .calendar-day:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+        
+        .calendar-day.active {
+            background: var(--primary);
+            box-shadow: 0 5px 15px var(--primary);
+        }
+        
+        .calendar-day.disabled {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--gray);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
+        .calendar-day.disabled:hover {
+            background: rgba(255, 255, 255, 0.03);
+            transform: none;
+        }
+        
+        .calendar-day-number {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .calendar-day-events {
+            margin-top: auto;
+            display: flex;
+            gap: 3px;
+        }
+        
+        .event-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+        }
+        
+        .sidebar {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .sidebar h2 i {
+            color: var(--primary);
+        }
+        
+        .selected-date {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .selected-date h3 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .time-slot {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .time-slot:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+        
+        .time-slot.selected {
+            background: var(--primary);
+            box-shadow: 0 5px 15px var(--primary);
+        }
+        
+        .time-slot.booked {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--gray);
+            cursor: not-allowed;
+            position: relative;
+        }
+        
+        .time-slot.booked::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--danger);
+            transform: translateY(-50%) rotate(-15deg);
+        }
+        
+        .time-slot.not-enough-time {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--gray);
+            cursor: not-allowed;
+            position: relative;
+        }
+        
+        .time-slot.not-enough-time::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--warning);
+            transform: translateY(-50%) rotate(-15deg);
+        }
+        
+        .booking-summary {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .booking-summary h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .confirm-btn {
+            width: 100%;
+            margin-top: 20px;
+            padding: 15px;
+            font-size: 1.1rem;
+        }
+        
+        /* Nuevos estilos para tamaño de tatuaje */
+        .size-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .size-option {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            position: relative;
+        }
+        
+        .size-option:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .size-option.selected {
+            background: var(--primary);
+            box-shadow: 0 5px 15px var(--primary);
+        }
+        
+        .size-option .duration {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+        
+        /* Formulario de contacto */
+        .contact-form {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .contact-form h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(255, 94, 148, 0.2);
+        }
+        
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .error-message {
+            color: var(--danger);
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        /* Notificaciones */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 10px;
+            background: var(--success);
+            color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.error {
+            background: var(--danger);
+        }
+        
+        .notification.warning {
+            background: var(--warning);
+            color: #000;
+        }
+        
+        .notification.admin {
+            background: var(--admin);
+        }
+        
+        /* Modal de carga */
+        .loader-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .loader-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 5px solid var(--primary);
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Modal de confirmación */
+        .confirmation-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .confirmation-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .close-modal:hover {
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+        
+        .modal-body {
+            margin-bottom: 25px;
+        }
+        
+        .modal-footer {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+        }
+        
+        .modal-btn {
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .modal-btn.confirm {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .modal-btn.cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        /* Responsive */
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .calendar-day {
+                height: 70px;
+            }
+            
+            .time-slots {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .calendar-day {
+                height: 60px;
+            }
+            
+            .time-slots {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .size-options {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .calendar {
+                gap: 5px;
+            }
+            
+            .calendar-day {
+                height: 50px;
+                padding: 5px;
+            }
+            
+            .calendar-day-number {
+                font-size: 1rem;
+            }
+            
+            .time-slots {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .contact-form, .booking-summary {
+                padding: 15px;
+            }
+            
+            .btn {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 380px) {
+            .time-slots {
+                grid-template-columns: 1fr;
+            }
+            
+            .calendar-day-header {
+                padding: 10px 0;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="notification" id="notification">
+            <i class="fas fa-check-circle"></i>
+            <span>¡Reserva guardada correctamente!</span>
+        </div>
+        
+        <div class="loader-modal" id="loader">
+            <div class="loader"></div>
+        </div>
+        
+        <div class="confirmation-modal" id="confirmationModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-check-circle"></i> Confirmar Reserva</h3>
+                    <button class="close-modal" id="closeModal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Estás seguro de que deseas confirmar la reserva con los siguientes detalles?</p>
+                    <div class="booking-summary" style="margin-top: 15px; background: rgba(255,255,255,0.05);">
+                        <div class="summary-item">
+                            <span>Fecha:</span>
+                            <span id="modal-summary-date">15/06/2025</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Hora:</span>
+                            <span id="modal-summary-time">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Tamaño:</span>
+                            <span id="modal-summary-size">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Duración:</span>
+                            <span id="modal-summary-duration">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Artista:</span>
+                            <span>Josiel Salabarría López</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Cliente:</span>
+                            <span id="modal-summary-name">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Teléfono:</span>
+                            <span id="modal-summary-phone">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Correo:</span>
+                            <span id="modal-summary-email">-</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-btn cancel" id="cancelReservation">Cancelar</button>
+                    <button class="modal-btn confirm" id="confirmReservation">Confirmar</button>
+                </div>
+            </div>
+        </div>
+        
+       
+        <div class="header">
+           <div class="header-controls">
+                    <!-- Botón para volver al inicio -->
+                    <a href="reservas.html" class="btn btn-home">
+                        <i class="fas fa-arrow-left"></i>
+                    </a> </div>
+          
+            <h1><i class="fas fa-calendar-plus"></i> Reserva Directa</h1>
+            <p>Para clientes que contactan directamente por WhatsApp</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <h2 id="current-month">Junio 2025</h2>
+                    <div class="calendar-nav">
+                        <button id="prev-month"><i class="fas fa-chevron-left"></i></button>
+                        <button id="next-month"><i class="fas fa-chevron-right"></i></button>
+                    </div>
+                </div>
+                
+                <div class="calendar">
+                    <div class="calendar-day-header">Lun</div>
+                    <div class="calendar-day-header">Mar</div>
+                    <div class="calendar-day-header">Mié</div>
+                    <div class="calendar-day-header">Jue</div>
+                    <div class="calendar-day-header">Vie</div>
+                    <div class="calendar-day-header">Sáb</div>
+                    <div class="calendar-day-header">Dom</div>
+                    
+                    <!-- Días del calendario generados por JavaScript -->
+                </div>
+            </div>
+            
+            <div class="sidebar">
+                <h2><i class="fas fa-clock"></i> Horarios Disponibles</h2>
+                
+                <div class="selected-date">
+                    <h3 id="selected-date-display">16 de Junio de 2025</h3>
+                </div>
+                
+                <div class="time-slots">
+                    <!-- Horarios generados por JavaScript -->
+                </div>
+                
+                <!-- Nuevo selector de tamaño de tatuaje -->
+                <div class="size-selection">
+                    <h3><i class="fas fa-ruler"></i> Tamaño del Tatuaje</h3>
+                    <div class="size-options">
+                        <div class="size-option" data-size="0-10" data-duration="2">
+                            <div>0-10 cm</div>
+                            <div class="duration">2 horas</div>
+                        </div>
+                        <div class="size-option" data-size="10-20" data-duration="4">
+                            <div>10-20 cm</div>
+                            <div class="duration">4 horas</div>
+                        </div>
+                        <div class="size-option" data-size="20-30" data-duration="6">
+                            <div>20-30 cm</div>
+                            <div class="duration">6 horas</div>
+                        </div>
+                        <div class="size-option" data-size="30+" data-duration="8">
+                            <div>+30 cm</div>
+                            <div class="duration">8 horas</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="contact-form">
+                    <h3><i class="fas fa-user"></i> Información del Cliente</h3>
+                    <div class="form-group">
+                        <label for="client-name">Nombre Completo *</label>
+                        <input type="text" id="client-name" placeholder="Nombre del cliente" required>
+                        <div class="error-message" id="name-error">Por favor ingresa el nombre del cliente</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="client-phone">Teléfono *</label>
+                        <input type="tel" id="client-phone" placeholder="Teléfono del cliente" required>
+                        <div class="error-message" id="phone-error">Por favor ingresa el teléfono del cliente</div>
+                    </div>
+                    <div class="form-group">
+                        <label for="client-email">Correo Electrónico (Opcional)</label>
+                        <input type="email" id="client-email" placeholder="Correo del cliente">
+                    </div>
+                </div>
+                
+                <div class="booking-summary">
+                    <h3><i class="fas fa-receipt"></i> Resumen de Reserva</h3>
+                    <div class="summary-item">
+                        <span>Fecha:</span>
+                        <span id="summary-date">16/06/2025</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Hora:</span>
+                        <span id="summary-time">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Tamaño:</span>
+                        <span id="summary-size">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Duración estimada:</span>
+                        <span id="summary-duration">-</span>
+                    </div>
+                    <div class="summary-item">
+                        <span>Artista:</span>
+                        <span>Josiel Salabarría López</span>
+                    </div>
+                    
+                    <button class="btn btn-primary confirm-btn" id="confirm-btn">
+                        <i class="fas fa-check-circle"></i> Confirmar Reserva
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- SDK de Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- SDK de EmailJS -->
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    
+    <script>
+        // Inicializar EmailJS con tu User ID
+        (function() {
+            emailjs.init("he4Q00rUNtLv_aUuL");
+        })();
+
+        // Configuración de Supabase
+        const supabaseUrl = 'https://umnfyoyamhsebhtystvr.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtbmZ5b3lhbWhzZWJodHlzdHZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5NDYyNzksImV4cCI6MjA2NTUyMjI3OX0.wgau4ceKnTkv3K5YzUsTvNWBEZ4-glmo-3kqIsKmx9U';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const today = new Date();
+            let currentMonth = today.getMonth();
+            let currentYear = today.getFullYear();
+            const calendarEl = document.querySelector('.calendar');
+            const currentMonthEl = document.getElementById('current-month');
+            const selectedDateDisplay = document.getElementById('selected-date-display');
+            const summaryDate = document.getElementById('summary-date');
+            const summaryTime = document.getElementById('summary-time');
+            const summarySize = document.getElementById('summary-size');
+            const summaryDuration = document.getElementById('summary-duration');
+            const timeSlotsEl = document.querySelector('.time-slots');
+            const prevMonthBtn = document.getElementById('prev-month');
+            const nextMonthBtn = document.getElementById('next-month');
+            const notification = document.getElementById('notification');
+            const loader = document.getElementById('loader');
+            const confirmBtn = document.getElementById('confirm-btn');
+            const confirmationModal = document.getElementById('confirmationModal');
+            const closeModal = document.getElementById('closeModal');
+            const cancelReservation = document.getElementById('cancelReservation');
+            const confirmReservation = document.getElementById('confirmReservation');
+            const modalSummaryDate = document.getElementById('modal-summary-date');
+            const modalSummaryTime = document.getElementById('modal-summary-time');
+            const modalSummarySize = document.getElementById('modal-summary-size');
+            const modalSummaryDuration = document.getElementById('modal-summary-duration');
+            const modalSummaryName = document.getElementById('modal-summary-name');
+            const modalSummaryPhone = document.getElementById('modal-summary-phone');
+            const modalSummaryEmail = document.getElementById('modal-summary-email');
+            const clientName = document.getElementById('client-name');
+            const clientPhone = document.getElementById('client-phone');
+            const clientEmail = document.getElementById('client-email');
+            const nameError = document.getElementById('name-error');
+            const phoneError = document.getElementById('phone-error');
+            
+            // Variables para la sesión
+            let selectedDate = new Date();
+            selectedDate.setDate(selectedDate.getDate() + 1);
+            selectedDate.setHours(0, 0, 0, 0); // Asegurar que sea inicio del día
+            
+            let selectedTime = null;
+            let selectedSize = null;
+            let horariosBloqueados = new Set();
+            
+            // Mapa de tamaños a duración (en horas)
+            const sizeDurationMap = {
+                "0-10": 2,
+                "10-20": 4,
+                "20-30": 6,
+                "30+": 8
+            };
+
+            // Función para formatear fecha en formato YYYY-MM-DD (local)
+            function formatLocalDate(date) {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+
+            // Función para mostrar notificaciones
+            function showNotification(message, isError = false, isWarning = false, isAdmin = false) {
+                notification.innerHTML = `
+                    <i class="fas ${isError ? 'fa-exclamation-circle' : isWarning ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i>
+                    <span>${message}</span>
+                `;
+                
+                notification.classList.toggle('error', isError);
+                notification.classList.toggle('warning', isWarning);
+                notification.classList.toggle('admin', isAdmin);
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+
+            // Función para mostrar/ocultar loader
+            function showLoader(show = true) {
+                loader.classList.toggle('active', show);
+            }
+
+            // Función para mostrar/ocultar modal de confirmación
+            function showConfirmationModal(show = true) {
+                confirmationModal.classList.toggle('active', show);
+            }
+
+            // Función para agregar minutos a un horario
+            function addMinutes(time, minutes) {
+                const [hours, mins] = time.split(':').map(Number);
+                const date = new Date();
+                date.setHours(hours);
+                date.setMinutes(mins + minutes);
+                return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+            }
+
+            // Función para calcular el tiempo final
+            function getEndTime(startTime, durationHours) {
+                const [hours, minutes] = startTime.split(':').map(Number);
+                const startDate = new Date();
+                startDate.setHours(hours, minutes, 0, 0);
+                
+                const endDate = new Date(startDate.getTime() + durationHours * 60 * 60 * 1000);
+                return `${String(endDate.getHours()).padStart(2, '0')}:${String(endDate.getMinutes()).padStart(2, '0')}`;
+            }
+
+            function updateMonthHeader() {
+                const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+                currentMonthEl.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+            }
+
+            function updateSelectedDateDisplay() {
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                selectedDateDisplay.textContent = selectedDate.toLocaleDateString('es-ES', options);
+                
+                // Actualizar resumen con formato DD/MM/YYYY
+                const formattedDate = selectedDate.toLocaleDateString('es-ES', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                }).replace(/\//g, '/');
+                summaryDate.textContent = formattedDate;
+            }
+
+            // Cargar horarios reservados desde Supabase
+            async function cargarHorariosReservados(fechaISO) {
+                try {
+                    showLoader(true);
+                    const { data, error } = await supabase
+                        .from('reservas')
+                        .select('hora, duracion')
+                        .eq('fecha', fechaISO);
+
+                    if (error) {
+                        console.error('Error cargando reservas:', error);
+                        return [];
+                    }
+
+                    // Extraemos los horarios de los datos
+                    return data;
+                } catch (error) {
+                    console.error('Error al cargar horarios:', error);
+                    return [];
+                } finally {
+                    showLoader(false);
+                }
+            }
+
+            // Generar slots de tiempo
+            async function generateTimeSlots() {
+                timeSlotsEl.innerHTML = '';
+                const fechaISO = formatLocalDate(selectedDate); // Usar formato local
+                const reservas = await cargarHorariosReservados(fechaISO);
+                
+                // Reiniciar horarios bloqueados
+                horariosBloqueados = new Set();
+                
+                // Agregar horarios reservados y bloquear según duración
+                reservas.forEach(reserva => {
+                    const horaInicio = reserva.hora;
+                    const duracion = reserva.duracion || 2; // Por defecto 2 horas si no hay duración
+                    
+                    // Bloquear el horario de inicio y los siguientes bloques según duración
+                    for (let i = 0; i < duracion * 2; i++) { // Cada 30 minutos (2 bloques por hora)
+                        const blockedTime = addMinutes(horaInicio, 30 * i);
+                        horariosBloqueados.add(blockedTime);
+                    }
+                });
+
+                const startHour = 9;
+                const endHour = 19;
+                const now = new Date();
+                const isToday = selectedDate.toDateString() === now.toDateString();
+
+                // Solo generar slots si hay un tamaño seleccionado
+                if (!selectedSize) {
+                    timeSlotsEl.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:15px;">Por favor, selecciona un tamaño de tatuaje</p>';
+                    return;
+                }
+                
+                const requiredDuration = sizeDurationMap[selectedSize];
+                const requiredBlocks = requiredDuration * 2; // Cada 30 minutos
+
+                for (let hour = startHour; hour < endHour; hour++) {
+                    for (let minute = 0; minute < 60; minute += 30) {
+                        const formattedHour = hour.toString().padStart(2, '0');
+                        const formattedMinute = minute.toString().padStart(2, '0');
+                        const timeString = `${formattedHour}:${formattedMinute}`;
+                        const slot = document.createElement('div');
+                        slot.classList.add('time-slot');
+                        slot.textContent = timeString;
+                        
+                        // Crear objeto Date para esta ranura horaria
+                        const slotTime = new Date(selectedDate);
+                        slotTime.setHours(hour, minute, 0, 0);
+                        
+                        // Comprobar si es un horario pasado para hoy
+                        const isPastSlot = isToday && slotTime < now;
+
+                        // Comprobar si hay suficiente tiempo disponible para la duración requerida
+                        let hasEnoughTime = true;
+                        for (let i = 0; i < requiredBlocks; i++) {
+                            const checkTime = addMinutes(timeString, 30 * i);
+                            const [checkHour] = checkTime.split(':').map(Number);
+                            
+                            // Comprobar si el horario está fuera del horario laboral
+                            if (checkHour >= endHour) {
+                                hasEnoughTime = false;
+                                break;
+                            }
+                            
+                            // Comprobar si el horario está reservado
+                            if (horariosBloqueados.has(checkTime)) {
+                                hasEnoughTime = false;
+                                break;
+                            }
+                        }
+
+                        if (horariosBloqueados.has(timeString) || isPastSlot) {
+                            slot.classList.add('booked');
+                            slot.title = isPastSlot ? 'Horario pasado' : 'Reservado';
+                        } else if (!hasEnoughTime) {
+                            slot.classList.add('not-enough-time');
+                            slot.title = 'No hay suficiente tiempo disponible';
+                        } else {
+                            slot.addEventListener('click', () => {
+                                document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
+                                slot.classList.add('selected');
+                                selectedTime = timeString;
+                                summaryTime.textContent = timeString;
+                                
+                                // Actualizar el resumen con la hora final
+                                const endTime = getEndTime(timeString, requiredDuration);
+                                summaryDuration.textContent = `${requiredDuration} horas (${timeString} - ${endTime})`;
+                            });
+                        }
+
+                        timeSlotsEl.appendChild(slot);
+                    }
+                }
+            }
+
+            // Generar calendario
+            function generateCalendar(month, year) {
+                // Limpiar calendario (dejando solo los encabezados)
+                const dayElements = Array.from(calendarEl.querySelectorAll('.calendar-day'));
+                dayElements.forEach(day => day.remove());
+                
+                updateMonthHeader();
+
+                const firstDay = new Date(year, month, 1);
+                const lastDay = new Date(year, month + 1, 0);
+                const firstDayOfWeek = firstDay.getDay();
+                const startingDay = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
+
+                // Crear fecha de hoy sin horas
+                const todayDate = new Date();
+                todayDate.setHours(0, 0, 0, 0);
+                
+                // Fecha mínima (mañana)
+                const minDate = new Date();
+                minDate.setDate(todayDate.getDate() + 1);
+                minDate.setHours(0, 0, 0, 0);
+
+                // Días vacíos al inicio del mes
+                for (let i = 0; i < startingDay; i++) {
+                    const emptyDay = document.createElement('div');
+                    emptyDay.classList.add('calendar-day', 'disabled');
+                    emptyDay.innerHTML = '<div class="calendar-day-number"></div>';
+                    calendarEl.appendChild(emptyDay);
+                }
+
+                // Generar días del mes
+                for (let day = 1; day <= lastDay.getDate(); day++) {
+                    const date = new Date(year, month, day);
+                    date.setHours(0, 0, 0, 0); // Resetear horas para comparación
+                    const dayEl = document.createElement('div');
+                    
+                    // Comprobar si es un día pasado o menor que la fecha mínima
+                    if (date < minDate) {
+                        dayEl.classList.add('calendar-day', 'disabled');
+                    } else {
+                        dayEl.classList.add('calendar-day');
+                    }
+                    
+                    // Comprobar si es el día seleccionado
+                    if (date.getTime() === selectedDate.getTime()) {
+                        dayEl.classList.add('active');
+                    }
+
+                    dayEl.innerHTML = `<div class="calendar-day-number">${day}</div>`;
+                    
+                    // Solo agregar evento click si no está deshabilitado
+                    if (!dayEl.classList.contains('disabled')) {
+                        dayEl.addEventListener('click', async () => {
+                            document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('active'));
+                            dayEl.classList.add('active');
+                            selectedDate = new Date(year, month, day);
+                            updateSelectedDateDisplay();
+                            selectedTime = null;
+                            summaryTime.textContent = '-';
+                            summaryDuration.textContent = '-';
+                            await generateTimeSlots();
+                        });
+                    }
+
+                    calendarEl.appendChild(dayEl);
+                }
+            }
+
+            // Eventos para seleccionar tamaño
+            document.querySelectorAll('.size-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    // Quitar selección anterior
+                    document.querySelectorAll('.size-option').forEach(el => el.classList.remove('selected'));
+                    
+                    // Seleccionar nueva opción
+                    this.classList.add('selected');
+                    
+                    // Guardar selección
+                    selectedSize = this.dataset.size;
+                    selectedDuration = parseInt(this.dataset.duration);
+                    
+                    // Actualizar resumen
+                    summarySize.textContent = this.querySelector('div:first-child').textContent;
+                    summaryDuration.textContent = `${selectedDuration} horas`;
+                    
+                    // Regenerar horarios con nueva duración
+                    if (selectedDate) {
+                        generateTimeSlots();
+                    }
+                });
+            });
+
+            // Navegación del calendario
+            prevMonthBtn.addEventListener('click', () => {
+                currentMonth--;
+                if (currentMonth < 0) {
+                    currentMonth = 11;
+                    currentYear--;
+                }
+                generateCalendar(currentMonth, currentYear);
+            });
+
+            nextMonthBtn.addEventListener('click', () => {
+                currentMonth++;
+                if (currentMonth > 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                }
+                generateCalendar(currentMonth, currentYear);
+            });
+
+            // Botón de confirmación abre el modal
+            confirmBtn.addEventListener('click', () => {
+                // Validar campos obligatorios
+                let isValid = true;
+                
+                if (!clientName.value.trim()) {
+                    nameError.style.display = 'block';
+                    isValid = false;
+                } else {
+                    nameError.style.display = 'none';
+                }
+                
+                if (!clientPhone.value.trim()) {
+                    phoneError.style.display = 'block';
+                    isValid = false;
+                } else {
+                    phoneError.style.display = 'none';
+                }
+                
+                if (!selectedTime) {
+                    showNotification('Por favor selecciona una hora', true);
+                    isValid = false;
+                }
+                
+                if (!selectedSize) {
+                    showNotification('Por favor selecciona un tamaño de tatuaje', true);
+                    isValid = false;
+                }
+                
+                if (!isValid) return;
+                
+                // Actualizar el modal con la información
+                modalSummaryDate.textContent = summaryDate.textContent;
+                modalSummaryTime.textContent = summaryTime.textContent;
+                modalSummarySize.textContent = summarySize.textContent;
+                modalSummaryDuration.textContent = summaryDuration.textContent;
+                modalSummaryName.textContent = clientName.value;
+                modalSummaryPhone.textContent = clientPhone.value;
+                modalSummaryEmail.textContent = clientEmail.value || 'No proporcionado';
+                
+                showConfirmationModal(true);
+            });
+
+            // Cerrar modal
+            closeModal.addEventListener('click', () => {
+                showConfirmationModal(false);
+            });
+
+            cancelReservation.addEventListener('click', () => {
+                showConfirmationModal(false);
+            });
+
+            // Confirmar reserva desde el modal
+            confirmReservation.addEventListener('click', async () => {
+                showConfirmationModal(false);
+                
+                const duracion = sizeDurationMap[selectedSize];
+                const fechaISO = formatLocalDate(selectedDate); // Usar formato local
+                const nombre = clientName.value.trim();
+                const telefono = clientPhone.value.trim();
+                const email = clientEmail.value.trim() || null; // Opcional
+
+                try {
+                    showLoader(true);
+                    
+                    // Verificar si el horario sigue disponible
+                    const { data: existingReservations, error: checkError } = await supabase
+                        .from('reservas')
+                        .select('id')
+                        .eq('fecha', fechaISO)
+                        .eq('hora', selectedTime);
+                    
+                    if (checkError) throw checkError;
+                    
+                    if (existingReservations.length > 0) {
+                        showNotification('Lo sentimos, este horario ya ha sido reservado', true);
+                        await generateTimeSlots();
+                        return;
+                    }
+                    
+                    // Guardar en Supabase con estado "confirmed" directamente
+                    const { error } = await supabase
+                        .from('reservas')
+                        .insert({
+                            user_id: null, // No asociado a un usuario registrado
+                            nombre: nombre,
+                            email: email,
+                            telefono: telefono,
+                            fecha: fechaISO,
+                            hora: selectedTime,
+                            artista: "Josiel Salabarría López",
+                            tamanio: selectedSize,
+                            duracion: duracion,
+                            estado: "confirmed", // Confirmada directamente
+                            timestamp: new Date().toISOString()
+                        });
+
+                    if (error) throw error;
+                    
+                    showNotification(`¡Reserva confirmada para ${nombre}!`);
+                    
+                    // SOLO ENVIAR CORREO SI HAY EMAIL PROPORCIONADO
+                    if (email) {
+                        try {
+                            const templateParams = {
+                                to_name: nombre,
+                                to_email: email,
+                                fecha: new Date(fechaISO + 'T00:00:00').toLocaleDateString('es-ES'),
+                                hora: selectedTime,
+                                artista: "Josiel Salabarría López",
+                                tamanio: selectedSize,
+                                duracion: `${duracion} horas`,
+                                telefono: telefono
+                            };
+                            
+                            await emailjs.send(
+                                'service_yw8xcrm', 
+                                'template_y09drjc',
+                                templateParams
+                            );
+                        } catch (emailError) {
+                            console.error('Error enviando correo:', emailError);
+                        }
+                    }
+                    
+                    // Enviar mensaje por WhatsApp (SIEMPRE SE ENVÍA)
+                    const whatsappMessage = `Hola ${nombre}, tu reserva en Inkart Studio ha sido confirmada:\nFecha: ${summaryDate.textContent}\nHora: ${selectedTime}\nArtista: Josiel Salabarría López\nTamaño: ${selectedSize}\nDuración: ${duracion} horas\n\nGracias por confiar en nosotros.`;
+                    const whatsappUrl = `https://wa.me/${telefono}?text=${encodeURIComponent(whatsappMessage)}`;
+                    window.open(whatsappUrl, '_blank');
+                    
+                    // Limpiar el formulario
+                    clientName.value = '';
+                    clientPhone.value = '';
+                    clientEmail.value = '';
+                    selectedTime = null;
+                    selectedSize = null;
+                    summaryTime.textContent = '-';
+                    summarySize.textContent = '-';
+                    summaryDuration.textContent = '-';
+                    
+                    // Limpiar selecciones
+                    document.querySelectorAll('.size-option').forEach(el => el.classList.remove('selected'));
+                    document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
+                    
+                    // Generar horarios de nuevo
+                    await generateTimeSlots();
+                    
+                } catch (error) {
+                    console.error('Error guardando reserva:', error);
+                    showNotification(`Error al guardar reserva: ${error.message}`, true);
+                } finally {
+                    showLoader(false);
+                }
+            });
+
+            // Inicializar la aplicación
+            generateCalendar(currentMonth, currentYear);
+            updateSelectedDateDisplay();
+            generateTimeSlots();
+        });
+    </script>
+</body>
+</html>

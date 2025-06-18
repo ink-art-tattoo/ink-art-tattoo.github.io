@@ -1,3 +1,4 @@
+
 // Efecto de máquina de escribir
 const typewriterElement = document.getElementById('typewriter');
 const cursorElement = document.querySelector('.cursor');
@@ -428,6 +429,7 @@ showItems('all');
         }, {
             threshold: 0.1
         });
+  
 
                // Observar todos los elementos con clase 'hidden'
         const hiddenElements = document.querySelectorAll('.hidden-left, .hidden-right, .hidden-top, .hidden-bottom');

@@ -1,0 +1,3572 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tattoo Studio - Sistema de Reservas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="canonical" href="https://ink-art-tattoo.github.io/">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        :root {
+            --primary: #5da7b6;
+            --secondary: #5da7b6;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --gray: #6c757d;
+            --admin: #5da7b6;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: var(--light);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .btn-home {
+            background: var(--secondary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        
+        .btn-home:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--secondary);
+            background: linear-gradient(to right, var(--secondary), #8a2be2);
+        }
+        
+        .reserva-view {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            gap: 15px;
+        }
+        
+        .header-controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .reserva-view {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            gap: 15px;
+        }
+        
+        .user-controls {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 8px 15px;
+            border-radius: 50px;
+        }
+        
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .admin-avatar {
+            background: var(--admin);
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-delete {
+            background: #8b0000;
+            color: white;
+        }
+        
+        .btn-admin {
+            background: var(--admin);
+            color: white;
+        }
+        
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--primary);
+        }
+        
+        .btn-danger:hover {
+            box-shadow: 0 5px 15px var(--danger);
+        }
+        
+        .btn-delete:hover {
+            box-shadow: 0 5px 15px #8b0000;
+        }
+        
+        .btn-admin:hover {
+            box-shadow: 0 5px 15px var(--admin);
+        }
+        
+        .btn-whatsapp:hover {
+            box-shadow: 0 5px 15px #25D366;
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 30px;
+        }
+        
+        .calendar-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .calendar-header h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .calendar-nav {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .calendar-nav button {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .calendar-nav button:hover {
+            background: var(--primary);
+        }
+        
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .calendar-day-header {
+            text-align: center;
+            padding: 15px 0;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .calendar-day {
+            background: rgba(255, 255, 255, 0.08);
+            height: 80px;
+            border-radius: 12px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .calendar-day:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+        
+        .calendar-day.active {
+            background: var(--primary);
+            box-shadow: 0 5px 15px var(--primary);
+        }
+        
+        .calendar-day.disabled {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--gray);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
+        .calendar-day.disabled:hover {
+            background: rgba(255, 255, 255, 0.03);
+            transform: none;
+        }
+        
+        .calendar-day-number {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        .calendar-day-events {
+            margin-top: auto;
+            display: flex;
+            gap: 3px;
+        }
+        
+        .event-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--success);
+            border-radius: 50%;
+        }
+        
+        .sidebar {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .sidebar h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .sidebar h2 i {
+            color: var(--primary);
+        }
+        
+        .selected-date {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .selected-date h3 {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--primary);
+        }
+        
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .time-slot {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .time-slot:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-3px);
+        }
+        
+        .time-slot.selected {
+            background: var(--primary);
+            box-shadow: 0 5px 15px var(--primary);
+        }
+        
+        .time-slot.booked {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--gray);
+            cursor: not-allowed;
+            position: relative;
+        }
+        
+        .time-slot.booked::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--danger);
+            transform: translateY(-50%) rotate(-15deg);
+        }
+        
+        .time-slot.not-enough-time {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--gray);
+            cursor: not-allowed;
+            position: relative;
+        }
+        
+        .time-slot.not-enough-time::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: var(--warning);
+            transform: translateY(-50%) rotate(-15deg);
+        }
+        
+        .booking-summary {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .booking-summary h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+        
+        .confirm-btn {
+            width: 100%;
+            margin-top: 20px;
+            padding: 15px;
+            font-size: 1.1rem;
+        }
+        
+        /* Nuevos estilos para tamaño de tatuaje */
+        .size-options {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .size-option {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            position: relative;
+        }
+        
+        .size-option:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .size-option.selected {
+            background: var(--primary);
+            box-shadow: 0 5px 15px var(--primary);
+        }
+        
+        .size-option .duration {
+            font-size: 0.8rem;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+        
+        /* Formulario de contacto */
+        .contact-form {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .contact-form h3 {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+        
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+        
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(255, 94, 148, 0.2);
+        }
+        
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .error-message {
+            color: var(--danger);
+            font-size: 0.8rem;
+            margin-top: 5px;
+            display: none;
+        }
+        
+        /* Notificaciones */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 10px;
+            background: var(--success);
+            color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.error {
+            background: var(--danger);
+        }
+        
+        .notification.warning {
+            background: var(--warning);
+            color: #000;
+        }
+        
+        .notification.admin {
+            background: var(--admin);
+        }
+        
+        /* Modal de carga */
+        .loader-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .loader-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 5px solid var(--primary);
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Modal de confirmación */
+        .confirmation-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .confirmation-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-header h3 {
+            font-size: 1.5rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .close-modal {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .close-modal:hover {
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+        
+        .modal-body {
+            margin-bottom: 25px;
+        }
+        
+        .modal-footer {
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+        }
+        
+        .modal-btn {
+            padding: 10px 20px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .modal-btn.confirm {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .modal-btn.cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        /* Modal de reservas */
+        .reservations-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .reservations-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .reservations-content {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 20px;
+            padding: 30px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .reservation-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .reservation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .reservation-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .reservation-detail {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .reservation-label {
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 3px;
+        }
+        
+        .reservation-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .no-reservations {
+            text-align: center;
+            padding: 30px;
+            color: var(--gray);
+        }
+        
+        /* Modal de autenticación */
+        .auth-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .auth-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .auth-content {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 20px;
+            padding: 30px;
+            width: 400px;
+            max-width: 90%;
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+        
+        .auth-content .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .auth-content .close-modal:hover {
+            color: var(--primary);
+            transform: rotate(90deg);
+        }
+        
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            background: rgba(255, 255, 255, 0.05);
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .auth-tab.active {
+            background: var(--primary);
+        }
+        
+        .auth-tab:first-child {
+            border-radius: 10px 0 0 10px;
+        }
+        
+        .auth-tab:last-child {
+            border-radius: 0 10px 10px 0;
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .auth-form h3 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+        
+        .auth-btn {
+            width: 100%;
+            padding: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+        
+        .auth-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px var(--primary);
+        }
+        
+        .auth-error {
+            color: var(--danger);
+            text-align: center;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        
+        /* Panel de administrador */
+        .admin-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            margin-top: 30px;
+        }
+        
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .admin-header h2 {
+            font-size: 1.8rem;
+            color: var(--admin);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .admin-header h2 i {
+            color: var(--admin);
+        }
+        
+        .admin-controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .admin-filter {
+            background: rgba(255, 255, 255, 0.08);
+            padding: 10px 15px;
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
+            min-width: 200px;
+        }
+        
+        .admin-filter select {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1rem;
+            width: 100%;
+        }
+        
+        .admin-filter select:focus {
+            outline: none;
+        }
+        
+        .reservations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .reservation-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .reservation-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(156, 39, 176, 0.3);
+        }
+        
+        .reservation-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .reservation-card-header h3 {
+            font-size: 1.2rem;
+            color: var(--admin);
+        }
+        
+        .reservation-status {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            min-width: 100px;
+            text-align: center;
+        }
+        
+        .status-pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: var(--warning);
+        }
+        
+        .status-confirmed {
+            background: rgba(40, 167, 69, 0.2);
+            color: var(--success);
+        }
+        
+        .status-canceled {
+            background: rgba(220, 53, 69, 0.2);
+            color: var(--danger);
+        }
+        
+        .reservation-card-body {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 10px;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+        
+        .reservation-card-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .admin-card-btn {
+            padding: 8px 15px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            white-space: nowrap;
+        }
+        
+        .btn-confirm {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn-cancel {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-delete {
+            background: #8b0000;
+            color: white;
+        }
+        
+        .btn-details {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+        }
+        
+        /* Sección de Gestión de Usuarios */
+        .admin-section {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .user-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            margin-bottom: 15px;
+        }
+        
+        .user-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(93, 167, 182, 0.3);
+        }
+        
+        .user-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .user-avatar-admin {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .user-role {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-left: auto;
+        }
+        
+        .user-role.admin {
+            background: rgba(156, 39, 176, 0.2);
+            color: var(--admin);
+        }
+        
+        .user-role.user {
+            background: rgba(93, 167, 182, 0.2);
+            color: var(--primary);
+        }
+        
+        .user-details p {
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .user-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 15px;
+        }
+        
+        /* Calendario del administrador */
+        .admin-calendar-container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .admin-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+        
+        .admin-calendar-day-header {
+            text-align: center;
+            padding: 10px 0;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .admin-calendar-day {
+            background: rgba(255, 255, 255, 0.08);
+            height: 60px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .admin-calendar-day:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+        
+        .admin-calendar-day.active {
+            background: var(--admin);
+            box-shadow: 0 3px 10px rgba(156, 39, 176, 0.5);
+        }
+        
+        .admin-calendar-day.disabled {
+            background: rgba(255, 255, 255, 0.03);
+            color: var(--gray);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+        
+        .admin-calendar-day.disabled:hover {
+            background: rgba(255, 255, 255, 0.03);
+            transform: none;
+        }
+        
+        .admin-calendar-day .event-indicators {
+            position: absolute;
+            bottom: 5px;
+            display: flex;
+            gap: 3px;
+        }
+        
+        .event-indicator {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        
+        .event-confirmed {
+            background: var(--success);
+        }
+        
+        .event-pending {
+            background: var(--warning);
+        }
+        
+        .event-canceled {
+            background: var(--danger);
+        }
+        
+        /* Responsive */
+        @media (max-width: 900px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .calendar-day {
+                height: 70px;
+            }
+            
+            .time-slots {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .reservations-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .user-controls {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .calendar-day {
+                height: 60px;
+            }
+            
+            .time-slots {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .size-options {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-controls {
+                flex-direction: column;
+            }
+            
+            .admin-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+            
+            .admin-filter {
+                width: 100%;
+            }
+            
+            .reservation-card-footer {
+                flex-direction: column;
+                align-items: stretch;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .calendar {
+                gap: 5px;
+            }
+            
+            .calendar-day {
+                height: 50px;
+                padding: 5px;
+            }
+            
+            .calendar-day-number {
+                font-size: 1rem;
+            }
+            
+            .time-slots {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .contact-form, .booking-summary {
+                padding: 15px;
+            }
+            
+            .btn {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .reservation-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .reservations-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .reservation-card-footer {
+                justify-content: center;
+            }
+            
+            .admin-card-btn {
+                padding: 8px 12px;
+                font-size: 0.85rem;
+            }
+        }
+        
+        @media (max-width: 380px) {
+            .time-slots {
+                grid-template-columns: 1fr;
+            }
+            
+            .calendar-day-header {
+                padding: 10px 0;
+                font-size: 0.9rem;
+            }
+            
+            .reservation-card-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .reservation-status {
+                align-self: flex-start;
+            }
+        }
+        
+        /* Nuevo estilo para el estado de reserva en el panel de admin */
+        .reservation-status-small {
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-top: 5px;
+            display: inline-block;
+        }
+        
+        /* Nuevos estilos para integración con Google Calendar */
+        .google-calendar-info {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 15px;
+            margin-top: 20px;
+            border-left: 4px solid var(--success);
+        }
+    
+        /* === Mejoras Estéticas Optimizadas === */
+
+        /* 1. Transiciones suaves globales */
+        .calendar-day, .time-slot, .size-option, .btn {
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* 2. Glass effect más pronunciado */
+        .calendar-container, .sidebar, .auth-content {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+        }
+
+        /* 3. Botones neón en hover */
+        .btn-primary:hover {
+            box-shadow: 0 0 10px var(--primary), 0 0 20px var(--primary);
+        }
+        .btn-admin:hover {
+            box-shadow: 0 0 10px var(--admin), 0 0 20px var(--admin);
+        }
+        .btn-whatsapp:hover {
+            box-shadow: 0 0 10px #25D366, 0 0 20px #25D366;
+        }
+
+        /* 4. Calendario vibrante con pulso */
+        .calendar-day.active {
+            border: 2px solid var(--primary);
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 var(--primary); }
+            50% { box-shadow: 0 0 15px 5px var(--primary); }
+        }
+
+        /* 5. Avatar con efecto 3D */
+        .user-avatar {
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+
+        /* 6. Notificaciones mejoradas */
+        .notification {
+            border-left: 5px solid white;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+
+        /* 7. Cards de reserva con escala suave */
+        .reservation-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 25px rgba(156, 39, 176, 0.4);
+        }
+
+        /* Nuevos estilos para modal de reservas de usuario */
+        .user-reservations-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .user-reservations-header .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="notification" id="notification">
+            <i class="fas fa-check-circle"></i>
+            <span>¡Reserva guardada correctamente!</span>
+        </div>
+        
+        <div class="loader-modal" id="loader">
+            <div class="loader"></div>
+        </div>
+        
+        <div class="confirmation-modal" id="confirmationModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-check-circle"></i> Confirmar Reserva</h3>
+                    <button class="close-modal" id="closeModal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Estás seguro de que deseas confirmar tu reserva con los siguientes detalles?</p>
+                    <div class="booking-summary" style="margin-top: 15px; background: rgba(255,255,255,0.05);">
+                        <div class="summary-item">
+                            <span>Fecha:</span>
+                            <span id="modal-summary-date">15/06/2025</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Hora:</span>
+                            <span id="modal-summary-time">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Tamaño:</span>
+                            <span id="modal-summary-size">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Duración:</span>
+                            <span id="modal-summary-duration">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Artista:</span>
+                            <span>Josiel Salabarría López</span>
+                        </div>
+                        <div class="summary-item" style="margin-top: 15px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1);">
+                            <span>Estado:</span>
+                            <span class="reservation-status-small status-pending">Pendiente de aprobación</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-btn cancel" id="cancelReservation">Cancelar</button>
+                    <button class="modal-btn confirm" id="confirmReservation">Confirmar</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal para ver/cancelar reservas -->
+        <div class="reservations-modal" id="reservationsModal">
+            <div class="reservations-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-calendar-check"></i> Mis Reservas</h3>
+                    <button class="close-modal" id="closeReservationsModal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="reservations-list" style="margin-top: 20px;">
+                        <!-- Las reservas se cargarán aquí -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal de autenticación con botón de cierre -->
+        <div class="auth-modal" id="authModal">
+            <div class="auth-content">
+                <button class="close-modal" id="closeAuthModal">
+                    <i class="fas fa-times"></i>
+                </button>
+                
+                <div class="auth-tabs">
+                    <div class="auth-tab active" data-tab="login">Iniciar Sesión</div>
+                    <div class="auth-tab" data-tab="register">Registrarse</div>
+                </div>
+                
+                <div class="auth-form active" id="loginForm">
+                    <h3>Bienvenido de vuelta</h3>
+                    <div class="form-group">
+                        <label for="login-email">Correo Electrónico</label>
+                        <input type="email" id="login-email" placeholder="Tu correo">
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Contraseña</label>
+                        <input type="password" id="login-password" placeholder="Tu contraseña">
+                    </div>
+                    <button class="auth-btn" id="login-btn">Iniciar Sesión</button>
+                    <div class="auth-error" id="login-error"></div>
+                </div>
+                
+                <div class="auth-form" id="registerForm">
+                    <h3>Crear una cuenta</h3>
+                    <div class="form-group">
+                        <label for="register-name">Nombre Completo</label>
+                        <input type="text" id="register-name" placeholder="Tu nombre">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-email">Correo Electrónico</label>
+                        <input type="email" id="register-email" placeholder="Tu correo">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-phone">Teléfono</label>
+                        <input type="tel" id="register-phone" placeholder="Tu teléfono">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password">Contraseña</label>
+                        <input type="password" id="register-password" placeholder="Tu contraseña">
+                    </div>
+                    <div class="form-group">
+                        <label for="register-password-confirm">Confirmar Contraseña</label>
+                        <input type="password" id="register-password-confirm" placeholder="Confirma tu contraseña">
+                    </div>
+                    <button class="auth-btn" id="register-btn">Registrarse</button>
+                    <div class="auth-error" id="register-error"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Nuevo modal para reservas de usuario -->
+        <div class="reservations-modal" id="userReservationsModal">
+            <div class="reservations-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-calendar-check"></i> Reservas del Usuario</h3>
+                    <button class="close-modal" id="closeUserReservationsModal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="user-reservations-header">
+                        <div class="user-avatar" id="user-modal-avatar">U</div>
+                        <div>
+                            <h4 id="user-modal-name">Nombre Usuario</h4>
+                            <p id="user-modal-email">email@ejemplo.com</p>
+                        </div>
+                    </div>
+                    <div id="user-reservations-list" style="margin-top: 20px;">
+                        <!-- Las reservas del usuario se cargarán aquí -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Contenido para usuarios normales -->
+        <div id="normal-content">
+            <div class="reserva-view">
+              <div class="header-controls">
+                    <!-- Botón para volver al inicio -->
+                    <a href="index.html" class="btn btn-home">
+                        <i class="fas fa-arrow-left"></i>
+                    </a> </div>
+              <div class="user-controls">
+                    <div id="user-info" class="user-info" style="display: none;">
+                        <div class="user-avatar" id="user-avatar">JS</div>
+                        <span id="user-name">Josiel Salabarría</span>
+                        <button class="btn btn-outline" id="logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </button>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="view-reservations">
+                        <i class="fas fa-calendar-check"></i> Mis Reservas
+                    </button>
+                    
+                    <button class="btn btn-outline" id="login-btn-header">
+                        <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+                    </button>
+                </div>
+            </div>
+            
+            <div class="main-content">
+                <div class="calendar-container">
+                    <div class="calendar-header">
+                        <h2 id="current-month">Junio 2025</h2>
+                        <div class="calendar-nav">
+                            <button id="prev-month"><i class="fas fa-chevron-left"></i></button>
+                            <button id="next-month"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    
+                    <div class="calendar">
+                        <div class="calendar-day-header">Lun</div>
+                        <div class="calendar-day-header">Mar</div>
+                        <div class="calendar-day-header">Mié</div>
+                        <div class="calendar-day-header">Jue</div>
+                        <div class="calendar-day-header">Vie</div>
+                        <div class="calendar-day-header">Sáb</div>
+                        <div class="calendar-day-header">Dom</div>
+                        
+                        <!-- Días del calendario generados por JavaScript -->
+                    </div>
+                </div>
+                
+                <div class="sidebar">
+                    <h2><i class="fas fa-clock"></i> Horarios Disponibles</h2>
+                    
+                    <div class="selected-date">
+                        <h3 id="selected-date-display">16 de Junio de 2025</h3>
+                    </div>
+                    
+                    <div class="time-slots">
+                        <!-- Horarios generados por JavaScript -->
+                    </div>
+                    
+                    <!-- Nuevo selector de tamaño de tatuaje -->
+                    <div class="size-selection">
+                        <h3><i class="fas fa-ruler"></i> Tamaño del Tatuaje</h3>
+                        <div class="size-options">
+                            <div class="size-option" data-size="0-10" data-duration="2">
+                                <div>0-10 cm</div>
+                                <div class="duration">2 horas</div>
+                            </div>
+                            <div class="size-option" data-size="10-20" data-duration="4">
+                                <div>10-20 cm</div>
+                                <div class="duration">4 horas</div>
+                            </div>
+                            <div class="size-option" data-size="20-30" data-duration="6">
+                                <div>20-30 cm</div>
+                                <div class="duration">6 horas</div>
+                            </div>
+                            <div class="size-option" data-size="30+" data-duration="8">
+                                <div>+30 cm</div>
+                                <div class="duration">8 horas</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="user-info-form" id="user-info-form" style="display: none;">
+                        <h3><i class="fas fa-user"></i> Información del Cliente</h3>
+                        <div class="form-group">
+                            <label>Nombre</label>
+                            <input type="text" id="user-info-name" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Correo</label>
+                            <input type="email" id="user-info-email" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label>Teléfono</label>
+                            <input type="tel" id="user-info-phone" readonly>
+                        </div>
+                    </div>
+                    
+                    <div class="booking-summary">
+                        <h3><i class="fas fa-receipt"></i> Resumen de Reserva</h3>
+                        <div class="summary-item">
+                            <span>Fecha:</span>
+                            <span id="summary-date">16/06/2025</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Hora:</span>
+                            <span id="summary-time">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Tamaño:</span>
+                            <span id="summary-size">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Duración estimada:</span>
+                            <span id="summary-duration">-</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Artista:</span>
+                            <span>Josiel Salabarría López</span>
+                        </div>
+                        
+                        <button class="btn btn-primary confirm-btn" id="confirm-btn">
+                            <i class="fas fa-check-circle"></i> Confirmar Reserva
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Panel de administrador -->
+        <div id="admin-panel" style="display: none;">
+            <div class="reserva-view">
+              <div class="header-controls">
+                    <!-- Botón para volver al inicio -->
+                    <a href="index.html" class="btn btn-home">
+                        <i class="fas fa-arrow-left"></i>
+                    </a> </div>
+              <div class="user-controls">
+                    <div class="user-info">
+                        <div class="user-avatar admin-avatar" id="admin-avatar">A</div>
+                        <span id="admin-name">Administrador</span>
+                        <button class="btn btn-admin" id="admin-logout-btn">
+                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                        </button>
+                    </div>
+                    
+                    <button class="btn btn-primary" id="admin-refresh">
+                        <i class="fas fa-sync-alt"></i> Actualizar
+                    </button>
+                    <button class="btn btn-whatsapp" id="direct-reservation-btn">
+                        <i class="fas fa-calendar-plus"></i> Reserva Directa
+                    </button>
+                </div>
+            </div>
+            
+            <div class="admin-panel">
+                <div class="admin-header">
+                    <h2><i class="fas fa-user-shield"></i> Panel de Administración</h2>
+                    <div class="admin-filter">
+                        <i class="fas fa-filter"></i>
+                        <select id="admin-filter">
+                            <option value="all">Todas las reservas</option>
+                            <option value="today">Hoy</option>
+                            <option value="pending">Pendientes</option>
+                            <option value="confirmed">Confirmadas</option>
+                            <option value="canceled">Canceladas</option>
+                            <option value="custom">Personalizado</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <!-- Nuevo calendario para administrador -->
+                <div class="admin-calendar-container">
+                    <div class="calendar-header">
+                        <h2 id="admin-current-month">Junio 2025</h2>
+                        <div class="calendar-nav">
+                            <button id="admin-prev-month"><i class="fas fa-chevron-left"></i></button>
+                            <button id="admin-next-month"><i class="fas fa-chevron-right"></i></button>
+                        </div>
+                    </div>
+                    <div class="admin-calendar">
+                        <div class="admin-calendar-day-header">Lun</div>
+                        <div class="admin-calendar-day-header">Mar</div>
+                        <div class="admin-calendar-day-header">Mié</div>
+                        <div class="admin-calendar-day-header">Jue</div>
+                        <div class="admin-calendar-day-header">Vie</div>
+                        <div class="admin-calendar-day-header">Sáb</div>
+                        <div class="admin-calendar-day-header">Dom</div>
+                    </div>
+                </div>
+                
+                <div class="google-calendar-info">
+                    <h4><i class="fab fa-google"></i> Integración con Google Calendar</h4>
+                    <p>Todas las reservas aprobadas se sincronizan automáticamente con el calendario de Inkart Studio.</p>
+                </div>
+                
+                <div class="admin-controls">
+                    <button class="btn btn-primary" id="admin-today">
+                        <i class="fas fa-calendar-day"></i> Reservas de hoy
+                    </button>
+                    <button class="btn btn-outline" id="admin-week">
+                        <i class="fas fa-calendar-week"></i> Esta semana
+                    </button>
+                    <button class="btn btn-admin" id="admin-pending">
+                        <i class="fas fa-clock"></i> Ver pendientes
+                    </button>
+                </div>
+                
+                <div class="reservations-grid" id="admin-reservations">
+                    <!-- Las reservas se cargarán aquí -->
+                </div>
+                
+                <!-- Nueva sección de gestión de usuarios -->
+                <div class="admin-section">
+                    <div class="admin-header">
+                        <h2><i class="fas fa-users"></i> Gestión de Usuarios</h2>
+                        <div class="admin-filter">
+                            <i class="fas fa-filter"></i>
+                            <select id="user-filter">
+                                <option value="all">Todos los usuarios</option>
+                                <option value="recent">Registrados recientemente</option>
+                                <option value="active">Activos (últimos 30 días)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div id="users-list">
+                        <!-- Los usuarios se cargarán aquí -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+        </footer>
+    </div>
+    
+    <!-- SDK de Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <!-- SDK de EmailJS -->
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    
+    <script>
+        // Inicializar EmailJS con tu User ID
+        (function() {
+            emailjs.init("he4Q00rUNtLv_aUuL");
+        })();
+
+        // Configuración de Supabase
+        const supabaseUrl = 'https://umnfyoyamhsebhtystvr.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtbmZ5b3lhbWhzZWJodHlzdHZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5NDYyNzksImV4cCI6MjA2NTUyMjI3OX0.wgau4ceKnTkv3K5YzUsTvNWBEZ4-glmo-3kqIsKmx9U';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        // Correo del administrador
+        const ADMIN_EMAIL = 'inkartjosielsalabarria@gmail.com';
+        // Número de WhatsApp del estudio
+        const WHATSAPP_NUMBER = '55480242';
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const today = new Date();
+            let currentMonth = today.getMonth();
+            let currentYear = today.getFullYear();
+            const calendarEl = document.querySelector('.calendar');
+            const currentMonthEl = document.getElementById('current-month');
+            const selectedDateDisplay = document.getElementById('selected-date-display');
+            const summaryDate = document.getElementById('summary-date');
+            const summaryTime = document.getElementById('summary-time');
+            const summarySize = document.getElementById('summary-size');
+            const summaryDuration = document.getElementById('summary-duration');
+            const timeSlotsEl = document.querySelector('.time-slots');
+            const prevMonthBtn = document.getElementById('prev-month');
+            const nextMonthBtn = document.getElementById('next-month');
+            const notification = document.getElementById('notification');
+            const loader = document.getElementById('loader');
+            const confirmBtn = document.getElementById('confirm-btn');
+            const confirmationModal = document.getElementById('confirmationModal');
+            const closeModal = document.getElementById('closeModal');
+            const cancelReservation = document.getElementById('cancelReservation');
+            const confirmReservation = document.getElementById('confirmReservation');
+            const modalSummaryDate = document.getElementById('modal-summary-date');
+            const modalSummaryTime = document.getElementById('modal-summary-time');
+            const modalSummarySize = document.getElementById('modal-summary-size');
+            const modalSummaryDuration = document.getElementById('modal-summary-duration');
+            
+            // Nuevos elementos para autenticación
+            const authModal = document.getElementById('authModal');
+            const loginForm = document.getElementById('loginForm');
+            const registerForm = document.getElementById('registerForm');
+            const loginTab = document.querySelector('[data-tab="login"]');
+            const registerTab = document.querySelector('[data-tab="register"]');
+            const loginBtn = document.getElementById('login-btn');
+            const registerBtn = document.getElementById('register-btn');
+            const loginError = document.getElementById('login-error');
+            const registerError = document.getElementById('register-error');
+            const loginBtnHeader = document.getElementById('login-btn-header');
+            const logoutBtn = document.getElementById('logout-btn');
+            const userInfo = document.getElementById('user-info');
+            const viewReservationsBtn = document.getElementById('view-reservations');
+            const userInfoForm = document.getElementById('user-info-form');
+            const userInfoName = document.getElementById('user-info-name');
+            const userInfoEmail = document.getElementById('user-info-email');
+            const userInfoPhone = document.getElementById('user-info-phone');
+            const userAvatar = document.getElementById('user-avatar');
+            const userName = document.getElementById('user-name');
+            const closeReservationsModal = document.getElementById('closeReservationsModal');
+            const reservationsList = document.getElementById('reservations-list');
+            const reservationsModal = document.getElementById('reservationsModal');
+            const closeAuthModalBtn = document.getElementById('closeAuthModal');
+            
+            // Elementos del panel de administrador
+            const adminPanel = document.getElementById('admin-panel');
+            const adminName = document.getElementById('admin-name');
+            const adminAvatar = document.getElementById('admin-avatar');
+            const adminLogoutBtn = document.getElementById('admin-logout-btn');
+            const adminRefreshBtn = document.getElementById('admin-refresh');
+            const adminReservations = document.getElementById('admin-reservations');
+            const adminFilter = document.getElementById('admin-filter');
+            const adminTodayBtn = document.getElementById('admin-today');
+            const adminWeekBtn = document.getElementById('admin-week');
+            const adminPendingBtn = document.getElementById('admin-pending');
+            
+            // Elementos de gestión de usuarios
+            const userFilter = document.getElementById('user-filter');
+            const usersList = document.getElementById('users-list');
+            
+            // Nuevos elementos para calendario del administrador
+            const adminCalendarEl = document.querySelector('.admin-calendar');
+            const adminCurrentMonthEl = document.getElementById('admin-current-month');
+            const adminPrevMonthBtn = document.getElementById('admin-prev-month');
+            const adminNextMonthBtn = document.getElementById('admin-next-month');
+            let adminCurrentMonth = today.getMonth();
+            let adminCurrentYear = today.getFullYear();
+            
+            // Nuevos elementos para modal de reservas de usuario
+            const userReservationsModal = document.getElementById('userReservationsModal');
+            const closeUserReservationsModal = document.getElementById('closeUserReservationsModal');
+            const userModalAvatar = document.getElementById('user-modal-avatar');
+            const userModalName = document.getElementById('user-modal-name');
+            const userModalEmail = document.getElementById('user-modal-email');
+            const userReservationsList = document.getElementById('user-reservations-list');
+            
+            // Variables para la sesión
+            let currentUser = null;
+            let isAdmin = false;
+            let userRole = 'user';
+            
+            // Establecer fecha por defecto al día siguiente
+            let selectedDate = new Date();
+            selectedDate.setDate(selectedDate.getDate() + 1);
+            selectedDate.setHours(0, 0, 0, 0); // Asegurar que sea inicio del día
+            
+            let selectedTime = null;
+            let selectedSize = null;
+            let horariosBloqueados = new Set();
+            
+            // Mapa de tamaños a duración (en horas)
+            const sizeDurationMap = {
+                "0-10": 2,
+                "10-20": 4,
+                "20-30": 6,
+                "30+": 8
+            };
+
+            // Función para formatear fecha en formato YYYY-MM-DD (local)
+            function formatLocalDate(date) {
+                const year = date.getFullYear();
+                const month = String(date.getMonth() + 1).padStart(2, '0');
+                const day = String(date.getDate()).padStart(2, '0');
+                return `${year}-${month}-${day}`;
+            }
+
+            // Función para mostrar notificaciones
+            function showNotification(message, isError = false, isWarning = false, isAdmin = false) {
+                notification.innerHTML = `
+                    <i class="fas ${isError ? 'fa-exclamation-circle' : isWarning ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i>
+                    <span>${message}</span>
+                `;
+                
+                notification.classList.toggle('error', isError);
+                notification.classList.toggle('warning', isWarning);
+                notification.classList.toggle('admin', isAdmin);
+                notification.classList.add('show');
+                
+                setTimeout(() => {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+
+            // Función para mostrar/ocultar loader
+            function showLoader(show = true) {
+                loader.classList.toggle('active', show);
+            }
+
+            // Función para mostrar/ocultar modal de confirmación
+            function showConfirmationModal(show = true) {
+                confirmationModal.classList.toggle('active', show);
+            }
+
+            // Función para mostrar/ocultar modal de reservas
+            function showReservationsModal(show = true) {
+                reservationsModal.classList.toggle('active', show);
+            }
+
+            // Función para mostrar/ocultar modal de autenticación
+            function showAuthModal(show = true, tab = 'login') {
+                authModal.classList.toggle('active', show);
+                
+                if (show) {
+                    if (tab === 'login') {
+                        loginForm.classList.add('active');
+                        registerForm.classList.remove('active');
+                        loginTab.classList.add('active');
+                        registerTab.classList.remove('active');
+                    } else {
+                        registerForm.classList.add('active');
+                        loginForm.classList.remove('active');
+                        registerTab.classList.add('active');
+                        loginTab.classList.remove('active');
+                    }
+                }
+            }
+
+            // Actualizar UI según estado de autenticación
+            function updateAuthUI(user) {
+                if (user) {
+                    // Obtener el rol del usuario
+                    getUserRole(user.id).then(role => {
+                        userRole = role;
+                        isAdmin = role === 'admin';
+                        
+                        if (isAdmin) {
+                            // Mostrar panel de administrador y ocultar contenido normal
+                            document.getElementById('normal-content').style.display = 'none';
+                            adminPanel.style.display = 'block';
+                            
+                            // Actualizar información del administrador
+                            adminName.textContent = 'Administrador';
+                            if (user.user_metadata && user.user_metadata.full_name) {
+                                adminName.textContent = user.user_metadata.full_name;
+                                const initials = user.user_metadata.full_name.split(' ').map(n => n[0]).join('').toUpperCase();
+                                adminAvatar.textContent = initials.substring(0, 2);
+                            }
+                            
+                            // Cargar reservas para el administrador
+                            cargarReservasAdmin();
+                            
+                            // Cargar usuarios
+                            cargarUsuariosAdmin();
+                            
+                            // Generar calendario administrativo
+                            generateAdminCalendar(adminCurrentMonth, adminCurrentYear);
+                        } else {
+                            // Mostrar contenido normal y ocultar panel de administrador
+                            document.getElementById('normal-content').style.display = 'block';
+                            adminPanel.style.display = 'none';
+                            
+                            userInfo.style.display = 'flex';
+                            loginBtnHeader.style.display = 'none';
+                            userInfoForm.style.display = 'block';
+                            
+                            // Actualizar información del usuario
+                            userInfoName.value = user.user_metadata.full_name || '';
+                            userInfoEmail.value = user.email || '';
+                            userInfoPhone.value = user.user_metadata.phone || '';
+                            
+                            // Actualizar barra de usuario
+                            userName.textContent = user.user_metadata.full_name || user.email;
+                            if (user.user_metadata.full_name) {
+                                const initials = user.user_metadata.full_name.split(' ').map(n => n[0]).join('').toUpperCase();
+                                userAvatar.textContent = initials.substring(0, 2);
+                            }
+                        }
+                    });
+                } else {
+                    // No hay usuario: mostrar contenido normal (sin sesión) y ocultar panel de admin
+                    document.getElementById('normal-content').style.display = 'block';
+                    adminPanel.style.display = 'none';
+                    
+                    userInfo.style.display = 'none';
+                    loginBtnHeader.style.display = 'block';
+                    userInfoForm.style.display = 'none';
+                }
+            }
+
+            // Obtener rol de usuario
+            async function getUserRole(userId) {
+                try {
+                    const { data, error } = await supabase
+                        .from('profiles')
+                        .select('role')
+                        .eq('id', userId)
+                        .single();
+                    
+                    if (error) throw error;
+                    
+                    return data ? data.role : 'user';
+                } catch (error) {
+                    console.error('Error obteniendo rol:', error);
+                    return 'user';
+                }
+            }
+
+            // Función para agregar minutos a un horario
+            function addMinutes(time, minutes) {
+                const [hours, mins] = time.split(':').map(Number);
+                const date = new Date();
+                date.setHours(hours);
+                date.setMinutes(mins + minutes);
+                return `${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(2, '0')}`;
+            }
+
+            // Función para calcular el tiempo final
+            function getEndTime(startTime, durationHours) {
+                const [hours, minutes] = startTime.split(':').map(Number);
+                const startDate = new Date();
+                startDate.setHours(hours, minutes, 0, 0);
+                
+                const endDate = new Date(startDate.getTime() + durationHours * 60 * 60 * 1000);
+                return `${String(endDate.getHours()).padStart(2, '0')}:${String(endDate.getMinutes()).padStart(2, '0')}`;
+            }
+
+            function updateMonthHeader() {
+                const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+                currentMonthEl.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+            }
+
+            function updateSelectedDateDisplay() {
+                const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                selectedDateDisplay.textContent = selectedDate.toLocaleDateString('es-ES', options);
+                
+                // Actualizar resumen con formato DD/MM/YYYY
+                const formattedDate = selectedDate.toLocaleDateString('es-ES', {
+                    day: '2-digit',
+                    month: '2-digit',
+                    year: 'numeric'
+                }).replace(/\//g, '/');
+                summaryDate.textContent = formattedDate;
+            }
+
+            // Cargar horarios reservados desde Supabase
+            async function cargarHorariosReservados(fechaISO) {
+                try {
+                    showLoader(true);
+                    const { data, error } = await supabase
+                        .from('reservas')
+                        .select('hora, duracion')
+                        .eq('fecha', fechaISO);
+
+                    if (error) {
+                        console.error('Error cargando reservas:', error);
+                        return [];
+                    }
+
+                    // Extraemos los horarios de los datos
+                    return data;
+                } catch (error) {
+                    console.error('Error al cargar horarios:', error);
+                    return [];
+                } finally {
+                    showLoader(false);
+                }
+            }
+
+            // Generar slots de tiempo
+            async function generateTimeSlots() {
+                timeSlotsEl.innerHTML = '';
+                const fechaISO = formatLocalDate(selectedDate); // Usar formato local
+                const reservas = await cargarHorariosReservados(fechaISO);
+                
+                // Reiniciar horarios bloqueados
+                horariosBloqueados = new Set();
+                
+                // Agregar horarios reservados y bloquear según duración
+                reservas.forEach(reserva => {
+                    const horaInicio = reserva.hora;
+                    const duracion = reserva.duracion || 2; // Por defecto 2 horas si no hay duración
+                    
+                    // Bloquear el horario de inicio y los siguientes bloques según duración
+                    for (let i = 0; i < duracion * 2; i++) { // Cada 30 minutos (2 bloques por hora)
+                        const blockedTime = addMinutes(horaInicio, 30 * i);
+                        horariosBloqueados.add(blockedTime);
+                    }
+                });
+
+                const startHour = 9;
+                const endHour = 19;
+                const now = new Date();
+                const isToday = selectedDate.toDateString() === now.toDateString();
+
+                // Solo generar slots si hay un tamaño seleccionado
+                if (!selectedSize) {
+                    timeSlotsEl.innerHTML = '<p style="grid-column:1/-1;text-align:center;padding:15px;">Por favor, selecciona un tamaño de tatuaje</p>';
+                    return;
+                }
+                
+                const requiredDuration = sizeDurationMap[selectedSize];
+                const requiredBlocks = requiredDuration * 2; // Cada 30 minutos
+
+                for (let hour = startHour; hour < endHour; hour++) {
+                    for (let minute = 0; minute < 60; minute += 30) {
+                        const formattedHour = hour.toString().padStart(2, '0');
+                        const formattedMinute = minute.toString().padStart(2, '0');
+                        const timeString = `${formattedHour}:${formattedMinute}`;
+                        const slot = document.createElement('div');
+                        slot.classList.add('time-slot');
+                        slot.textContent = timeString;
+                        
+                        // Crear objeto Date para esta ranura horaria
+                        const slotTime = new Date(selectedDate);
+                        slotTime.setHours(hour, minute, 0, 0);
+                        
+                        // Comprobar si es un horario pasado para hoy
+                        const isPastSlot = isToday && slotTime < now;
+
+                        // Comprobar si hay suficiente tiempo disponible para la duración requerida
+                        let hasEnoughTime = true;
+                        for (let i = 0; i < requiredBlocks; i++) {
+                            const checkTime = addMinutes(timeString, 30 * i);
+                            const [checkHour] = checkTime.split(':').map(Number);
+                            
+                            // Comprobar si el horario está fuera del horario laboral
+                            if (checkHour >= endHour) {
+                                hasEnoughTime = false;
+                                break;
+                            }
+                            
+                            // Comprobar si el horario está reservado
+                            if (horariosBloqueados.has(checkTime)) {
+                                hasEnoughTime = false;
+                                break;
+                            }
+                        }
+
+                        if (horariosBloqueados.has(timeString) || isPastSlot) {
+                            slot.classList.add('booked');
+                            slot.title = isPastSlot ? 'Horario pasado' : 'Reservado';
+                        } else if (!hasEnoughTime) {
+                            slot.classList.add('not-enough-time');
+                            slot.title = 'No hay suficiente tiempo disponible';
+                        } else {
+                            slot.addEventListener('click', () => {
+                                document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
+                                slot.classList.add('selected');
+                                selectedTime = timeString;
+                                summaryTime.textContent = timeString;
+                                
+                                // Actualizar el resumen con la hora final
+                                const endTime = getEndTime(timeString, requiredDuration);
+                                summaryDuration.textContent = `${requiredDuration} horas (${timeString} - ${endTime})`;
+                            });
+                        }
+
+                        timeSlotsEl.appendChild(slot);
+                    }
+                }
+            }
+
+            // Generar calendario
+            function generateCalendar(month, year) {
+                // Limpiar calendario (dejando solo los encabezados)
+                const dayElements = Array.from(calendarEl.querySelectorAll('.calendar-day'));
+                dayElements.forEach(day => day.remove());
+                
+                updateMonthHeader();
+
+                const firstDay = new Date(year, month, 1);
+                const lastDay = new Date(year, month + 1, 0);
+                const firstDayOfWeek = firstDay.getDay();
+                const startingDay = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
+
+                // Crear fecha de hoy sin horas
+                const todayDate = new Date();
+                todayDate.setHours(0, 0, 0, 0);
+                
+                // Fecha mínima (mañana)
+                const minDate = new Date();
+                minDate.setDate(todayDate.getDate() + 1);
+                minDate.setHours(0, 0, 0, 0);
+
+                // Días vacíos al inicio del mes
+                for (let i = 0; i < startingDay; i++) {
+                    const emptyDay = document.createElement('div');
+                    emptyDay.classList.add('calendar-day', 'disabled');
+                    emptyDay.innerHTML = '<div class="calendar-day-number"></div>';
+                    calendarEl.appendChild(emptyDay);
+                }
+
+                // Generar días del mes
+                for (let day = 1; day <= lastDay.getDate(); day++) {
+                    const date = new Date(year, month, day);
+                    date.setHours(0, 0, 0, 0); // Resetear horas para comparación
+                    const dayEl = document.createElement('div');
+                    
+                    // Comprobar si es un día pasado o menor que la fecha mínima
+                    if (date < minDate) {
+                        dayEl.classList.add('calendar-day', 'disabled');
+                    } else {
+                        dayEl.classList.add('calendar-day');
+                    }
+                    
+                    // Comprobar si es el día seleccionado
+                    if (date.getTime() === selectedDate.getTime()) {
+                        dayEl.classList.add('active');
+                    }
+
+                    dayEl.innerHTML = `<div class="calendar-day-number">${day}</div>`;
+                    
+                    // Solo agregar evento click si no está deshabilitado
+                    if (!dayEl.classList.contains('disabled')) {
+                        dayEl.addEventListener('click', async () => {
+                            document.querySelectorAll('.calendar-day').forEach(d => d.classList.remove('active'));
+                            dayEl.classList.add('active');
+                            selectedDate = new Date(year, month, day);
+                            updateSelectedDateDisplay();
+                            selectedTime = null;
+                            summaryTime.textContent = '-';
+                            summaryDuration.textContent = '-';
+                            await generateTimeSlots();
+                        });
+                    }
+
+                    calendarEl.appendChild(dayEl);
+                }
+            }
+
+            // Función para cancelar una reserva
+            async function cancelarReserva(reservaId) {
+                try {
+                    showLoader(true);
+                    
+                    // Primero obtenemos los datos de la reserva para el correo
+                    const { data: reserva, error: getError } = await supabase
+                        .from('reservas')
+                        .select('*')
+                        .eq('id', reservaId)
+                        .single();
+                    
+                    if (getError) throw getError;
+                    
+                    // Ahora eliminamos la reserva
+                    const { error: deleteError } = await supabase
+                        .from('reservas')
+                        .delete()
+                        .eq('id', reservaId);
+                    
+                    if (deleteError) throw deleteError;
+                    
+                    // Enviar correo de cancelación
+                    const templateParams = {
+                        to_name: reserva.nombre,
+                        to_email: reserva.email,
+                        fecha: new Date(reserva.fecha + 'T00:00:00').toLocaleDateString('es-ES'),
+                        hora: reserva.hora,
+                        artista: reserva.artista,
+                        tamanio: reserva.tamanio,
+                        duracion: `${reserva.duracion} horas`
+                    };
+                    
+                    await emailjs.send(
+                        'service_yw8xcrm', 
+                        'template_cancelacion', 
+                        templateParams
+                    );
+                    
+                    showNotification('Reserva cancelada correctamente. Se ha enviado un correo de confirmación.');
+                    
+                    // Volver a cargar las reservas
+                    if (isAdmin) {
+                        cargarReservasAdmin();
+                    } else {
+                        cargarReservasUsuario();
+                    }
+                } catch (error) {
+                    console.error('Error cancelando reserva:', error);
+                    showNotification(`Error al cancelar reserva: ${error.message}`, true);
+                } finally {
+                    showLoader(false);
+                }
+            }
+
+            // Función para cargar las reservas del usuario actual
+            async function cargarReservasUsuario() {
+                try {
+                    showLoader(true);
+                    
+                    if (!currentUser) {
+                        showNotification('Por favor inicia sesión para ver tus reservas', true);
+                        return;
+                    }
+                    
+                    const { data: reservas, error } = await supabase
+                        .from('reservas')
+                        .select('*')
+                        .eq('user_id', currentUser.id)
+                        .order('fecha', { ascending: true })
+                        .order('hora', { ascending: true });
+                    
+                    if (error) throw error;
+                    
+                    reservationsList.innerHTML = '';
+                    
+                    if (!reservas || reservas.length === 0) {
+                        reservationsList.innerHTML = `
+                            <div class="no-reservations">
+                                <i class="fas fa-calendar-times fa-3x" style="margin-bottom: 15px; opacity: 0.5;"></i>
+                                <p>No se encontraron reservas para este usuario</p>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    reservas.forEach(reserva => {
+                        const reservaEl = document.createElement('div');
+                        reservaEl.classList.add('reservation-item');
+                        
+                        // Crear la fecha como local, agregando 'T00:00:00' para evitar desplazamiento
+                        const fecha = new Date(reserva.fecha + 'T00:00:00');
+                        const fechaFormateada = fecha.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                        
+                        // Determinar el estado para mostrar
+                        let estadoTexto = '';
+                        let estadoClase = '';
+                        if (reserva.estado === 'pending') {
+                            estadoTexto = 'Pendiente de aprobación';
+                            estadoClase = 'status-pending';
+                        } else if (reserva.estado === 'confirmed') {
+                            estadoTexto = 'Confirmada';
+                            estadoClase = 'status-confirmed';
+                        } else {
+                            estadoTexto = 'Cancelada';
+                            estadoClase = 'status-canceled';
+                        }
+                        
+                        reservaEl.innerHTML = `
+                            <div class="reservation-header">
+                                <h4>Reserva #${reserva.id}</h4>
+                                <span>${fechaFormateada}</span>
+                            </div>
+                            <div class="reservation-details">
+                                <div class="reservation-detail">
+                                    <div class="reservation-label">Hora</div>
+                                    <div>${reserva.hora}</div>
+                                </div>
+                                <div class="reservation-detail">
+                                    <div class="reservation-label">Tamaño</div>
+                                    <div>${reserva.tamanio}</div>
+                                </div>
+                                <div class="reservation-detail">
+                                    <div class="reservation-label">Duración</div>
+                                    <div>${reserva.duracion} horas</div>
+                                </div>
+                                <div class="reservation-detail">
+                                    <div class="reservation-label">Artista</div>
+                                    <div>${reserva.artista}</div>
+                                </div>
+                                <div class="reservation-detail">
+                                    <div class="reservation-label">Estado</div>
+                                    <div><span class="reservation-status-small ${estadoClase}">${estadoTexto}</span></div>
+                                </div>
+                            </div>
+                            <div class="reservation-actions">
+                                <button class="btn btn-danger cancel-reservation-btn" data-id="${reserva.id}" ${reserva.estado === 'canceled' ? 'disabled' : ''}>
+                                    <i class="fas fa-trash-alt"></i> Cancelar Reserva
+                                </button>
+                            </div>
+                        `;
+                        
+                        reservationsList.appendChild(reservaEl);
+                    });
+                    
+                    // Agregar eventos a los botones de cancelar
+                    document.querySelectorAll('.cancel-reservation-btn').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            const reservaId = btn.dataset.id;
+                            if (confirm('¿Estás seguro de que deseas cancelar esta reserva?')) {
+                                cancelarReserva(reservaId);
+                            }
+                        });
+                    });
+                } catch (error) {
+                    console.error('Error cargando reservas:', error);
+                    showNotification(`Error al cargar reservas: ${error.message}`, true);
+                } finally {
+                    showLoader(false);
+                }
+            }
+
+            // Función para cargar reservas para el panel de administrador
+            async function cargarReservasAdmin(filter = 'all', customDate = null) {
+                try {
+                    showLoader(true);
+                    
+                    let query = supabase
+                        .from('reservas')
+                        .select('*')
+                        .order('fecha', { ascending: true })
+                        .order('hora', { ascending: true });
+                    
+                    // Aplicar filtros
+                    if (filter === 'today') {
+                        const today = new Date();
+                        const todayISO = formatLocalDate(today);
+                        query = query.eq('fecha', todayISO);
+                    } else if (filter === 'pending') {
+                        query = query.eq('estado', 'pending');
+                    } else if (filter === 'confirmed') {
+                        query = query.eq('estado', 'confirmed');
+                    } else if (filter === 'canceled') {
+                        query = query.eq('estado', 'canceled');
+                    } else if (filter === 'custom' && customDate) {
+                        const customISO = formatLocalDate(customDate);
+                        query = query.eq('fecha', customISO);
+                    }
+                    
+                    const { data: reservas, error } = await query;
+                    
+                    if (error) throw error;
+                    
+                    adminReservations.innerHTML = '';
+                    
+                    if (!reservas || reservas.length === 0) {
+                        adminReservations.innerHTML = `
+                            <div class="no-reservations" style="grid-column:1/-1;text-align:center;padding:30px;">
+                                <i class="fas fa-calendar-times fa-3x" style="margin-bottom: 15px; opacity: 0.5;"></i>
+                                <p>No se encontraron reservas</p>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    reservas.forEach(reserva => {
+                        const fecha = new Date(reserva.fecha + 'T00:00:00');
+                        const fechaFormateada = fecha.toLocaleDateString('es-ES', { 
+                            weekday: 'short', 
+                            day: '2-digit', 
+                            month: 'short' 
+                        });
+                        
+                        const horaFormateada = reserva.hora.substring(0, 5);
+                        
+                        const card = document.createElement('div');
+                        card.classList.add('reservation-card');
+                        
+                        card.innerHTML = `
+                            <div class="reservation-card-header">
+                                <h3>${fechaFormateada} ${horaFormateada}</h3>
+                                <span class="reservation-status status-${reserva.estado}">
+                                    ${reserva.estado === 'pending' ? 'Pendiente' : 
+                                      reserva.estado === 'confirmed' ? 'Confirmada' : 'Cancelada'}
+                                </span>
+                            </div>
+                            <div class="reservation-card-body">
+                                <div><strong>${reserva.nombre}</strong></div>
+                                <div>${reserva.email}</div>
+                                <div>${reserva.telefono}</div>
+                                <div>Tamaño: ${reserva.tamanio}</div>
+                                <div>Duración: ${reserva.duracion} horas</div>
+                                <div>Artista: ${reserva.artista}</div>
+                            </div>
+                            <div class="reservation-card-footer">
+                                ${reserva.estado === 'pending' ? `
+                                <button class="admin-card-btn btn-confirm" data-id="${reserva.id}">
+                                    <i class="fas fa-check"></i> Aprobar
+                                </button>
+                                ` : ''}
+                                ${reserva.estado !== 'canceled' ? `
+                                <button class="admin-card-btn btn-cancel" data-id="${reserva.id}">
+                                    <i class="fas fa-times"></i> Cancelar
+                                </button>
+                                ` : ''}
+                                <button class="admin-card-btn btn-delete" data-id="${reserva.id}">
+                                    <i class="fas fa-trash-alt"></i> Eliminar
+                                </button>
+                                <button class="admin-card-btn btn-whatsapp" data-phone="${reserva.telefono}">
+                                    <i class="fab fa-whatsapp"></i> WhatsApp
+                                </button>
+                                <button class="admin-card-btn btn-details" data-id="${reserva.id}">
+                                    <i class="fas fa-info-circle"></i> Detalles
+                                </button>
+                            </div>
+                        `;
+                        
+                        adminReservations.appendChild(card);
+                    });
+                    
+                    // Agregar eventos a los botones de administrador
+                    document.querySelectorAll('.btn-confirm').forEach(btn => {
+                        btn.addEventListener('click', async () => {
+                            const reservaId = btn.dataset.id;
+                            await actualizarEstadoReserva(reservaId, 'confirmed');
+                        });
+                    });
+                    
+                    document.querySelectorAll('.btn-cancel').forEach(btn => {
+                        btn.addEventListener('click', async () => {
+                            const reservaId = btn.dataset.id;
+                            await actualizarEstadoReserva(reservaId, 'canceled');
+                        });
+                    });
+                    
+                    document.querySelectorAll('.btn-delete').forEach(btn => {
+                        btn.addEventListener('click', async () => {
+                            const reservaId = btn.dataset.id;
+                            if (confirm('¿Estás seguro de que deseas eliminar permanentemente esta reserva?')) {
+                                await eliminarReserva(reservaId);
+                            }
+                        });
+                    });
+                    
+                    document.querySelectorAll('.btn-whatsapp').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            const phone = btn.dataset.phone;
+                            // Eliminar cualquier carácter que no sea dígito
+                            const cleanedPhone = phone.replace(/\D/g, '');
+                            // Formatear el enlace de WhatsApp
+                            const whatsappUrl = `https://wa.me/${cleanedPhone}`;
+                            window.open(whatsappUrl, '_blank');
+                        });
+                    });
+                    
+                    document.querySelectorAll('.btn-details').forEach(btn => {
+                        btn.addEventListener('click', async () => {
+                            const reservaId = btn.dataset.id;
+                            mostrarDetallesReserva(reservaId);
+                        });
+                    });
+                    
+                } catch (error) {
+                    console.error('Error cargando reservas (admin):', error);
+                    showNotification(`Error al cargar reservas: ${error.message}`, true);
+                } finally {
+                    showLoader(false);
+                }
+            }
+
+            // Función para eliminar permanentemente una reserva (admin)
+            async function eliminarReserva(reservaId) {
+                try {
+                    showLoader(true);
+                    
+                    // Eliminar la reserva de Supabase
+                    const { error } = await supabase
+                        .from('reservas')
+                        .delete()
+                        .eq('id', reservaId);
+                    
+                    if (error) throw error;
+                    
+                    showNotification('Reserva eliminada permanentemente', false, false, true);
+                    
+                    // Recargar las reservas
+                    cargarReservasAdmin(adminFilter.value);
+                } catch (error) {
+                    console.error('Error eliminando reserva:', error);
+                    showNotification(`Error al eliminar reserva: ${error.message}`, true);
+                } finally {
+                    showLoader(false);
+                }
+            }
+
+            // Función para actualizar el estado de una reserva (admin)
+            async function actualizarEstadoReserva(reservaId, estado) {
+                try {
+                    showLoader(true);
+                    
+                    // Obtener la reserva para enviar el correo si es necesario
+                    const { data: reserva, error: getError } = await supabase
+                        .from('reservas')
+                        .select('*')
+                        .eq('id', reservaId)
+                        .single();
+                    
+                    if (getError) throw getError;
+                    
+                    // Actualizar el estado
+                    const { error } = await supabase
+                        .from('reservas')
+                        .update({ estado: estado })
+                        .eq('id', reservaId);
+                    
+                    if (error) throw error;
+                    
+                    showNotification(`Reserva ${estado === 'confirmed' ? 'confirmada' : 'cancelada'} correctamente`, false, false, true);
+                    
+                    // Enviar correo de confirmación solo si se aprueba
+                    if (estado === 'confirmed') {
+                        const templateParams = {
+                            to_name: reserva.nombre,
+                            to_email: reserva.email,
+                            fecha: new Date(reserva.fecha + 'T00:00:00').toLocaleDateString('es-ES'),
+                            hora: reserva.hora,
+                            artista: reserva.artista,
+                            tamanio: reserva.tamanio,
+                            duracion: `${reserva.duracion} horas`,
+                            telefono: reserva.telefono
+                        };
+                        
+                        await emailjs.send(
+                            'service_yw8xcrm', 
+                            'template_y09drjc',
+                            templateParams
+                        );
+                        
+                        // Agregar al calendario de Google solo si es una confirmación
+                        await agregarAlCalendarioGoogle(reserva);
+                    }
+                    
+                    // Recargar las reservas
+                    cargarReservasAdmin(adminFilter.value);
+                } catch (error) {
+                    console.error('Error actualizando reserva:', error);
+                    showNotification(`Error al actualizar reserva: ${error.message}`, true);
+                } finally {
+                    showLoader(false);
+                }
+            }
+
+            // Función para agregar reserva al calendario de Google
+            async function agregarAlCalendarioGoogle(reserva) {
+                try {
+                    // Simulación de integración con Google Calendar
+                    // En un entorno real, esto sería una llamada a una API segura
+                    
+                    console.log('Agregando al calendario de Google:', reserva);
+                    
+                    // Construir los datos del evento
+                    const evento = {
+                        summary: `Tatuaje - ${reserva.nombre}`,
+                        location: 'Inkart Studio',
+                        description: `Tatuaje de ${reserva.tamanio} - ${reserva.duracion} horas\nCliente: ${reserva.nombre}\nTeléfono: ${reserva.telefono}`,
+                        start: {
+                            dateTime: `${reserva.fecha}T${reserva.hora}:00`,
+                            timeZone: 'Europe/Madrid'
+                        },
+                        end: {
+                            dateTime: `${reserva.fecha}T${getEndTime(reserva.hora, reserva.duracion)}:00`,
+                            timeZone: 'Europe/Madrid'
+                        },
+                        reminders: {
+                            useDefault: true
+                        }
+                    };
+                    
+                    // Aquí iría la llamada real a la API de Google Calendar
+                    // Esta es una simulación para mostrar cómo funcionaría
+                    
+                    showNotification('Reserva agregada al calendario de Google', false, false, true);
+                    
+                    return true;
+                } catch (error) {
+                    console.error('Error al agregar al calendario:', error);
+                    showNotification('Error al sincronizar con Google Calendar', true, false, true);
+                    return false;
+                }
+            }
+
+            // Función para mostrar detalles de una reserva (admin)
+            async function mostrarDetallesReserva(reservaId) {
+                try {
+                    showLoader(true);
+                    
+                    const { data: reserva, error } = await supabase
+                        .from('reservas')
+                        .select('*')
+                        .eq('id', reservaId)
+                        .single();
+                    
+                    if (error) throw error;
+                    
+                    const fecha = new Date(reserva.fecha + 'T00:00:00');
+                    const fechaFormateada = fecha.toLocaleDateString('es-ES', { 
+                        weekday: 'long', 
+                        day: 'numeric', 
+                        month: 'long', 
+                        year: 'numeric' 
+                    });
+                    
+                    alert(`
+                        Detalles de la Reserva #${reserva.id}
+                        
+                        Fecha: ${fechaFormateada}
+                        Hora: ${reserva.hora}
+                        Cliente: ${reserva.nombre}
+                        Email: ${reserva.email}
+                        Teléfono: ${reserva.telefono}
+                        Tamaño: ${reserva.tamanio}
+                        Duración: ${reserva.duracion} horas
+                        Artista: ${reserva.artista}
+                        Estado: ${reserva.estado === 'pending' ? 'Pendiente' : 
+                                 reserva.estado === 'confirmed' ? 'Confirmada' : 'Cancelada'}
+                    `);
+                    
+                } catch (error) {
+                    console.error('Error obteniendo detalles de reserva:', error);
+                    showNotification(`Error al obtener detalles: ${error.message}`, true);
+                } finally {
+                    showLoader(false);
+                }
+            }
+
+            document.getElementById('direct-reservation-btn').addEventListener('click', () => {
+                window.open('reserva-directa.html', '_blank');
+            });
+
+            // Función para cargar usuarios en el panel de administrador
+            async function cargarUsuariosAdmin(filtro = 'all') {
+                try {
+                    showLoader(true);
+                    
+                    let query = supabase
+                        .from('profiles')
+                        .select('*')
+                        .order('created_at', { ascending: false });
+
+                    if (filtro === 'recent') {
+                        const lastWeek = new Date();
+                        lastWeek.setDate(lastWeek.getDate() - 7);
+                        query = query.gte('created_at', lastWeek.toISOString());
+                    } else if (filtro === 'active') {
+                        const lastMonth = new Date();
+                        lastMonth.setMonth(lastMonth.getMonth() - 1);
+                        query = query.gte('last_login', lastMonth.toISOString());
+                    }
+
+                    const { data: usuarios, error } = await query;
+                    
+                    if (error) throw error;
+                    
+                    usersList.innerHTML = '';
+                    
+                    if (!usuarios || usuarios.length === 0) {
+                        usersList.innerHTML = `
+                            <div class="no-reservations" style="grid-column:1/-1;text-align:center;padding:30px;">
+                                <i class="fas fa-user-slash fa-3x" style="margin-bottom: 15px; opacity: 0.5;"></i>
+                                <p>No se encontraron usuarios</p>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    usuarios.forEach(usuario => {
+                        const card = document.createElement('div');
+                        card.classList.add('user-card');
+                        
+                        const createdDate = new Date(usuario.created_at);
+                        const lastLogin = usuario.last_login ? new Date(usuario.last_login) : null;
+                        
+                        card.innerHTML = `
+                            <div class="user-header">
+                                <div class="user-avatar-admin">${usuario.full_name ? usuario.full_name.charAt(0).toUpperCase() : 'U'}</div>
+                                <h3>${usuario.full_name || 'Usuario sin nombre'}</h3>
+                                <span class="user-role ${usuario.role}">${usuario.role}</span>
+                            </div>
+                            <div class="user-details">
+                                <p><i class="fas fa-envelope"></i> ${usuario.email}</p>
+                                <p><i class="fas fa-phone"></i> ${usuario.phone || 'Sin teléfono'}</p>
+                                <p><i class="fas fa-calendar-plus"></i> Registrado: ${createdDate.toLocaleDateString('es-ES')}</p>
+                                <p><i class="fas fa-sign-in-alt"></i> Último acceso: ${lastLogin ? lastLogin.toLocaleString('es-ES') : 'Nunca'}</p>
+                            </div>
+                            <div class="user-actions">
+                                <button class="admin-card-btn btn-details view-user-reservations" data-id="${usuario.id}" data-name="${usuario.full_name || 'Usuario'}" data-email="${usuario.email}" data-initial="${usuario.full_name ? usuario.full_name.charAt(0).toUpperCase() : 'U'}">
+                                    <i class="fas fa-calendar"></i> Ver Reservas
+                                </button>
+                                ${usuario.role !== 'admin' ? `
+                                <button class="admin-card-btn btn-admin make-admin-btn" data-id="${usuario.id}">
+                                    <i class="fas fa-user-shield"></i> Hacer Admin
+                                </button>
+                                ` : ''}
+                            </div>
+                        `;
+                        
+                        usersList.appendChild(card);
+                    });
+                    
+                    // Agregar eventos a los botones
+                    document.querySelectorAll('.make-admin-btn').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            const userId = btn.dataset.id;
+                            actualizarRolUsuario(userId, 'admin');
+                        });
+                    });
+                    
+                    // Agregar eventos para ver reservas de usuario
+                    document.querySelectorAll('.view-user-reservations').forEach(btn => {
+                        btn.addEventListener('click', async (e) => {
+                            e.stopPropagation();
+                            const userId = btn.dataset.id;
+                            const userName = btn.dataset.name;
+                            const userEmail = btn.dataset.email;
+                            const userInitial = btn.dataset.initial;
+                            
+                            // Actualizar la información en el modal
+                            userModalName.textContent = userName;
+                            userModalEmail.textContent = userEmail;
+                            userModalAvatar.textContent = userInitial;
+                            
+                            // Cargar las reservas del usuario
+                            await mostrarReservasUsuario(userId);
+                        });
+                    });
+                    
+                } catch (error) {
+                    console.error('Error cargando usuarios:', error);
+                    showNotification(`Error al cargar usuarios: ${error.message}`, true);
+                } finally {
+                    showLoader(false);
+                }
+            }
+
+            // Función para mostrar reservas de un usuario específico
+            async function mostrarReservasUsuario(userId) {
+                try {
+                    showLoader(true);
+                    
+                    const { data: reservas, error } = await supabase
+                        .from('reservas')
+                        .select('*')
+                        .eq('user_id', userId)
+                        .order('fecha', { ascending: true })
+                        .order('hora', { ascending: true });
+                    
+                    if (error) throw error;
+                    
+                    userReservationsList.innerHTML = '';
+                    
+                    if (!reservas || reservas.length === 0) {
+                        userReservationsList.innerHTML = `
+                            <div class="no-reservations">
+                                <i class="fas fa-calendar-times fa-3x" style="margin-bottom: 15px; opacity: 0.5;"></i>
+                                <p>No se encontraron reservas para este usuario</p>
+                            </div>
+                        `;
+                        return;
+                    }
+                    
+                    reservas.forEach(reserva => {
+                        const reservaEl = document.createElement('div');
+                        reservaEl.classList.add('reservation-item');
+                        
+                        // Crear la fecha como local, agregando 'T00:00:00' para evitar desplazamiento
+                        const fecha = new Date(reserva.fecha + 'T00:00:00');
+                        const fechaFormateada = fecha.toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+                        
+                        // Determinar el estado para mostrar
+                        let estadoTexto = '';
+                        let estadoClase = '';
+                        if (reserva.estado === 'pending') {
+                            estadoTexto = 'Pendiente de aprobación';
+                            estadoClase = 'status-pending';
+                        } else if (reserva.estado === 'confirmed') {
+                            estadoTexto = 'Confirmada';
+                            estadoClase = 'status-confirmed';
+                        } else {
+                            estadoTexto = 'Cancelada';
+                            estadoClase = 'status-canceled';
+                        }
+                        
+                        reservaEl.innerHTML = `
+                            <div class="reservation-header">
+                                <h4>Reserva #${reserva.id}</h4>
+                                <span>${fechaFormateada}</span>
+                            </div>
+                            <div class="reservation-details">
+                                <div class="reservation-detail">
+                                    <div class="reservation-label">Hora</div>
+                                    <div>${reserva.hora}</div>
+                                </div>
+                                <div class="reservation-detail">
+                                    <div class="reservation-label">Tamaño</div>
+                                    <div>${reserva.tamanio}</div>
+                                </div>
+                                <div class="reservation-detail">
+                                    <div class="reservation-label">Duración</div>
+                                    <div>${reserva.duracion} horas</div>
+                                </div>
+                                <div class="reservation-detail">
+                                    <div class="reservation-label">Artista</div>
+                                    <div>${reserva.artista}</div>
+                                </div>
+                                <div class="reservation-detail">
+                                    <div class="reservation-label">Estado</div>
+                                    <div><span class="reservation-status-small ${estadoClase}">${estadoTexto}</span></div>
+                                </div>
+                            </div>
+                            <div class="reservation-actions">
+                                <button class="btn btn-danger cancel-reservation-btn" data-id="${reserva.id}" ${reserva.estado === 'canceled' ? 'disabled' : ''}>
+                                    <i class="fas fa-trash-alt"></i> Cancelar Reserva
+                                </button>
+                            </div>
+                        `;
+                        
+                        userReservationsList.appendChild(reservaEl);
+                    });
+                    
+                    // Agregar eventos a los botones de cancelar
+                    document.querySelectorAll('.cancel-reservation-btn').forEach(btn => {
+                        btn.addEventListener('click', () => {
+                            const reservaId = btn.dataset.id;
+                            if (confirm('¿Estás seguro de que deseas cancelar esta reserva?')) {
+                                cancelarReserva(reservaId);
+                            }
+                        });
+                    });
+                    
+                    // Mostrar el modal
+                    userReservationsModal.classList.add('active');
+                    
+                } catch (error) {
+                    console.error('Error cargando reservas del usuario:', error);
+                    showNotification(`Error al cargar reservas: ${error.message}`, true);
+                } finally {
+                    showLoader(false);
+                }
+            }
+
+            // Función para actualizar el rol de un usuario
+            async function actualizarRolUsuario(userId, nuevoRol) {
+                try {
+                    showLoader(true);
+                    
+                    const { error } = await supabase
+                        .from('profiles')
+                        .update({ role: nuevoRol })
+                        .eq('id', userId);
+                        
+                    if (error) throw error;
+                    
+                    showNotification(`Rol de usuario actualizado a ${nuevoRol}`, false, false, true);
+                    cargarUsuariosAdmin(userFilter.value);
+                } catch (error) {
+                    console.error('Error actualizando rol:', error);
+                    showNotification(`Error al actualizar rol: ${error.message}`, true);
+                } finally {
+                    showLoader(false);
+                }
+            }
+
+            // Función para generar el calendario del administrador
+            async function generateAdminCalendar(month, year) {
+                adminCalendarEl.innerHTML = '';
+                updateAdminMonthHeader(month, year);
+                
+                // Agregar encabezados de días
+                const days = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom'];
+                days.forEach(day => {
+                    const dayHeader = document.createElement('div');
+                    dayHeader.classList.add('admin-calendar-day-header');
+                    dayHeader.textContent = day;
+                    adminCalendarEl.appendChild(dayHeader);
+                });
+                
+                const firstDay = new Date(year, month, 1);
+                const lastDay = new Date(year, month + 1, 0);
+                const firstDayOfWeek = firstDay.getDay();
+                const startingDay = firstDayOfWeek === 0 ? 6 : firstDayOfWeek - 1;
+                
+                // Días vacíos al inicio del mes
+                for (let i = 0; i < startingDay; i++) {
+                    const emptyDay = document.createElement('div');
+                    emptyDay.classList.add('admin-calendar-day', 'disabled');
+                    adminCalendarEl.appendChild(emptyDay);
+                }
+                
+                // Obtener las reservas del mes para determinar los estados
+                const reservasMes = await cargarReservasPorMes(month, year);
+                
+                // Generar días del mes
+                for (let day = 1; day <= lastDay.getDate(); day++) {
+                    const date = new Date(year, month, day);
+                    date.setHours(0, 0, 0, 0);
+                    const dayEl = document.createElement('div');
+                    dayEl.classList.add('admin-calendar-day');
+                    dayEl.innerHTML = `<div class="day-number">${day}</div>`;
+                    dayEl.dataset.date = formatLocalDate(date);
+                    
+                    // Comprobar si hay reservas en este día
+                    const fechaStr = formatLocalDate(date);
+                    const reservasDia = reservasMes[fechaStr] || [];
+                    
+                    // Crear contenedor de indicadores
+                    const indicatorsContainer = document.createElement('div');
+                    indicatorsContainer.classList.add('event-indicators');
+                    
+                    // Agregar indicadores según los estados de reserva
+                    if (reservasDia.includes('confirmed')) {
+                        const indicator = document.createElement('div');
+                        indicator.classList.add('event-indicator', 'event-confirmed');
+                        indicatorsContainer.appendChild(indicator);
+                    }
+                    
+                    if (reservasDia.includes('pending')) {
+                        const indicator = document.createElement('div');
+                        indicator.classList.add('event-indicator', 'event-pending');
+                        indicatorsContainer.appendChild(indicator);
+                    }
+                    
+                    if (reservasDia.includes('canceled')) {
+                        const indicator = document.createElement('div');
+                        indicator.classList.add('event-indicator', 'event-canceled');
+                        indicatorsContainer.appendChild(indicator);
+                    }
+                    
+                    // Agregar contenedor de indicadores si hay reservas
+                    if (reservasDia.length > 0) {
+                        dayEl.appendChild(indicatorsContainer);
+                    }
+                    
+                    dayEl.addEventListener('click', async () => {
+                        // Al hacer clic, cargar reservas de este día
+                        document.querySelectorAll('.admin-calendar-day').forEach(d => d.classList.remove('active'));
+                        dayEl.classList.add('active');
+                        adminFilter.value = 'custom';
+                        // Cargar reservas para este día
+                        cargarReservasAdmin('custom', date);
+                    });
+                    
+                    adminCalendarEl.appendChild(dayEl);
+                }
+            }
+            
+            // Función para actualizar el encabezado del mes del administrador
+            function updateAdminMonthHeader(month, year) {
+                const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+                adminCurrentMonthEl.textContent = `${monthNames[month]} ${year}`;
+            }
+            
+            // Función para cargar reservas por mes
+            async function cargarReservasPorMes(month, year) {
+                try {
+                    const startDate = new Date(year, month, 1);
+                    const endDate = new Date(year, month + 1, 0);
+                    
+                    const { data: reservas, error } = await supabase
+                        .from('reservas')
+                        .select('fecha, estado')
+                        .gte('fecha', formatLocalDate(startDate))
+                        .lte('fecha', formatLocalDate(endDate));
+                    
+                    if (error) throw error;
+                    
+                    // Agrupar por fecha y guardar los estados únicos
+                    const reservasPorDia = {};
+                    reservas.forEach(reserva => {
+                        if (!reservasPorDia[reserva.fecha]) {
+                            reservasPorDia[reserva.fecha] = [];
+                        }
+                        reservasPorDia[reserva.fecha].push(reserva.estado);
+                    });
+                    
+                    return reservasPorDia;
+                } catch (error) {
+                    console.error('Error cargando reservas del mes:', error);
+                    return {};
+                }
+            }
+
+            // Función para eliminar reservas pasadas automáticamente
+            async function eliminarReservasPasadas() {
+                try {
+                    const today = new Date();
+                    const todayISO = formatLocalDate(today);
+                    
+                    const { data: reservasPasadas, error: fetchError } = await supabase
+                        .from('reservas')
+                        .select('id')
+                        .lt('fecha', todayISO);
+                    
+                    if (fetchError) throw fetchError;
+                    
+                    if (reservasPasadas.length === 0) {
+                        console.log('No hay reservas pasadas para eliminar');
+                        return;
+                    }
+                    
+                    const reservasIds = reservasPasadas.map(r => r.id);
+                    
+                    const { error: deleteError } = await supabase
+                        .from('reservas')
+                        .delete()
+                        .in('id', reservasIds);
+                    
+                    if (deleteError) throw deleteError;
+                    
+                    console.log(`Se eliminaron ${reservasPasadas.length} reservas pasadas`);
+                    
+                    // Recargar las reservas si estamos en el panel de admin
+                    if (isAdmin && adminPanel.style.display === 'block') {
+                        cargarReservasAdmin(adminFilter.value);
+                    }
+                    
+                } catch (error) {
+                    console.error('Error eliminando reservas pasadas:', error);
+                }
+            }
+
+            // Eventos para seleccionar tamaño
+            document.querySelectorAll('.size-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    // Quitar selección anterior
+                    document.querySelectorAll('.size-option').forEach(el => el.classList.remove('selected'));
+                    
+                    // Seleccionar nueva opción
+                    this.classList.add('selected');
+                    
+                    // Guardar selección
+                    selectedSize = this.dataset.size;
+                    selectedDuration = parseInt(this.dataset.duration);
+                    
+                    // Actualizar resumen
+                    summarySize.textContent = this.querySelector('div:first-child').textContent;
+                    summaryDuration.textContent = `${selectedDuration} horas`;
+                    
+                    // Regenerar horarios con nueva duración
+                    if (selectedDate) {
+                        generateTimeSlots();
+                    }
+                });
+            });
+
+            // Navegación del calendario
+            prevMonthBtn.addEventListener('click', () => {
+                currentMonth--;
+                if (currentMonth < 0) {
+                    currentMonth = 11;
+                    currentYear--;
+                }
+                generateCalendar(currentMonth, currentYear);
+            });
+
+            nextMonthBtn.addEventListener('click', () => {
+                currentMonth++;
+                if (currentMonth > 11) {
+                    currentMonth = 0;
+                    currentYear++;
+                }
+                generateCalendar(currentMonth, currentYear);
+            });
+            
+            // Navegación del calendario administrativo
+            adminPrevMonthBtn.addEventListener('click', () => {
+                adminCurrentMonth--;
+                if (adminCurrentMonth < 0) {
+                    adminCurrentMonth = 11;
+                    adminCurrentYear--;
+                }
+                generateAdminCalendar(adminCurrentMonth, adminCurrentYear);
+            });
+
+            adminNextMonthBtn.addEventListener('click', () => {
+                adminCurrentMonth++;
+                if (adminCurrentMonth > 11) {
+                    adminCurrentMonth = 0;
+                    adminCurrentYear++;
+                }
+                generateAdminCalendar(adminCurrentMonth, adminCurrentYear);
+            });
+
+            // Botón de confirmación abre el modal
+            confirmBtn.addEventListener('click', () => {
+                if (!currentUser) {
+                    showNotification('Por favor inicia sesión para reservar', true);
+                    return;
+                }
+                
+                if (!selectedTime) {
+                    showNotification('Por favor selecciona una hora', true);
+                    return;
+                }
+                
+                if (!selectedSize) {
+                    showNotification('Por favor selecciona un tamaño de tatuaje', true);
+                    return;
+                }
+                
+                // Actualizar el modal con la información
+                modalSummaryDate.textContent = summaryDate.textContent;
+                modalSummaryTime.textContent = summaryTime.textContent;
+                modalSummarySize.textContent = summarySize.textContent;
+                modalSummaryDuration.textContent = summaryDuration.textContent;
+                
+                showConfirmationModal(true);
+            });
+
+            // Cerrar modal
+            closeModal.addEventListener('click', () => {
+                showConfirmationModal(false);
+            });
+
+            cancelReservation.addEventListener('click', () => {
+                showConfirmationModal(false);
+            });
+
+            // Confirmar reserva desde el modal
+            confirmReservation.addEventListener('click', async () => {
+                showConfirmationModal(false);
+                
+                if (!currentUser) {
+                    showNotification('Por favor inicia sesión para reservar', true);
+                    return;
+                }
+                
+                const duracion = sizeDurationMap[selectedSize];
+                const fechaISO = formatLocalDate(selectedDate); // Usar formato local
+
+                try {
+                    showLoader(true);
+                    
+                    // Verificar si el horario sigue disponible
+                    const { data: existingReservations, error: checkError } = await supabase
+                        .from('reservas')
+                        .select('id')
+                        .eq('fecha', fechaISO)
+                        .eq('hora', selectedTime);
+                    
+                    if (checkError) throw checkError;
+                    
+                    if (existingReservations.length > 0) {
+                        showNotification('Lo sentimos, este horario ya ha sido reservado', true);
+                        await generateTimeSlots();
+                        return;
+                    }
+                    
+                    // Guardar en Supabase con estado "pending"
+                    const { error } = await supabase
+                        .from('reservas')
+                        .insert({
+                            user_id: currentUser.id,
+                            nombre: currentUser.user_metadata.full_name,
+                            email: currentUser.email,
+                            telefono: currentUser.user_metadata.phone,
+                            fecha: fechaISO,
+                            hora: selectedTime,
+                            artista: "Josiel Salabarría López",
+                            tamanio: selectedSize,
+                            duracion: duracion,
+                            estado: "pending", // Estado pendiente por defecto
+                            timestamp: new Date().toISOString()
+                        });
+
+                    if (error) throw error;
+                    
+                    showNotification(`¡Reserva enviada para aprobación! Recibirás un correo cuando sea confirmada.`);
+                    selectedTime = null;
+                    selectedSize = null;
+                    summaryTime.textContent = '-';
+                    summarySize.textContent = '-';
+                    summaryDuration.textContent = '-';
+                    
+                    // Limpiar selecciones
+                    document.querySelectorAll('.size-option').forEach(el => el.classList.remove('selected'));
+                    document.querySelectorAll('.time-slot').forEach(el => el.classList.remove('selected'));
+                    
+                    await generateTimeSlots();
+                } catch (error) {
+                    console.error('Error guardando reserva:', error);
+                    showNotification(`Error al guardar reserva: ${error.message}`, true);
+                } finally {
+                    showLoader(false);
+                }
+            });
+
+            // Botón para ver reservas
+            viewReservationsBtn.addEventListener('click', () => {
+                showReservationsModal(true);
+                cargarReservasUsuario();
+            });
+
+            // Cerrar modal de reservas
+            closeReservationsModal.addEventListener('click', () => {
+                showReservationsModal(false);
+            });
+
+            // Cambiar pestañas de autenticación
+            loginTab.addEventListener('click', () => {
+                loginForm.classList.add('active');
+                registerForm.classList.remove('active');
+                loginTab.classList.add('active');
+                registerTab.classList.remove('active');
+            });
+            
+            registerTab.addEventListener('click', () => {
+                registerForm.classList.add('active');
+                loginForm.classList.remove('active');
+                registerTab.classList.add('active');
+                loginTab.classList.remove('active');
+            });
+            
+            // Botón para abrir modal de login
+            loginBtnHeader.addEventListener('click', () => showAuthModal(true, 'login'));
+            
+            // Botón de login
+            loginBtn.addEventListener('click', async () => {
+                const email = document.getElementById('login-email').value;
+                const password = document.getElementById('login-password').value;
+                
+                if (!email || !password) {
+                    loginError.textContent = 'Por favor completa todos los campos';
+                    return;
+                }
+                
+                try {
+                    showLoader(true);
+                    const { data, error } = await supabase.auth.signInWithPassword({
+                        email,
+                        password
+                    });
+                    
+                    if (error) throw error;
+                    
+                    currentUser = data.user;
+                    
+                    // Verificar si el usuario ha confirmado su correo
+                    if (!currentUser.confirmed_at) {
+                        showNotification('Por favor confirma tu correo electrónico antes de iniciar sesión', true);
+                        logoutBtn.click(); // Cerrar sesión automáticamente
+                        return;
+                    }
+                    
+                    // Actualizar último acceso
+                    await supabase
+                        .from('profiles')
+                        .update({ last_login: new Date().toISOString() })
+                        .eq('id', currentUser.id);
+                    
+                    updateAuthUI(currentUser);
+                    showAuthModal(false);
+                    showNotification('Sesión iniciada correctamente');
+                } catch (error) {
+                    loginError.textContent = error.message;
+                } finally {
+                    showLoader(false);
+                }
+            });
+            
+            // Botón de registro con confirmación de correo
+            registerBtn.addEventListener('click', async () => {
+                const name = document.getElementById('register-name').value;
+                const email = document.getElementById('register-email').value;
+                const phone = document.getElementById('register-phone').value;
+                const password = document.getElementById('register-password').value;
+                const passwordConfirm = document.getElementById('register-password-confirm').value;
+                
+                // Validaciones
+                if (!name || !email || !phone || !password || !passwordConfirm) {
+                    registerError.textContent = 'Por favor completa todos los campos';
+                    return;
+                }
+                
+                if (password !== passwordConfirm) {
+                    registerError.textContent = 'Las contraseñas no coinciden';
+                    return;
+                }
+                
+                try {
+                    showLoader(true);
+                    const { data, error } = await supabase.auth.signUp({
+                        email,
+                        password,
+                        options: {
+                            data: {
+                                full_name: name,
+                                phone: phone
+                            },
+                            // Habilitar redirección después de confirmación
+                            emailRedirectTo: window.location.href
+                        }
+                    });
+                    
+                    if (error) throw error;
+                    
+                    // Mostrar mensaje de confirmación
+                    showNotification('¡Registro exitoso! Por favor revisa tu correo para confirmar tu cuenta.');
+                    
+                    // Limpiar formulario
+                    document.getElementById('register-name').value = '';
+                    document.getElementById('register-email').value = '';
+                    document.getElementById('register-phone').value = '';
+                    document.getElementById('register-password').value = '';
+                    document.getElementById('register-password-confirm').value = '';
+                    
+                    // Cambiar a pestaña de inicio de sesión
+                    loginTab.click();
+                    
+                } catch (error) {
+                    registerError.textContent = error.message;
+                } finally {
+                    showLoader(false);
+                }
+            });
+            
+            // Botón de logout
+            logoutBtn.addEventListener('click', async () => {
+                try {
+                    await supabase.auth.signOut();
+                    currentUser = null;
+                    updateAuthUI(null);
+                    showNotification('Sesión cerrada correctamente');
+                } catch (error) {
+                    console.error('Error cerrando sesión:', error);
+                    showNotification('Error al cerrar sesión', true);
+                }
+            });
+            
+            // Botón de logout para administrador
+            adminLogoutBtn.addEventListener('click', async () => {
+                try {
+                    await supabase.auth.signOut();
+                    currentUser = null;
+                    isAdmin = false;
+                    updateAuthUI(null);
+                    showNotification('Sesión cerrada correctamente');
+                } catch (error) {
+                    console.error('Error cerrando sesión:', error);
+                    showNotification('Error al cerrar sesión', true);
+                }
+            });
+            
+            // Botón para cerrar modal de autenticación
+            closeAuthModalBtn.addEventListener('click', () => {
+                showAuthModal(false);
+            });
+            
+            // Botón de actualizar para administrador
+            adminRefreshBtn.addEventListener('click', () => {
+                cargarReservasAdmin(adminFilter.value);
+                cargarUsuariosAdmin(userFilter.value);
+                generateAdminCalendar(adminCurrentMonth, adminCurrentYear);
+                showNotification('Datos actualizados', false, false, true);
+            });
+            
+            // Filtro para administrador (reservas)
+            adminFilter.addEventListener('change', () => {
+                cargarReservasAdmin(adminFilter.value);
+            });
+            
+            // Filtro para administrador (usuarios)
+            userFilter.addEventListener('change', () => {
+                cargarUsuariosAdmin(userFilter.value);
+            });
+            
+            // Botones de filtro rápido para administrador
+            adminTodayBtn.addEventListener('click', () => {
+                adminFilter.value = 'today';
+                cargarReservasAdmin('today');
+            });
+            
+            adminWeekBtn.addEventListener('click', () => {
+                // Implementar lógica para esta semana
+                showNotification('Filtro de esta semana seleccionado', false, false, true);
+            });
+            
+            adminPendingBtn.addEventListener('click', () => {
+                adminFilter.value = 'pending';
+                cargarReservasAdmin('pending');
+            });
+            
+            // Cerrar modal de reservas de usuario
+            closeUserReservationsModal.addEventListener('click', () => {
+                userReservationsModal.classList.remove('active');
+            });
+            
+            // Verificar sesión al cargar la página
+            async function checkSession() {
+                const { data, error } = await supabase.auth.getUser();
+                if (data && data.user) {
+                    currentUser = data.user;
+                    
+                    // Verificar si el usuario ha confirmado su correo
+                    if (!currentUser.confirmed_at) {
+                        showNotification('Por favor confirma tu correo electrónico antes de iniciar sesión', true);
+                        await supabase.auth.signOut();
+                        currentUser = null;
+                        return;
+                    }
+                    
+                    // Actualizar último acceso
+                    await supabase
+                        .from('profiles')
+                        .update({ last_login: new Date().toISOString() })
+                        .eq('id', currentUser.id);
+                    
+                    updateAuthUI(currentUser);
+                }
+            }
+            
+            // Inicializar la aplicación
+            generateCalendar(currentMonth, currentYear);
+            updateSelectedDateDisplay();
+            checkSession().then(() => {
+                // Eliminar reservas pasadas después de verificar la sesión
+                eliminarReservasPasadas();
+            });
+            generateTimeSlots();
+        });
+    </script>
+</body>
+</html>
