@@ -1392,8 +1392,8 @@
                     }
                     
                     // Enviar mensaje por WhatsApp (SIEMPRE SE ENVÍA)
-                    const whatsappMessage = `Hola ${nombre}, tu reserva en Inkart Studio ha sido confirmada:\nFecha: ${summaryDate.textContent}\nHora: ${selectedTime}\nArtista: Josiel Salabarría López\nTamaño: ${selectedSize}\nDuración: ${duracion} horas\n\nGracias por confiar en nosotros.`;
-                    const whatsappUrl = `https://wa.me/${telefono}?text=${encodeURIComponent(whatsappMessage)}`;
+                    const whatsappMessage = `Hola ${nombre}, tu reserva en Inkart Studio ha sido confirmada:\nFecha: ${summaryDate.textContent}\nHora: ${selectedTime}\nArtista: Josiel Salabarría López\nTamaño: ${selectedSize}cm\nDuración: ${duracion} horas\n\nGracias por confiar en nosotros.`;
+                    const whatsappUrl = `https://wa.me/53${telefono}?text=${encodeURIComponent(whatsappMessage)}`;
                     window.open(whatsappUrl, '_blank');
                     
                     // Limpiar el formulario
