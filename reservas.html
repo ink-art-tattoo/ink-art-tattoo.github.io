@@ -78,17 +78,6 @@
             align-items: center;
         }
         
-        .reserva-view {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: space-between;
-            align-items: center;
-            padding: 20px 0;
-            margin-bottom: 30px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            gap: 15px;
-        }
-        
         .user-controls {
             display: flex;
             gap: 15px;
@@ -162,6 +151,12 @@
             background: #25D366;
             color: white;
         }
+
+        /* Nuevo estilo para botón de confirmar pago */
+        .btn-payment-confirm {
+            background: var(--success);
+            color: white;
+        }
         
         .btn:hover {
             transform: translateY(-3px);
@@ -182,6 +177,10 @@
         
         .btn-whatsapp:hover {
             box-shadow: 0 5px 15px #25D366;
+        }
+
+        .btn-payment-confirm:hover {
+            box-shadow: 0 5px 15px var(--success);
         }
         
         .btn:disabled {
@@ -1049,6 +1048,11 @@
             background: #25D366;
             color: white;
         }
+
+        .btn-payment-confirm {
+            background: var(--success);
+            color: white;
+        }
         
         /* Sección de Gestión de Usuarios */
         .admin-section {
@@ -1344,7 +1348,7 @@
             margin-top: 20px;
             border-left: 4px solid var(--success);
         }
-    
+        
         /* === Mejoras Estéticas Optimizadas === */
 
         /* 1. Transiciones suaves globales */
@@ -1417,6 +1421,95 @@
             font-weight: bold;
             font-size: 1.2rem;
         }
+        
+        /* Nuevos estilos para modal de pago */
+        .payment-details {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+            border-left: 4px solid var(--warning);
+        }
+        
+        .payment-details h4 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: var(--warning);
+        }
+        
+        .payment-info {
+            font-size: 1.1rem;
+            margin: 10px 0;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        
+        .payment-note {
+            font-size: 0.9rem;
+            margin-top: 15px;
+            opacity: 0.8;
+        }
+        
+        
+        /* MEJORAS PARA EL MODAL DE PAGO EN MÓVILES */
+        #paymentModal .modal-content {
+            max-height: 90vh;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        
+        @media (max-width: 480px) {
+            #paymentModal .modal-content {
+                padding: 15px;
+                max-width: 95%;
+            }
+            
+            #paymentModal h3 {
+                font-size: 1.3rem;
+            }
+            
+            #paymentModal .payment-info {
+                font-size: 0.95rem;
+                padding: 8px;
+            }
+            
+            #paymentModal .payment-note {
+                font-size: 0.85rem;
+            }
+            
+            #paymentModal ul {
+                font-size: 0.9rem;
+                padding-left: 15px;
+            }
+            
+            #paymentModal p {
+                font-size: 0.9rem;
+            }
+        }
+        
+        /* Asegurar que el modal sea desplazable en móviles */
+        #paymentModal .modal-body {
+            max-height: 60vh;
+            overflow-y: auto;
+            padding-right: 5px;
+        }
+        
+        /* Scrollbar personalizada para el modal */
+        #paymentModal .modal-body::-webkit-scrollbar {
+            width: 6px;
+        }
+        
+        #paymentModal .modal-body::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        
+        #paymentModal .modal-body::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
     </style>
 </head>
 <body>
@@ -1465,11 +1558,51 @@
                             <span>Estado:</span>
                             <span class="reservation-status-small status-pending">Pendiente de aprobación</span>
                         </div>
+                        <div class="summary-item">
+                            <span>Pago:</span>
+                            <span class="reservation-status-small status-pending">Pendiente</span>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button class="modal-btn cancel" id="cancelReservation">Cancelar</button>
                     <button class="modal-btn confirm" id="confirmReservation">Confirmar</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Nuevo modal para detalles de pago -->
+        <div class="confirmation-modal" id="paymentModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3><i class="fas fa-money-bill-wave"></i> Pago Requerido</h3>
+                    <button class="close-modal" id="closePaymentModal">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Para completar tu reserva, por favor realiza un pago por adelantado de <strong>1000 CUP</strong> mediante transferencia que se descontarán del precio final:</p>
+                    
+                    <div class="payment-details">
+                        <h4><i class="fas fa-credit-card"></i> Detalles de Transferencia</h4>
+                        <div class="payment-info">
+                            <div><strong>Tarjeta:</strong> 9205-1299-7511-4183</div>
+                            <div><strong>Móvil:</strong> 59372581</div>
+                        </div>
+                        <p class="payment-note">* El administrador verificará manualmente tu pago antes de confirmar la reserva</p>
+                    </div>
+                    
+                    <p>Una vez realizado el pago:</p>
+                    <ul style="padding-left: 20px; margin: 15px 0;">
+                        <li>Guarda el comprobante de pago</li>
+                        <li>Envía un mensaje por WhatsApp al número proporcionado para notificar tu pago junto con la captura del mensaje de confirmacion</li>
+                        <li>Recibirás una confirmación a través de WhatsApp cuando se verifique el pago</li>
+                    </ul>
+                    
+                    <p><strong>Nota:</strong> Tu reserva permanecerá en estado "Pendiente" hasta que se verifique el pago.</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="modal-btn confirm" id="paymentDoneBtn">Entendido</button>
                 </div>
             </div>
         </div>
@@ -1690,6 +1823,10 @@
                         <div class="summary-item">
                             <span>Artista:</span>
                             <span>Josiel Salabarría López</span>
+                        </div>
+                        <div class="summary-item">
+                            <span>Pago por adelantado:</span>
+                            <span>1000 CUP</span>
                         </div>
                         
                         <button class="btn btn-primary confirm-btn" id="confirm-btn">
@@ -1912,6 +2049,11 @@
             const userModalEmail = document.getElementById('user-modal-email');
             const userReservationsList = document.getElementById('user-reservations-list');
             
+            // Nuevos elementos para modal de pago
+            const paymentModal = document.getElementById('paymentModal');
+            const closePaymentModal = document.getElementById('closePaymentModal');
+            const paymentDoneBtn = document.getElementById('paymentDoneBtn');
+            
             // Variables para la sesión
             let currentUser = null;
             let isAdmin = false;
@@ -1967,6 +2109,11 @@
             // Función para mostrar/ocultar modal de confirmación
             function showConfirmationModal(show = true) {
                 confirmationModal.classList.toggle('active', show);
+            }
+
+            // Función para mostrar/ocultar modal de pago
+            function showPaymentModal(show = true) {
+                paymentModal.classList.toggle('active', show);
             }
 
             // Función para mostrar/ocultar modal de reservas
@@ -2405,6 +2552,14 @@
                             estadoClase = 'status-canceled';
                         }
                         
+                        // Determinar estado de pago
+                        let pagoTexto = 'Pendiente';
+                        let pagoClase = 'status-pending';
+                        if (reserva.pago_verificado) {
+                            pagoTexto = 'Verificado';
+                            pagoClase = 'status-confirmed';
+                        }
+                        
                         reservaEl.innerHTML = `
                             <div class="reservation-header">
                                 <h4>Reserva #${reserva.id}</h4>
@@ -2430,6 +2585,10 @@
                                 <div class="reservation-detail">
                                     <div class="reservation-label">Estado</div>
                                     <div><span class="reservation-status-small ${estadoClase}">${estadoTexto}</span></div>
+                                </div>
+                                <div class="reservation-detail">
+                                    <div class="reservation-label">Pago</div>
+                                    <div><span class="reservation-status-small ${pagoClase}">${pagoTexto}</span></div>
                                 </div>
                             </div>
                             <div class="reservation-actions">
@@ -2530,6 +2689,7 @@
                                 <div>Tamaño: ${reserva.tamanio}</div>
                                 <div>Duración: ${reserva.duracion} horas</div>
                                 <div>Artista: ${reserva.artista}</div>
+                                <div>Pago: <span class="${reserva.pago_verificado ? 'reservation-status-small status-confirmed' : 'reservation-status-small status-pending'}">${reserva.pago_verificado ? 'Verificado' : 'Pendiente'}</span></div>
                             </div>
                             <div class="reservation-card-footer">
                                 ${reserva.estado === 'pending' ? `
@@ -2540,6 +2700,12 @@
                                 ${reserva.estado !== 'canceled' ? `
                                 <button class="admin-card-btn btn-cancel" data-id="${reserva.id}">
                                     <i class="fas fa-times"></i> Cancelar
+                                </button>
+                                ` : ''}
+                                <!-- Nuevo botón para confirmar pago -->
+                                ${!reserva.pago_verificado && reserva.estado !== 'canceled' ? `
+                                <button class="admin-card-btn btn-payment-confirm" data-id="${reserva.id}">
+                                    <i class="fas fa-money-check-alt"></i> Confirmar Pago
                                 </button>
                                 ` : ''}
                                 <button class="admin-card-btn btn-delete" data-id="${reserva.id}">
@@ -2596,6 +2762,14 @@
                         btn.addEventListener('click', async () => {
                             const reservaId = btn.dataset.id;
                             mostrarDetallesReserva(reservaId);
+                        });
+                    });
+
+                    // Agregar eventos a los botones de confirmar pago
+                    document.querySelectorAll('.btn-payment-confirm').forEach(btn => {
+                        btn.addEventListener('click', async () => {
+                            const reservaId = btn.dataset.id;
+                            await confirmarPago(reservaId);
                         });
                     });
                     
@@ -2762,11 +2936,57 @@
                         Artista: ${reserva.artista}
                         Estado: ${reserva.estado === 'pending' ? 'Pendiente' : 
                                  reserva.estado === 'confirmed' ? 'Confirmada' : 'Cancelada'}
+                        Pago: ${reserva.pago_verificado ? 'Verificado' : 'Pendiente'}
                     `);
                     
                 } catch (error) {
                     console.error('Error obteniendo detalles de reserva:', error);
                     showNotification(`Error al obtener detalles: ${error.message}`, true);
+                } finally {
+                    showLoader(false);
+                }
+            }
+
+            // Función para confirmar el pago de una reserva (admin)
+            async function confirmarPago(reservaId) {
+                try {
+                    showLoader(true);
+                    
+                    // Actualizar el estado del pago en Supabase
+                    const { error } = await supabase
+                        .from('reservas')
+                        .update({ pago_verificado: true })
+                        .eq('id', reservaId);
+                    
+                    if (error) throw error;
+                    
+                    // Obtener los datos de la reserva para enviar el correo
+                    const { data: reserva, error: getError } = await supabase
+                        .from('reservas')
+                        .select('*')
+                        .eq('id', reservaId)
+                        .single();
+                    
+                    if (getError) throw getError;
+                    
+const mensaje = `Hola ${reserva.nombre}, tu pago ha sido confirmado correctamente. Nos vemos en tu cita de tatuaje en InkArt Studio. ¡Gracias!`;
+
+const numeroWhatsApp = reserva.telefono?.replace(/\D/g, ''); // Limpia el número
+
+if (numeroWhatsApp) {
+    const url = `https://wa.me/53${numeroWhatsApp}?text=${encodeURIComponent(mensaje)}`;
+    window.open(url, '_blank');
+} else {
+    showNotification('Número de teléfono no válido para WhatsApp.', true);
+}
+                    
+                    showNotification('Pago confirmado y notificación enviada al cliente', false, false, true);
+                    
+                    // Recargar las reservas
+                    cargarReservasAdmin(adminFilter.value);
+                } catch (error) {
+                    console.error('Error confirmando pago:', error);
+                    showNotification(`Error al confirmar pago: ${error.message}`, true);
                 } finally {
                     showLoader(false);
                 }
@@ -2929,6 +3149,14 @@
                             estadoClase = 'status-canceled';
                         }
                         
+                        // Determinar estado de pago
+                        let pagoTexto = 'Pendiente';
+                        let pagoClase = 'status-pending';
+                        if (reserva.pago_verificado) {
+                            pagoTexto = 'Verificado';
+                            pagoClase = 'status-confirmed';
+                        }
+                        
                         reservaEl.innerHTML = `
                             <div class="reservation-header">
                                 <h4>Reserva #${reserva.id}</h4>
@@ -2954,6 +3182,10 @@
                                 <div class="reservation-detail">
                                     <div class="reservation-label">Estado</div>
                                     <div><span class="reservation-status-small ${estadoClase}">${estadoTexto}</span></div>
+                                </div>
+                                <div class="reservation-detail">
+                                    <div class="reservation-label">Pago</div>
+                                    <div><span class="reservation-status-small ${pagoClase}">${pagoTexto}</span></div>
                                 </div>
                             </div>
                             <div class="reservation-actions">
@@ -3268,6 +3500,12 @@
             // Confirmar reserva desde el modal
             confirmReservation.addEventListener('click', async () => {
                 showConfirmationModal(false);
+                showPaymentModal(true);
+            });
+
+            // Botón "He realizado el pago" en modal de pago
+            paymentDoneBtn.addEventListener('click', async () => {
+                showPaymentModal(false);
                 
                 if (!currentUser) {
                     showNotification('Por favor inicia sesión para reservar', true);
@@ -3295,7 +3533,7 @@
                         return;
                     }
                     
-                    // Guardar en Supabase con estado "pending"
+                    // Guardar en Supabase con estado "pending" y pago pendiente
                     const { error } = await supabase
                         .from('reservas')
                         .insert({
@@ -3309,12 +3547,13 @@
                             tamanio: selectedSize,
                             duracion: duracion,
                             estado: "pending", // Estado pendiente por defecto
+                            pago_verificado: false, // Pago pendiente de verificación
                             timestamp: new Date().toISOString()
                         });
 
                     if (error) throw error;
                     
-                    showNotification(`¡Reserva enviada para aprobación! Recibirás un correo cuando sea confirmada.`);
+                    showNotification(`¡Reserva enviada para aprobación! Por favor realiza el pago de 1000 CUP.`);
                     selectedTime = null;
                     selectedSize = null;
                     summaryTime.textContent = '-';
@@ -3343,6 +3582,11 @@
             // Cerrar modal de reservas
             closeReservationsModal.addEventListener('click', () => {
                 showReservationsModal(false);
+            });
+            
+            // Cerrar modal de pago
+            closePaymentModal.addEventListener('click', () => {
+                showPaymentModal(false);
             });
 
             // Cambiar pestañas de autenticación
