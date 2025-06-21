@@ -288,6 +288,7 @@
         .nav-links ul li:nth-child(4) { transition-delay: 0.4s; }
         .nav-links ul li:nth-child(5) { transition-delay: 0.5s; }
         .nav-links ul li:nth-child(6) { transition-delay: 0.6s; }
+        .nav-links ul li:nth-child(7) { transition-delay: 0.7s; }
         
         .nav-links ul li a {
             text-decoration: none;

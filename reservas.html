@@ -3809,8 +3809,23 @@ if (numeroWhatsApp) {
                 // Eliminar reservas pasadas después de verificar la sesión
                 eliminarReservasPasadas();
             });
-            generateTimeSlots();
-        });
+        
+    
+    // ===== NUEVO CÓDIGO AQUÍ =====
+    // Verificar si debemos abrir el modal de login
+    const urlParams = new URLSearchParams(window.location.search);
+    const action = urlParams.get('action');
+    
+    if (action === 'openLogin') {
+        // Esperar 500ms para que la página cargue completamente
+        setTimeout(() => {
+            showAuthModal(true, 'login');
+        }, 500);
+    }
+    // ===== FIN NUEVO CÓDIGO =====
+});
+generateTimeSlots();
+        
     </script>
 </body>
 </html>

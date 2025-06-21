@@ -542,7 +542,7 @@
                     
                     // Configurar botón de redirección
                     document.getElementById('go-to-reservations')?.addEventListener('click', () => {
-                        window.location.href = 'reservas.html';
+                        window.location.href = 'reservas.html?action=openLogin';
                     });
                 }
             }
