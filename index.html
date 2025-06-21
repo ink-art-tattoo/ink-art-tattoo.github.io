@@ -27,7 +27,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&family=Righteous&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Cinzel:wght@400;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+    
     <meta name="google-site-verification" content="wnbhMj6o68SbbYOzOLcd9826IzcbpsI9anoRfRc9vwk" />
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <script type="application/ld+json">
 {
@@ -782,36 +784,61 @@
             </div>
         </div>
     </section>
+    
+        <!-- Reviews Section -->
+    <section class="reviews-section">
+        <div class="reviews-container">
+            <div class="section-title">
+                <h2>Reseñas de Clientes</h2>
+            </div>
+
+            <div class="filters">
+                <button class="filter-btn active" data-filter="all">Todos</button>
+                <button class="filter-btn" data-filter="5">5 Estrellas</button>
+                <button class="filter-btn" data-filter="4">4 Estrellas</button>
+                <button class="filter-btn" data-filter="with-photos">Con Fotos</button>
+            </div>
+
+            <div class="reviews-grid" id="reviews-container">
+                <!-- Las reseñas se cargarán desde la base de datos -->
+            </div>
+            
+            <!-- Contenedor de paginación -->
+            <div class="pagination-container" id="pagination-container">
+                <button id="prev-btn" class="pagination-btn" disabled>
+                    <i class="fas fa-chevron-left"></i> Anteriores
+                </button>
+                <div class="pagination-info" id="pagination-info">Página 1 de 1</div>
+                <button id="next-btn" class="pagination-btn">
+                    Siguientes <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+
+            <!-- Formulario para nuevas reseñas -->
+            <div id="review-form-container">
+                <!-- Se cargará dinámicamente según estado de autenticación -->
+            </div>
+        </div>
+    </section>
+    
+    <!-- Modal de carga -->
+    <div id="loading-modal" class="loading-modal">
+        <div class="modal-content">
+            <div class="spinner"></div>
+            <h3>Cargando</h3>
+            <p id="loading-message">Por favor espera...</p>
+        </div>
+    </div>
+
 
     <!-- Nuevo Footer Moderno -->
     <script src="footer-include.js"></script>
 
     <!-- Scripts -->
     <script src="main.js"></script>
+    <script src="reseñas.js"></script>
 
-    <script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyCANqpv_Qoj_zSdVrg57GFzmBNvhdUcII8",
-    authDomain: "reservasweb-3ab66.firebaseapp.com",
-    projectId: "reservasweb-3ab66",
-    storageBucket: "reservasweb-3ab66.firebasestorage.app",
-    messagingSenderId: "769749538076",
-    appId: "1:769749538076:web:cfbdb4a58187bddeb616d9",
-    measurementId: "G-5MYEV31179"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-    </script>
 
     <script>
   if ('serviceWorker' in navigator) {
