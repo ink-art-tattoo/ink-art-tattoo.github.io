@@ -1016,6 +1016,62 @@
                 return `${String(endDate.getHours()).padStart(2, '0')}:${String(endDate.getMinutes()).padStart(2, '0')}`;
             }
 
+            // Función para generar el contenido del archivo .ics
+            function generateICS(eventDetails) {
+                // Crear fechas de inicio y fin
+                const startDateTime = new Date(`${eventDetails.startDate}T${eventDetails.startTime}:00`);
+                const endDateTime = new Date(startDateTime.getTime() + eventDetails.duration * 60 * 60 * 1000);
+                
+                // Función para formatear fecha en formato UTC para .ics
+                const formatDate = (date) => {
+                    return date.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z$/, 'Z');
+                };
+                
+                // Crear UID único
+                const uid = `${Date.now()}@inkartstudio`;
+                
+                // Crear descripción
+                const description = `Reserva de tatuaje con Josiel Salabarría López
+Cliente: ${eventDetails.clientName}
+Teléfono: ${eventDetails.clientPhone}
+Email: ${eventDetails.clientEmail || 'No proporcionado'}
+Tamaño: ${eventDetails.size} cm
+Duración: ${eventDetails.duration} horas`;
+                
+                // Contenido del archivo .ics
+                return `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Inkart Studio//Reservas//ES
+BEGIN:VEVENT
+UID:${uid}
+DTSTAMP:${formatDate(new Date())}
+DTSTART:${formatDate(startDateTime)}
+DTEND:${formatDate(endDateTime)}
+SUMMARY:Reserva de Tatuaje - ${eventDetails.clientName}
+DESCRIPTION:${description.replace(/\n/g, '\\n')}
+LOCATION:Inkart Studio, La Habana, Cuba
+END:VEVENT
+END:VCALENDAR`;
+            }
+
+            // Función para descargar el archivo .ics
+            function downloadICS(content, filename) {
+                const blob = new Blob([content], { type: 'text/calendar;charset=utf-8' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                
+                // Limpiar
+                setTimeout(() => {
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(url);
+                }, 0);
+            }
+
             function updateMonthHeader() {
                 const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
                     'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
@@ -1366,6 +1422,20 @@
                     if (error) throw error;
                     
                     showNotification(`¡Reserva confirmada para ${nombre}!`);
+                    
+                    // Generar y descargar archivo .ics
+                    const icsContent = generateICS({
+                        startDate: fechaISO,
+                        startTime: selectedTime,
+                        duration: duracion,
+                        clientName: nombre,
+                        clientPhone: telefono,
+                        clientEmail: email,
+                        size: selectedSize
+                    });
+                    
+                    // Descargar archivo .ics
+                    downloadICS(icsContent, `Reserva-Inkart-${fechaISO}-${selectedTime.replace(':', '')}.ics`);
                     
                     // SOLO ENVIAR CORREO SI HAY EMAIL PROPORCIONADO
                     if (email) {

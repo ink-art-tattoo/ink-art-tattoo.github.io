@@ -1707,9 +1707,9 @@
             <div class="reserva-view">
               <div class="header-controls">
                     <!-- Botón para volver al inicio -->
-                    <a href="index.html" class="btn btn-home">
-                        <i class="fas fa-arrow-left"></i>
-                    </a> </div>
+                    <button class="btn btn-home" id="back-button">
+    <i class="fas fa-arrow-left"></i>
+</button>
               <div class="user-controls">
                     <div id="user-info" class="user-info" style="display: none;">
                         <div class="user-avatar" id="user-avatar">JS</div>
@@ -1842,7 +1842,7 @@
             <div class="reserva-view">
               <div class="header-controls">
                     <!-- Botón para volver al inicio -->
-                    <a href="index.html" class="btn btn-home">
+                    <a href="index.html" class="btn btn-home" id="back-buttom">
                         <i class="fas fa-arrow-left"></i>
                     </a> </div>
               <div class="user-controls">
@@ -2811,6 +2811,7 @@
                 try {
                     showLoader(true);
                     
+                    
                     // Obtener la reserva para enviar el correo si es necesario
                     const { data: reserva, error: getError } = await supabase
                         .from('reservas')
@@ -2830,6 +2831,14 @@
                     
                     showNotification(`Reserva ${estado === 'confirmed' ? 'confirmada' : 'cancelada'} correctamente`, false, false, true);
                     
+                    if (estado === 'confirmed') {
+                      // Generar y descargar archivo ICS
+    const icsContent = generateICS(reserva);
+    downloadICS(icsContent, `reserva-${reserva.id}.ics`);
+    
+    // Agregar al calendario de Google (opcional)
+    await agregarAlCalendarioGoogle(reserva);
+}
                     // Enviar correo de confirmación solo si se aprueba
                     if (estado === 'confirmed') {
                         const templateParams = {
@@ -2861,6 +2870,7 @@
                 } finally {
                     showLoader(false);
                 }
+              
             }
 
             // Función para agregar reserva al calendario de Google
@@ -3824,6 +3834,64 @@ if (numeroWhatsApp) {
     }
     // ===== FIN NUEVO CÓDIGO =====
 });
+
+// ... código existente ...
+
+// Función para generar contenido .ics
+function generateICS(reserva) {
+    const startDate = new Date(`${reserva.fecha}T${reserva.hora}:00`);
+    const endDate = new Date(startDate.getTime() + reserva.duracion * 60 * 60 * 1000);
+    
+    // Formatear fechas para ICS (formato UTC)
+    const formatDate = (date) => {
+        return date.toISOString().replace(/-|:|\.\d\d\d/g, '');
+    };
+
+    return `BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//Inkart Studio//Reservas//ES
+BEGIN:VEVENT
+UID:${reserva.id}@inkartstudio
+DTSTAMP:${formatDate(new Date())}
+DTSTART:${formatDate(startDate)}
+DTEND:${formatDate(endDate)}
+SUMMARY:Tatuaje - ${reserva.nombre}
+DESCRIPTION:Cliente: ${reserva.nombre}\\nTeléfono: ${reserva.telefono}\\nTamaño: ${reserva.tamanio}\\nDuración: ${reserva.duracion} horas
+LOCATION:Inkart Studio
+STATUS:CONFIRMED
+END:VEVENT
+END:VCALENDAR`;
+}
+
+// Función para descargar el archivo .ics
+function downloadICS(icsContent, fileName) {
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName || 'reserva.ics';
+    document.body.appendChild(a);
+    a.click();
+    
+    // Limpiar después de la descarga
+    setTimeout(() => {
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }, 100);
+}
+
+// Al final del script existente, antes del cierre de
+document.getElementById('back-button').addEventListener('click', () => {
+    if (history.length > 1) {
+        history.back();
+    } else {
+        // Redirigir al inicio si no hay historial
+        window.location.href = 'index.html';
+    }
+});
+
+// ... resto del código ...
 generateTimeSlots();
         
     </script>
