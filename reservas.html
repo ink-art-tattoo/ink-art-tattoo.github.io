@@ -31,6 +31,7 @@
             background: linear-gradient(135deg, #1a1a2e, #16213e);
             color: var(--light);
             min-height: 100vh;
+            
             padding: 20px;
         }
         
@@ -1707,9 +1708,9 @@
             <div class="reserva-view">
               <div class="header-controls">
                     <!-- Botón para volver al inicio -->
-                    <button class="btn btn-home" id="back-button">
+                    <button id="back-button" class="btn btn-home">
     <i class="fas fa-arrow-left"></i>
-</button>
+                    </button> </div>
               <div class="user-controls">
                     <div id="user-info" class="user-info" style="display: none;">
                         <div class="user-avatar" id="user-avatar">JS</div>
@@ -1842,9 +1843,9 @@
             <div class="reserva-view">
               <div class="header-controls">
                     <!-- Botón para volver al inicio -->
-                    <a href="index.html" class="btn btn-home" id="back-buttom">
-                        <i class="fas fa-arrow-left"></i>
-                    </a> </div>
+                    <a href="index.html" class="btn btn-home">
+    <i class="fas fa-arrow-left"></i>
+                    </a>
               <div class="user-controls">
                     <div class="user-info">
                         <div class="user-avatar admin-avatar" id="admin-avatar">A</div>
@@ -3835,6 +3836,17 @@ if (numeroWhatsApp) {
     // ===== FIN NUEVO CÓDIGO =====
 });
 
+// Al final del script existente, antes del cierre de
+document.getElementById('back-button').addEventListener('click', () => {
+    if (history.length > 1) {
+        history.back();
+    } else {
+        // Redirigir al inicio si no hay historial
+        window.location.href = 'index.html';
+    }
+});
+
+
 // ... código existente ...
 
 // Función para generar contenido .ics
@@ -3880,19 +3892,10 @@ function downloadICS(icsContent, fileName) {
         URL.revokeObjectURL(url);
     }, 100);
 }
-
-// Al final del script existente, antes del cierre de
-document.getElementById('back-button').addEventListener('click', () => {
-    if (history.length > 1) {
-        history.back();
-    } else {
-        // Redirigir al inicio si no hay historial
-        window.location.href = 'index.html';
-    }
-});
-
-// ... resto del código ...
 generateTimeSlots();
+
+
+
         
     </script>
 </body>
