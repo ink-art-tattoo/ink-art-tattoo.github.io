@@ -2603,7 +2603,7 @@
         }
         
         .modal-content {
-            background:;
+            
             padding: 40px;
             margin-top: 40px;
             border-radius: 15px;
@@ -2780,5 +2780,52 @@
                 font-size: 14px;
             }
         }
+
+        .access-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.access-btn {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-size: 1.1rem;
+    color: var(--primary);
+}
+
+.access-btn:hover {
+    background: rgba(93, 167, 182, 0.3);
+    transform: scale(1.1);
+}
+
+.user-avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    overflow: hidden;
+    cursor: pointer;
+    border: 2px solid var(--primary);
+    box-shadow: 0 0 10px rgba(93, 167, 182, 0.123);
+    transition: all 0.3s;
+}
+
+.user-avatar:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 15px rgba(93, 167, 182, 0.274);
+}
+
+.user-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
 
        

@@ -1,0 +1,1737 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Perfil de Usuario - InkArt Studio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        :root {
+            --primary: #5da7b6;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --success: #28a745;
+            --danger: #dc3545;
+            --warning: #ffc107;
+            --gray: #6c757d;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            color: var(--light);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .profile-container {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            animation: fadeIn 0.8s ease-out;
+            display: none;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .profile-header {
+            text-align: center;
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .profile-header h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px rgba(93, 167, 182, 0.3);
+        }
+        
+        .avatar-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 20px;
+            cursor: pointer;
+        }
+        
+        .avatar-image {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+            box-shadow: 0 0 15px rgba(93, 167, 182, 0.4);
+            transition: all 0.3s;
+        }
+        
+        .avatar-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .avatar-overlay i {
+            font-size: 1.5rem;
+            color: white;
+        }
+        
+        .avatar-container:hover .avatar-overlay {
+            opacity: 1;
+        }
+        
+        .avatar-container:hover .avatar-image {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(93, 167, 182, 0.7);
+        }
+        
+        .user-info {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .user-info p {
+            font-size: 1.1rem;
+            margin: 10px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .user-info i {
+            color: var(--primary);
+            min-width: 20px;
+        }
+        
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 15px;
+            padding: 18px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(93, 167, 182, 0.3);
+        }
+        
+        .stat-card .number {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+        
+        .stat-card div {
+            font-size: 0.95rem;
+        }
+        
+        .profile-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .action-btn {
+            padding: 13px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        
+        .action-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(93, 167, 182, 0.5);
+        }
+        
+        .action-btn.logout {
+            background: var(--danger);
+        }
+        
+        .action-btn.edit {
+            background: var(--warning);
+            color: #000;
+        }
+        
+        .loader-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .loader-modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .loader {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 5px solid var(--primary);
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 10px;
+            background: var(--success);
+            color: white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            z-index: 1000;
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .notification.error {
+            background: var(--danger);
+        }
+        
+        .notification.warning {
+            background: var(--warning);
+            color: #000;
+        }
+        
+        .back-home {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--primary);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+            padding: 8px 15px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .back-home:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 3px 10px rgba(93, 167, 182, 0.3);
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .modal.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            border-radius: 20px;
+            padding: 25px;
+            max-width: 450px;
+            width: 90%;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+        }
+        
+        .modal-content h2 {
+            color: var(--primary);
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 1.6rem;
+        }
+        
+        .modal-content .form-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+        
+        .modal-content label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+        }
+        
+        .modal-content input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+        
+        .modal-content input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(93, 167, 182, 0.2);
+        }
+        
+        .modal-content .error-message {
+            color: var(--danger);
+            font-size: 0.85rem;
+            margin-top: 5px;
+            min-height: 18px;
+        }
+        
+        .modal-actions {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        
+        .modal-btn {
+            padding: 10px 18px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 0.95rem;
+        }
+        
+        .modal-btn.confirm {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .modal-btn.cancel {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        
+        /* Reservas Styles */
+        .reservations-section {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .reservations-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .reservations-header h2 {
+            font-size: 1.8rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .reservations-list {
+            max-height: 300px;
+            overflow-y: auto;
+            padding-right: 10px;
+        }
+        
+        .reservation-card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+        
+        .reservation-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(93, 167, 182, 0.2);
+        }
+        
+        .reservation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .reservation-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+        
+        .reservation-date {
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        
+        .reservation-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .detail-label {
+            font-size: 0.85rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 4px;
+        }
+        
+        .detail-value {
+            font-size: 1rem;
+            font-weight: 500;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .status-pending {
+            background: rgba(255, 193, 7, 0.2);
+            color: var(--warning);
+        }
+        
+        .status-confirmed {
+            background: rgba(40, 167, 69, 0.2);
+            color: var(--success);
+        }
+        
+        .status-completed {
+            background: rgba(93, 167, 182, 0.2);
+            color: var(--primary);
+        }
+        
+        .status-cancelled {
+            background: rgba(220, 53, 69, 0.2);
+            color: var(--danger);
+        }
+        
+        .payment-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .payment-verified {
+            color: var(--success);
+        }
+        
+        .payment-pending {
+            color: var(--warning);
+        }
+        
+        .no-reservations {
+            text-align: center;
+            padding: 30px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        /* Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #4c919e;
+        }
+        
+        .rating-stars {
+            display: flex;
+            justify-content: center;
+            gap: 3px;
+            margin-top: 5px;
+        }
+        
+        .rating-stars i {
+            color: #ffc107;
+            font-size: 1.1rem;
+        }
+
+        /* MEJORAS PARA VISTA MÓVIL */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+            
+            .profile-container {
+                padding: 25px 20px;
+                max-width: 100%;
+            }
+            
+            .profile-header {
+                margin-top: 30px;
+            }
+            
+            .back-home {
+                position: relative;
+                top: 0;
+                left: 0;
+                margin: 0 auto 20px;
+                justify-content: center;
+                width: fit-content;
+                display: block;
+            }
+            
+            .profile-actions {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .profile-stats {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .avatar-container {
+                width: 100px;
+                height: 100px;
+            }
+            
+            .profile-header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .user-info p {
+                font-size: 1rem;
+                flex-wrap: wrap;
+                justify-content: flex-start;
+                padding: 0 10px;
+            }
+            
+            .reservation-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .reservation-title {
+                font-size: 1.1rem;
+                margin-bottom: 5px;
+            }
+            
+            .reservation-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .modal-content {
+                padding: 20px 15px;
+            }
+            
+            .modal-actions {
+                flex-direction: column;
+                gap: 8px;
+            }
+            
+            .modal-btn {
+                width: 100%;
+            }
+            
+            .reservations-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .stat-card .number {
+                font-size: 1.8rem;
+            }
+        }
+        
+        @media (max-width: 500px) {
+            .profile-container {
+                padding: 20px 15px;
+            }
+            
+            .profile-header h1 {
+                font-size: 1.6rem;
+            }
+            
+            .modal-content {
+                padding: 15px;
+            }
+            
+            .user-info p {
+                font-size: 0.95rem;
+                padding: 0;
+            }
+            
+            .reservations-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .reservations-header h2 {
+                margin-bottom: 10px;
+            }
+        }
+        
+        /* MEJORAS PARA PANTALLAS GRANDES */
+        @media (min-width: 1200px) {
+            .profile-container, .login-container {
+                max-width: 900px;
+                padding: 50px;
+            }
+            
+            .profile-header h1 {
+                font-size: 2.8rem;
+            }
+            
+            .user-info p {
+                font-size: 1.2rem;
+            }
+            
+            .avatar-container {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .stat-card .number {
+                font-size: 2.5rem;
+            }
+            
+            .action-btn {
+                font-size: 1.1rem;
+                padding: 15px;
+            }
+            
+            .reservations-header h2 {
+                font-size: 2rem;
+            }
+            
+            .reservation-title {
+                font-size: 1.3rem;
+            }
+            
+            .detail-value {
+                font-size: 1.1rem;
+            }
+        }
+
+        @media (min-width: 1500px) {
+            .profile-container, .login-container {
+                max-width: 1000px;
+            }
+        }
+        
+        .login-container {
+            width: 100%;
+            max-width: 450px;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 35px;
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: none;
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        
+        .login-header p {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 20px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 50px;
+            overflow: hidden;
+        }
+        
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            font-size: 1rem;
+        }
+        
+        .auth-tab.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 18px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 0.95rem;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 0.95rem;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(93, 167, 182, 0.2);
+        }
+        
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .auth-btn {
+            width: 100%;
+            padding: 13px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-weight: 500;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .auth-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(93, 167, 182, 0.5);
+        }
+        
+        .auth-error {
+            color: var(--danger);
+            text-align: center;
+            margin-top: 12px;
+            font-size: 0.9rem;
+            min-height: 20px;
+        }
+        
+        .avatar-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 15px auto;
+            overflow: hidden;
+            border: 3px solid var(--primary);
+        }
+        
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            
+        }
+        
+        .logo-text {
+            font-size: 5rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            letter-spacing: 1px;
+            font-family: 'Gothice', sans-serif;
+            padding: 30px;
+            
+        }
+        
+        .logo-text span {
+            font-family: 'Gothice';
+            color: #6CB4C1;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container" id="loginContainer">
+        <div class="login-header">
+            <div class="logo">
+            <div class="logo-text">Ink<span>Art</span></div>
+        </div>
+            <p>Accede a tu cuenta para gestionar tu perfil</p>
+        </div>
+        
+        <div class="auth-tabs">
+            <div class="auth-tab active" data-tab="login">Iniciar Sesión</div>
+            <div class="auth-tab" data-tab="register">Registrarse</div>
+        </div>
+        
+        <div class="auth-form active" id="loginForm">
+            <div class="form-group">
+                <label for="login-email">Correo Electrónico</label>
+                <input type="email" id="login-email" placeholder="Tu correo" autocomplete="email">
+            </div>
+            <div class="form-group">
+                <label for="login-password">Contraseña</label>
+                <input type="password" id="login-password" placeholder="Tu contraseña" autocomplete="current-password">
+            </div>
+            <button class="auth-btn" id="login-btn">
+                <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
+            </button>
+            <div class="auth-error" id="login-error"></div>
+        </div>
+        
+        <div class="auth-form" id="registerForm">
+            <div class="form-group">
+                <label for="register-name">Nombre Completo</label>
+                <input type="text" id="register-name" placeholder="Tu nombre" autocomplete="name">
+            </div>
+            <div class="form-group">
+                <label for="register-email">Correo Electrónico</label>
+                <input type="email" id="register-email" placeholder="Tu correo" autocomplete="email">
+            </div>
+            <div class="form-group">
+                <label for="register-phone">Teléfono</label>
+                <input type="tel" id="register-phone" placeholder="Tu teléfono" autocomplete="tel">
+            </div>
+            <div class="form-group">
+                <label for="register-password">Contraseña</label>
+                <input type="password" id="register-password" placeholder="Tu contraseña" autocomplete="new-password">
+            </div>
+            <div class="form-group">
+                <label for="register-password-confirm">Confirmar Contraseña</label>
+                <input type="password" id="register-password-confirm" placeholder="Confirma tu contraseña" autocomplete="new-password">
+            </div>
+            <button class="auth-btn" id="register-btn">
+                <i class="fas fa-user-plus"></i> Registrarse
+            </button>
+            <div class="auth-error" id="register-error"></div>
+        </div>
+    </div>
+    
+    <div class="profile-container" id="profileContainer">
+        <a href="index.html" class="back-home">
+            <i class="fas fa-arrow-left"></i> Volver al inicio
+        </a>
+        
+        <div class="profile-header">
+            <h1><i class="fas fa-user"></i> Mi Perfil</h1>
+            
+            <div class="avatar-container" id="avatarContainer">
+                <img id="avatarImage" class="avatar-image" alt="Avatar">
+                <div class="avatar-overlay">
+                    <i class="fas fa-camera"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="user-info">
+            <p><i class="fas fa-user"></i> <span id="userName">Josiel Salabarría López</span></p>
+            <p><i class="fas fa-envelope"></i> <span id="userEmail">inkartjosielsalabarria@gmail.com</span></p>
+            <p><i class="fas fa-phone"></i> <span id="userPhone">55480242</span></p>
+            <p><i class="fas fa-calendar-alt"></i> Miembro desde: <span id="joinDate">01/01/2023</span></p>
+        </div>
+        
+        <div class="profile-stats">
+            <div class="stat-card">
+                <div class="number" id="reservationsCount">0</div>
+                <div>Reservas realizadas</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="completedTattoos">0</div>
+                <div>Tatuajes completados</div>
+            </div>
+            <div class="stat-card">
+                <div class="number" id="ratingAverage">0.0</div>
+                <div>Valoración promedio</div>
+                <div class="rating-stars" id="ratingStars">
+                    <i class="far fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <i class="far fa-star"></i>
+                    <i class="far fa-star"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="profile-actions">
+            <button class="action-btn edit" id="editProfileBtn">
+                <i class="fas fa-edit"></i> Editar Perfil
+            </button>
+            <a href="reservas.html" class="action-btn" id="viewReservationsBtn">
+                <i class="fas fa-calendar-check"></i> Reservar
+            </a>
+            <button class="action-btn" id="changePasswordBtn">
+                <i class="fas fa-lock"></i> Cambiar Contraseña
+            </button>
+            <button class="action-btn logout" id="logoutBtn">
+                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+            </button>
+        </div>
+        
+        <!-- Sección de Reservas -->
+        <div class="reservations-section" id="reservationsSection">
+            <div class="reservations-header">
+                <h2><i class="fas fa-calendar-check"></i> Mis Reservas</h2>
+            </div>
+            
+            <div class="reservations-list" id="reservationsList">
+                <!-- Las reservas se cargarán dinámicamente aquí -->
+            </div>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <span>¡Avatar actualizado correctamente!</span>
+    </div>
+    
+    <div class="loader-modal" id="loader">
+        <div class="loader"></div>
+    </div>
+    
+    <!-- Modal para cambiar avatar -->
+    <div class="modal" id="avatarModal">
+        <div class="modal-content">
+            <h2><i class="fas fa-camera"></i> Cambiar Avatar</h2>
+            <p>Selecciona una nueva imagen para tu perfil</p>
+            
+            <div class="avatar-preview">
+                <img id="avatarPreview" src="https://raw.githubusercontent.com/ink-art-tattoo/Imagenes/main/User.jpg" alt="Previsualización">
+            </div>
+            
+            <input type="file" id="avatarFile" accept="image/*" style="display: none;">
+            <button class="action-btn" id="selectAvatarBtn" style="margin: 15px auto;">
+                <i class="fas fa-folder-open"></i> Seleccionar Imagen
+            </button>
+            
+            <div class="modal-actions">
+                <button class="modal-btn cancel" id="cancelAvatarBtn">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <button class="modal-btn confirm" id="saveAvatarBtn">
+                    <i class="fas fa-save"></i> Guardar Avatar
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para editar perfil - SOLO NOMBRE -->
+    <div class="modal" id="editProfileModal">
+        <div class="modal-content">
+            <h2><i class="fas fa-edit"></i> Editar Perfil</h2>
+            
+            <div class="form-group">
+                <label for="edit-name">Nombre Completo</label>
+                <input type="text" id="edit-name" placeholder="Tu nombre">
+                <div class="error-message" id="name-error"></div>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="modal-btn cancel" id="cancelEditBtn">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <button class="modal-btn confirm" id="saveProfileBtn">
+                    <i class="fas fa-save"></i> Guardar Cambios
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal para cambiar contraseña -->
+    <div class="modal" id="changePasswordModal">
+        <div class="modal-content">
+            <h2><i class="fas fa-lock"></i> Cambiar Contraseña</h2>
+            
+            <div class="form-group">
+                <label for="current-password">Contraseña Actual</label>
+                <input type="password" id="current-password" placeholder="Tu contraseña actual">
+                <div class="error-message" id="current-password-error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="new-password">Nueva Contraseña</label>
+                <input type="password" id="new-password" placeholder="Tu nueva contraseña">
+                <div class="error-message" id="new-password-error"></div>
+            </div>
+            
+            <div class="form-group">
+                <label for="confirm-password">Confirmar Contraseña</label>
+                <input type="password" id="confirm-password" placeholder="Confirma tu nueva contraseña">
+                <div class="error-message" id="confirm-password-error"></div>
+            </div>
+            
+            <div class="modal-actions">
+                <button class="modal-btn cancel" id="cancelPasswordBtn">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
+                <button class="modal-btn confirm" id="savePasswordBtn">
+                    <i class="fas fa-save"></i> Cambiar Contraseña
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Configuración de Supabase
+        const supabaseUrl = 'https://umnfyoyamhsebhtystvr.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtbmZ5b3lhbWhzZWJodHlzdHZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5NDYyNzksImV4cCI6MjA2NTUyMjI3OX0.wgau4ceKnTkv3K5YzUsTvNWBEZ4-glmo-3kqIsKmx9U';
+        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+        // Variables globales
+        let currentUser = null;
+        const defaultAvatar = 'https://raw.githubusercontent.com/ink-art-tattoo/Imagenes/main/User.jpg';
+
+        // Elementos del DOM
+        const loginContainer = document.getElementById('loginContainer');
+        const profileContainer = document.getElementById('profileContainer');
+        const avatarContainer = document.getElementById('avatarContainer');
+        const avatarImage = document.getElementById('avatarImage');
+        const avatarModal = document.getElementById('avatarModal');
+        const avatarPreview = document.getElementById('avatarPreview');
+        const avatarFile = document.getElementById('avatarFile');
+        const selectAvatarBtn = document.getElementById('selectAvatarBtn');
+        const saveAvatarBtn = document.getElementById('saveAvatarBtn');
+        const cancelAvatarBtn = document.getElementById('cancelAvatarBtn');
+        const notification = document.getElementById('notification');
+        const loader = document.getElementById('loader');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const userName = document.getElementById('userName');
+        const userEmail = document.getElementById('userEmail');
+        const userPhone = document.getElementById('userPhone');
+        const joinDate = document.getElementById('joinDate');
+        const loginTab = document.querySelector('[data-tab="login"]');
+        const registerTab = document.querySelector('[data-tab="register"]');
+        const loginForm = document.getElementById('loginForm');
+        const registerForm = document.getElementById('registerForm');
+        const loginBtn = document.getElementById('login-btn');
+        const registerBtn = document.getElementById('register-btn');
+        const loginError = document.getElementById('login-error');
+        const registerError = document.getElementById('register-error');
+        const editProfileBtn = document.getElementById('editProfileBtn');
+        const editProfileModal = document.getElementById('editProfileModal');
+        const changePasswordBtn = document.getElementById('changePasswordBtn');
+        const changePasswordModal = document.getElementById('changePasswordModal');
+        const reservationsList = document.getElementById('reservationsList');
+        const reservationsCount = document.getElementById('reservationsCount');
+        const completedTattoos = document.getElementById('completedTattoos');
+        const ratingAverage = document.getElementById('ratingAverage');
+        const ratingStars = document.getElementById('ratingStars');
+
+        // Función para mostrar notificaciones
+        function showNotification(message, isError = false, isWarning = false) {
+            notification.innerHTML = `
+                <i class="fas ${isError ? 'fa-exclamation-circle' : isWarning ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            notification.classList.toggle('error', isError);
+            notification.classList.toggle('warning', isWarning);
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Función para mostrar/ocultar loader
+        function showLoader(show = true) {
+            loader.classList.toggle('active', show);
+        }
+        
+        // Función para mostrar/ocultar modal
+        function showModal(modal, show = true) {
+            modal.classList.toggle('active', show);
+        }
+        
+        // Abrir modal al hacer clic en el avatar
+        avatarContainer.addEventListener('click', () => {
+            showModal(avatarModal, true);
+        });
+        
+        // Seleccionar nueva imagen
+        selectAvatarBtn.addEventListener('click', () => {
+            avatarFile.click();
+        });
+        
+        // Previsualizar imagen seleccionada
+        avatarFile.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    avatarPreview.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        
+        // Cancelar cambio de avatar
+        cancelAvatarBtn.addEventListener('click', () => {
+            showModal(avatarModal, false);
+        });
+        
+        // Guardar nuevo avatar
+        saveAvatarBtn.addEventListener('click', async () => {
+            const file = avatarFile.files[0];
+            if (!file) {
+                showNotification('Por favor selecciona una imagen', true);
+                return;
+            }
+            
+            try {
+                showLoader(true);
+                
+                // Generar un nombre único para el archivo
+                const fileName = `avatar_${Date.now()}.${file.name.split('.').pop()}`;
+                const filePath = `avatars/${fileName}`; // Carpeta dentro del bucket
+                
+                // Subir la imagen al bucket "reviews" en la carpeta "avatars"
+                const { data, error: uploadError } = await supabase.storage
+                    .from('reviews') // Bucket "reviews"
+                    .upload(filePath, file, {
+                        cacheControl: '3600',
+                        upsert: true
+                    });
+                
+                if (uploadError) throw uploadError;
+                
+                // Obtener la URL pública de la imagen
+                const { data: { publicUrl } } = supabase.storage
+                    .from('reviews') // Bucket "reviews"
+                    .getPublicUrl(filePath);
+                
+                // Actualizar el avatar en la interfaz
+                avatarImage.src = publicUrl;
+                
+                // Actualizar la URL en la base de datos
+                const { error: updateError } = await supabase
+                    .from('profiles')
+                    .update({ avatar_url: publicUrl })
+                    .eq('id', currentUser.id);
+                
+                if (updateError) throw updateError;
+                
+                showNotification('¡Avatar actualizado correctamente!');
+                showModal(avatarModal, false);
+            } catch (error) {
+                console.error('Error subiendo avatar:', error);
+                showNotification(`Error al actualizar avatar: ${error.message}`, true);
+            } finally {
+                showLoader(false);
+            }
+        });
+        
+        // Cerrar sesión
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                showLoader(true);
+                await supabase.auth.signOut();
+                showNotification('Sesión cerrada correctamente');
+                setTimeout(() => {
+                    window.location.reload();
+                }, 1500);
+            } catch (error) {
+                console.error('Error cerrando sesión:', error);
+                showNotification('Error al cerrar sesión', true);
+            } finally {
+                showLoader(false);
+            }
+        });
+        
+        // Cambiar pestañas de autenticación
+        loginTab.addEventListener('click', () => {
+            loginForm.classList.add('active');
+            registerForm.classList.remove('active');
+            loginTab.classList.add('active');
+            registerTab.classList.remove('active');
+        });
+        
+        registerTab.addEventListener('click', () => {
+            registerForm.classList.add('active');
+            loginForm.classList.remove('active');
+            registerTab.classList.add('active');
+            loginTab.classList.remove('active');
+        });
+        
+        // Botón de login
+        loginBtn.addEventListener('click', async () => {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            if (!email || !password) {
+                loginError.textContent = 'Por favor completa todos los campos';
+                return;
+            }
+            
+            try {
+                showLoader(true);
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password
+                });
+                
+                if (error) throw error;
+                
+                // Verificar si el usuario ha confirmado su correo
+                if (!data.user.confirmed_at) {
+                    showNotification('Por favor confirma tu correo electrónico antes de iniciar sesión', true);
+                    return;
+                }
+                
+                currentUser = data.user;
+                await loadUserProfile();
+                showNotification('Sesión iniciada correctamente');
+            } catch (error) {
+                loginError.textContent = error.message;
+            } finally {
+                showLoader(false);
+            }
+        });
+        
+        // Botón de registro
+        registerBtn.addEventListener('click', async () => {
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const phone = document.getElementById('register-phone').value;
+            const password = document.getElementById('register-password').value;
+            const passwordConfirm = document.getElementById('register-password-confirm').value;
+            
+            // Validaciones
+            if (!name || !email || !phone || !password || !passwordConfirm) {
+                registerError.textContent = 'Por favor completa todos los campos';
+                return;
+            }
+            
+            if (password !== passwordConfirm) {
+                registerError.textContent = 'Las contraseñas no coinciden';
+                return;
+            }
+            
+            try {
+                showLoader(true);
+                const { data, error } = await supabase.auth.signUp({
+                    email,
+                    password,
+                    options: {
+                        data: {
+                            full_name: name,
+                            display_name: name,
+                            phone: phone
+                        },
+                        emailRedirectTo: window.location.href
+                    }
+                });
+                
+                if (error) throw error;
+                
+                // Usar UPSERT para crear o actualizar el perfil
+                if (data.user) {
+                    await supabase.from('profiles').upsert({
+                        id: data.user.id,
+                        full_name: name,
+                        phone: phone
+                    }, {
+                        onConflict: 'id'
+                    });
+                }
+                
+                // Mostrar mensaje de confirmación
+                showNotification('¡Registro exitoso! Por favor revisa tu correo para confirmar tu cuenta.');
+                
+                // Limpiar formulario
+                document.getElementById('register-name').value = '';
+                document.getElementById('register-email').value = '';
+                document.getElementById('register-phone').value = '';
+                document.getElementById('register-password').value = '';
+                document.getElementById('register-password-confirm').value = '';
+                
+                // Cambiar a pestaña de inicio de sesión
+                loginTab.click();
+                
+            } catch (error) {
+                registerError.textContent = error.message;
+            } finally {
+                showLoader(false);
+            }
+        });
+        
+        // Función para cargar las reservas del usuario
+        async function loadUserReservations() {
+            try {
+                const { data: reservations, error } = await supabase
+                    .from('reservas')
+                    .select('*')
+                    .eq('user_id', currentUser.id)
+                    .order('fecha', { ascending: false });
+                
+                if (error) throw error;
+                
+                // Actualizar contadores
+                reservationsCount.textContent = reservations.length;
+                const completed = reservations.filter(r => r.estado === 'completada').length;
+                completedTattoos.textContent = completed;
+                
+                // Limpiar lista de reservas
+                reservationsList.innerHTML = '';
+                
+                if (reservations.length === 0) {
+                    reservationsList.innerHTML = `
+                        <div class="no-reservations">
+                            <i class="fas fa-calendar-times" style="font-size: 3rem; margin-bottom: 15px;"></i>
+                            <p>No tienes reservas realizadas</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Formatear y mostrar cada reserva
+                reservations.forEach(reservation => {
+                    // Formatear fecha
+                    const fecha = new Date(reservation.fecha);
+                    const fechaFormateada = fecha.toLocaleDateString('es-ES', {
+                        day: '2-digit',
+                        month: 'long',
+                        year: 'numeric'
+                    });
+                    
+                    // Determinar clase de estado
+                    let statusClass = 'status-pending';
+                    let statusText = 'Pendiente';
+                    
+                    if (reservation.estado === 'confirmada') {
+                        statusClass = 'status-confirmed';
+                        statusText = 'Confirmada';
+                    } else if (reservation.estado === 'completada') {
+                        statusClass = 'status-completed';
+                        statusText = 'Completada';
+                    } else if (reservation.estado === 'cancelada') {
+                        statusClass = 'status-cancelled';
+                        statusText = 'Cancelada';
+                    }
+                    
+                    const reservationCard = document.createElement('div');
+                    reservationCard.className = 'reservation-card';
+                    reservationCard.innerHTML = `
+                        <div class="reservation-header">
+                            <div class="reservation-title">${reservation.nombre}</div>
+                            <div class="reservation-date">${fechaFormateada}</div>
+                        </div>
+                        <div class="reservation-details">
+                            <div class="detail-item">
+                                <span class="detail-label">Hora</span>
+                                <span class="detail-value">${reservation.hora}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Artista</span>
+                                <span class="detail-value">${reservation.artista}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Duración</span>
+                                <span class="detail-value">${reservation.duracion} horas</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Tamaño</span>
+                                <span class="detail-value">${reservation.tamanio}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Estado</span>
+                                <span class="detail-value"><span class="status-badge ${statusClass}">${statusText}</span></span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">Pago</span>
+                                <span class="detail-value">
+                                    <span class="payment-status ${reservation.pago_verificado ? 'payment-verified' : 'payment-pending'}">
+                                        <i class="fas ${reservation.pago_verificado ? 'fa-check-circle' : 'fa-clock'}"></i>
+                                        ${reservation.pago_verificado ? 'Verificado' : 'Pendiente'}
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    `;
+                    
+                    reservationsList.appendChild(reservationCard);
+                });
+                
+            } catch (error) {
+                console.error('Error cargando reservas:', error);
+                showNotification('Error al cargar las reservas', true);
+            }
+        }
+        
+        // Función para cargar el promedio de valoraciones del usuario
+        async function loadUserRatingAverage() {
+            try {
+                // Obtener todas las reseñas del usuario
+                const { data: reviews, error } = await supabase
+                    .from('reviews')
+                    .select('rating')
+                    .eq('user_id', currentUser.id);
+                
+                if (error) throw error;
+                
+                // Calcular el promedio
+                let average = 0;
+                if (reviews && reviews.length > 0) {
+                    const total = reviews.reduce((sum, review) => sum + review.rating, 0);
+                    average = total / reviews.length;
+                }
+                
+                // Actualizar la interfaz
+                ratingAverage.textContent = average.toFixed(1);
+                
+                // Actualizar estrellas
+                updateRatingStars(average);
+                
+            } catch (error) {
+                console.error('Error cargando valoraciones:', error);
+                ratingAverage.textContent = '0.0';
+                updateRatingStars(0);
+                showNotification('Error al cargar las valoraciones', true);
+            }
+        }
+        
+        // Actualizar visualización de estrellas
+        function updateRatingStars(rating) {
+            ratingStars.innerHTML = '';
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+            
+            // Estrellas llenas
+            for (let i = 0; i < fullStars; i++) {
+                ratingStars.innerHTML += '<i class="fas fa-star"></i>';
+            }
+            
+            // Media estrella
+            if (hasHalfStar) {
+                ratingStars.innerHTML += '<i class="fas fa-star-half-alt"></i>';
+            }
+            
+            // Estrellas vacías
+            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            for (let i = 0; i < emptyStars; i++) {
+                ratingStars.innerHTML += '<i class="far fa-star"></i>';
+            }
+        }
+        
+        // Cargar perfil de usuario
+        async function loadUserProfile() {
+            try {
+                showLoader(true);
+                
+                // Obtener datos de perfil
+                const { data: profile, error } = await supabase
+                    .from('profiles')
+                    .select('*')
+                    .eq('id', currentUser.id)
+                    .single();
+                
+                if (error) throw error;
+                
+                // Actualizar interfaz con datos del usuario
+                userName.textContent = profile.full_name || 'Usuario';
+                userEmail.textContent = currentUser.email;
+                userPhone.textContent = profile.phone || 'Sin teléfono';
+                
+                // Formatear fecha de creación
+                const createdAt = new Date(profile.created_at);
+                joinDate.textContent = createdAt.toLocaleDateString('es-ES');
+                
+                // Cargar avatar con imagen por defecto si no existe
+                avatarImage.src = profile.avatar_url || defaultAvatar;
+                
+                // Cargar reservas del usuario
+                await loadUserReservations();
+                
+                // Cargar promedio de valoraciones
+                await loadUserRatingAverage();
+                
+                // Mostrar perfil y ocultar login
+                profileContainer.style.display = 'block';
+                loginContainer.style.display = 'none';
+                
+            } catch (error) {
+                console.error('Error cargando perfil:', error);
+                showNotification('Error al cargar perfil de usuario: ' + error.message, true);
+            } finally {
+                showLoader(false);
+            }
+        }
+        
+        // Abrir modal de edición de perfil (solo nombre)
+        editProfileBtn.addEventListener('click', () => {
+            document.getElementById('edit-name').value = userName.textContent;
+            showModal(editProfileModal, true);
+        });
+        
+        // Cancelar edición de perfil
+        document.getElementById('cancelEditBtn').addEventListener('click', () => {
+            showModal(editProfileModal, false);
+        });
+        
+        // Guardar cambios de perfil - SOLO NOMBRE
+        document.getElementById('saveProfileBtn').addEventListener('click', async () => {
+            const name = document.getElementById('edit-name').value;
+            
+            // Validación solo del nombre
+            if (!name) {
+                document.getElementById('name-error').textContent = 'Por favor ingresa tu nombre';
+                return;
+            }
+            
+            try {
+                showLoader(true);
+                
+                // Actualizar usando UPSERT para garantizar que se actualice la tabla profiles
+                const { error: profileError } = await supabase
+                    .from('profiles')
+                    .upsert({ 
+                        id: currentUser.id,
+                        full_name: name   // Solo actualizamos el nombre
+                    }, {
+                        onConflict: 'id'
+                    });
+                
+                if (profileError) throw profileError;
+                
+                // Actualizar metadata de autenticación
+                const { error: authError } = await supabase.auth.updateUser({
+                    data: { 
+                        display_name: name,
+                        full_name: name
+                    }
+                });
+                
+                if (authError) throw authError;
+                
+                // Actualizar interfaz
+                userName.textContent = name;
+                
+                showNotification('Perfil actualizado correctamente');
+                showModal(editProfileModal, false);
+                
+            } catch (error) {
+                console.error('Error actualizando perfil:', error);
+                showNotification('Error al actualizar perfil: ' + error.message, true);
+            } finally {
+                showLoader(false);
+            }
+        });
+        
+        // Abrir modal de cambio de contraseña
+        changePasswordBtn.addEventListener('click', () => {
+            // Limpiar campos
+            document.getElementById('current-password').value = '';
+            document.getElementById('new-password').value = '';
+            document.getElementById('confirm-password').value = '';
+            document.getElementById('current-password-error').textContent = '';
+            document.getElementById('new-password-error').textContent = '';
+            document.getElementById('confirm-password-error').textContent = '';
+            
+            showModal(changePasswordModal, true);
+        });
+        
+        // Cancelar cambio de contraseña
+        document.getElementById('cancelPasswordBtn').addEventListener('click', () => {
+            showModal(changePasswordModal, false);
+        });
+        
+        // Cambiar contraseña
+        document.getElementById('savePasswordBtn').addEventListener('click', async () => {
+            const currentPassword = document.getElementById('current-password').value;
+            const newPassword = document.getElementById('new-password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            
+            // Validaciones
+            let isValid = true;
+            
+            if (!currentPassword) {
+                document.getElementById('current-password-error').textContent = 'Por favor ingresa tu contraseña actual';
+                isValid = false;
+            }
+            
+            if (!newPassword) {
+                document.getElementById('new-password-error').textContent = 'Por favor ingresa tu nueva contraseña';
+                isValid = false;
+            } else if (newPassword.length < 6) {
+                document.getElementById('new-password-error').textContent = 'La contraseña debe tener al menos 6 caracteres';
+                isValid = false;
+            }
+            
+            if (!confirmPassword) {
+                document.getElementById('confirm-password-error').textContent = 'Por favor confirma tu nueva contraseña';
+                isValid = false;
+            } else if (newPassword !== confirmPassword) {
+                document.getElementById('confirm-password-error').textContent = 'Las contraseñas no coinciden';
+                isValid = false;
+            }
+            
+            if (!isValid) return;
+            
+            try {
+                showLoader(true);
+                
+                // Actualizar contraseña
+                const { data, error } = await supabase.auth.updateUser({
+                    password: newPassword
+                });
+                
+                if (error) throw error;
+                
+                showNotification('Contraseña actualizada correctamente');
+                showModal(changePasswordModal, false);
+                
+            } catch (error) {
+                console.error('Error cambiando contraseña:', error);
+                
+                if (error.message.includes('Invalid login credentials')) {
+                    document.getElementById('current-password-error').textContent = 'Contraseña actual incorrecta';
+                } else {
+                    showNotification('Error al cambiar contraseña', true);
+                }
+            } finally {
+                showLoader(false);
+            }
+        });
+        
+        // Verificar sesión al cargar la página
+        async function checkSession() {
+            const { data, error } = await supabase.auth.getUser();
+            
+            if (data && data.user) {
+                currentUser = data.user;
+                await loadUserProfile();
+            } else {
+                loginContainer.style.display = 'block';
+            }
+        }
+
+        
+        // Inicializar la aplicación
+        document.addEventListener('DOMContentLoaded', () => {
+            checkSession();
+        });
+    </script>
+</body>
+</html>

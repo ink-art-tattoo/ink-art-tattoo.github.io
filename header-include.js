@@ -96,4 +96,77 @@ function initHeaderFunctions() {
             header.classList.remove('scrolled');
         }
     });
+
+
+    // Configuración de Supabase (usa las mismas credenciales)
+    const supabaseUrl = 'https://umnfyoyamhsebhtystvr.supabase.co';
+    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVtbmZ5b3lhbWhzZWJodHlzdHZyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDk5NDYyNzksImV4cCI6MjA2NTUyMjI3OX0.wgau4ceKnTkv3K5YzUsTvNWBEZ4-glmo-3kqIsKmx9U';
+    const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    // Elementos del DOM
+    const loginBtn = document.getElementById('loginBtn');
+    const userAvatarBtn = document.getElementById('userAvatarBtn');
+    const userAvatarImg = document.getElementById('userAvatarImg');
+    const defaultAvatar = 'https://raw.githubusercontent.com/ink-art-tattoo/Imagenes/main/User.jpg';
+
+    // Verificar estado de autenticación
+    async function checkAuthStatus() {
+        try {
+            const { data: { user }, error } = await supabase.auth.getUser();
+            
+            if (error) throw error;
+            
+            if (user) {
+                // Obtener perfil completo del usuario
+                const { data: profile, error: profileError } = await supabase
+                    .from('profiles')
+                    .select('avatar_url')
+                    .eq('id', user.id)
+                    .single();
+                
+                if (profileError) throw profileError;
+                
+                // Actualizar avatar - importante agregar timestamp para evitar caché
+                const timestamp = new Date().getTime();
+                userAvatarImg.src = profile.avatar_url 
+                    ? `${profile.avatar_url}?t=${timestamp}` 
+                    : `${defaultAvatar}?t=${timestamp}`;
+                
+                loginBtn.style.display = 'none';
+                userAvatarBtn.style.display = 'block';
+            } else {
+                loginBtn.style.display = 'block';
+                userAvatarBtn.style.display = 'none';
+            }
+        } catch (error) {
+            console.error('Error verificando sesión:', error);
+            loginBtn.style.display = 'block';
+            userAvatarBtn.style.display = 'none';
+        }
+    }
+
+    // Evento para abrir login
+    loginBtn.addEventListener('click', () => {
+        window.location.href = 'login.html';
+    });
+
+    // Evento para el avatar (abrir perfil)
+    userAvatarBtn.addEventListener('click', () => {
+        window.location.href = 'login.html';
+    });
+
+    // Escuchar cambios de autenticación en tiempo real
+    supabase.auth.onAuthStateChange((event, session) => {
+        if (event === 'SIGNED_IN') {
+            checkAuthStatus();
+        } else if (event === 'SIGNED_OUT') {
+            loginBtn.style.display = 'block';
+            userAvatarBtn.style.display = 'none';
+        }
+    });
+
+    // Inicializar al cargar la página
+    document.addEventListener('DOMContentLoaded', () => {
+        checkAuthStatus();
+    });
 }
