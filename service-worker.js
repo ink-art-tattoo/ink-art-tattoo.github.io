@@ -5,6 +5,8 @@ const urlsToCache = [
   '/index.html',
   '/styles.css',
   '/main.js',
+  '/login.html',
+  '/header.html',
   '/'  // Ajusta según tus recursos
 ];
 

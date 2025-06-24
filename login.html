@@ -8,6 +8,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
+            @font-face {
+  font-family: 'Gothice';
+  src: 
+    url('fonts/gothice/gothice_-webfont.woff2') format('woff2'),
+    url('fonts/gothice/gothice_-webfont.woff') format('woff');
+  font-weight: normal; 
+  font-style: normal; 
+}
+
+
+
         * {
             margin: 0;
             padding: 0;
@@ -924,6 +935,22 @@
                 margin-top: 0;
             }
         }
+
+                /* Agregamos estilos para la previsualización de avatar */
+        .avatar-preview {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 15px auto;
+            overflow: hidden;
+            border: 3px solid var(--primary);
+        }
+        
+        .avatar-preview img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
     </style>
 </head>
 <body>
@@ -1197,6 +1224,53 @@
         const ratingAverage = document.getElementById('ratingAverage');
         const ratingStars = document.getElementById('ratingStars');
 
+         // Función para manejar el almacenamiento en caché de la imagen
+        function cacheAvatarImage(url) {
+            if (!url) return;
+            
+            // Verificar si la URL ya está en caché
+            const cachedAvatar = localStorage.getItem('cachedAvatar');
+            if (cachedAvatar && cachedAvatar.url === url) {
+                return cachedAvatar.dataUrl;
+            }
+            
+            return null;
+        }
+
+        // Función para cargar la imagen y almacenarla en caché
+        async function loadAndCacheAvatar(url) {
+            if (!url) return defaultAvatar;
+            
+            try {
+                // Intentar obtener la imagen desde caché
+                const cached = cacheAvatarImage(url);
+                if (cached) return cached;
+                
+                // Si no está en caché, cargarla
+                const response = await fetch(url);
+                const blob = await response.blob();
+                
+                // Convertir a Data URL
+                return new Promise((resolve) => {
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        // Almacenar en localStorage con marca de tiempo
+                        const cacheData = {
+                            url: url,
+                            dataUrl: reader.result,
+                            timestamp: Date.now()
+                        };
+                        localStorage.setItem('cachedAvatar', JSON.stringify(cacheData));
+                        resolve(reader.result);
+                    };
+                    reader.readAsDataURL(blob);
+                });
+            } catch (error) {
+                console.error('Error cargando avatar:', error);
+                return defaultAvatar;
+            }
+        }
+
         // Función para mostrar notificaciones
         function showNotification(message, isError = false, isWarning = false) {
             notification.innerHTML = `
@@ -1299,10 +1373,18 @@
             } finally {
                 showLoader(false);
             }
+
+                         // Después de actualizar el avatar
+            clearAvatarCache();
+            avatarImage.src = publicUrl;
+
+
         });
         
         // Cerrar sesión
         logoutBtn.addEventListener('click', async () => {
+
+            clearAvatarCache();
             try {
                 showLoader(true);
                 await supabase.auth.signOut();
@@ -1316,6 +1398,9 @@
             } finally {
                 showLoader(false);
             }
+
+
+            
         });
         
         // Cambiar pestañas de autenticación
@@ -1448,7 +1533,7 @@
                 
                 // Actualizar contadores
                 reservationsCount.textContent = reservations.length;
-                const completed = reservations.filter(r => r.estado === 'completada').length;
+                const completed = reservations.filter(r => r.estado === 'completed').length;
                 completedTattoos.textContent = completed;
                 
                 // Limpiar lista de reservas
@@ -1464,11 +1549,15 @@
                     return;
                 }
                 
-                // Formatear y mostrar cada reserva
+// Formatear y mostrar cada reserva - SOLUCIÓN AL PROBLEMA DE FECHAS
                 reservations.forEach(reservation => {
-                    // Formatear fecha
-                    const fecha = new Date(reservation.fecha);
-                    const fechaFormateada = fecha.toLocaleDateString('es-ES', {
+                    // SOLUCIÓN: Crear fecha en UTC y ajustar a zona horaria local
+                    const fechaUTC = new Date(reservation.fecha + 'T00:00:00Z');
+                    
+                    // Añadir el offset de la zona horaria para obtener la fecha local correcta
+                    const fechaLocal = new Date(fechaUTC.getTime() + fechaUTC.getTimezoneOffset() * 60000);
+                    
+                    const fechaFormateada = fechaLocal.toLocaleDateString('es-ES', {
                         day: '2-digit',
                         month: 'long',
                         year: 'numeric'
@@ -1618,6 +1707,10 @@
                 
                 // Cargar avatar con imagen por defecto si no existe
                 avatarImage.src = profile.avatar_url || defaultAvatar;
+
+                 // Cargar avatar con caché
+                const avatarUrl = profile.avatar_url || defaultAvatar;
+                avatarImage.src = await loadAndCacheAvatar(avatarUrl);
                 
                 // Cargar reservas del usuario
                 await loadUserReservations();
@@ -1635,6 +1728,11 @@
             } finally {
                 showLoader(false);
             }
+        }
+
+         // Función para limpiar la caché de avatar
+        function clearAvatarCache() {
+            localStorage.removeItem('cachedAvatar');
         }
         
         // Abrir modal de edición de perfil (solo nombre)
