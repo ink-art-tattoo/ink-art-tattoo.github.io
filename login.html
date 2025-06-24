@@ -1478,10 +1478,10 @@
                     let statusClass = 'status-pending';
                     let statusText = 'Pendiente';
                     
-                    if (reservation.estado === 'confirmada') {
+                    if (reservation.estado === 'confirmed') {
                         statusClass = 'status-confirmed';
                         statusText = 'Confirmada';
-                    } else if (reservation.estado === 'completada') {
+                    } else if (reservation.estado === 'completed') {
                         statusClass = 'status-completed';
                         statusText = 'Completada';
                     } else if (reservation.estado === 'cancelada') {
