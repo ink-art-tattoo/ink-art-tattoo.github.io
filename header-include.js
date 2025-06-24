@@ -126,12 +126,37 @@ function initHeaderFunctions() {
                 
                 if (profileError) throw profileError;
                 
-                // Actualizar avatar - importante agregar timestamp para evitar caché
-                const timestamp = new Date().getTime();
-                userAvatarImg.src = profile.avatar_url 
-                    ? `${profile.avatar_url}?t=${timestamp}` 
-                    : `${defaultAvatar}?t=${timestamp}`;
+                // Determinar URL del avatar (usar default si no existe)
+                const newAvatarUrl = profile?.avatar_url || defaultAvatar;
                 
+                // Clave única para el almacenamiento local
+                const storageKey = `avatarCache_${user.id}`;
+                const now = Date.now();
+                const cacheExpiry = 5 * 60 * 1000; // 5 minutos
+                
+                // Obtener caché existente
+                const cachedAvatar = JSON.parse(localStorage.getItem(storageKey)) || {};
+                
+                // Verificar si necesitamos actualizar la imagen
+                const shouldUpdate = 
+                    !cachedAvatar.url ||                     // No hay caché previa
+                    cachedAvatar.url !== newAvatarUrl ||     // URL cambiada
+                    (now - cachedAvatar.timestamp) > cacheExpiry; // Caché expirada
+
+                if (shouldUpdate) {
+                    // Forzar recarga con nuevo timestamp
+                    userAvatarImg.src = `${newAvatarUrl}?t=${now}`;
+                    
+                    // Actualizar caché local
+                    localStorage.setItem(storageKey, JSON.stringify({
+                        url: newAvatarUrl,
+                        timestamp: now
+                    }));
+                } else {
+                    // Usar versión en caché (sin recargar)
+                    userAvatarImg.src = cachedAvatar.url;
+                }
+
                 loginBtn.style.display = 'none';
                 userAvatarBtn.style.display = 'block';
             } else {
@@ -166,7 +191,5 @@ function initHeaderFunctions() {
     });
 
     // Inicializar al cargar la página
-    document.addEventListener('DOMContentLoaded', () => {
-        checkAuthStatus();
-    });
+    checkAuthStatus();
 }
