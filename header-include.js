@@ -1,4 +1,6 @@
 // js/include-header.js
+
+
 document.addEventListener('DOMContentLoaded', function() {
     // Crear contenedor para el header
     const headerContainer = document.createElement('div');
