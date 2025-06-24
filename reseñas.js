@@ -7,9 +7,8 @@ document.addEventListener('DOMContentLoaded', function() {
     // Crear cliente Supabase
     const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
     
-    // Variables para almacenar las imágenes seleccionadas
+    // Variable para almacenar la imagen seleccionada (solo tatuaje)
     let tattooImageFile = null;
-    let avatarImageFile = null;
     
     // Referencia al modal de carga
     const loadingModal = document.getElementById('loading-modal');
@@ -316,7 +315,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
     
-    // Función para manejar la previsualización de imágenes
+    // Función para manejar la previsualización de imágenes (solo tatuaje)
     function setupImagePreview() {
         // Foto del tatuaje
         const tattooInput = document.getElementById('tattoo-image');
@@ -350,39 +349,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 reader.readAsDataURL(this.files[0]);
             }
         });
-        
-        // Foto del cliente
-        const avatarInput = document.getElementById('avatar');
-        const avatarPreview = document.getElementById('avatar-preview-container');
-        
-        avatarInput.addEventListener('change', function(e) {
-            avatarPreview.innerHTML = '';
-            avatarImageFile = null;
-            
-            if (this.files && this.files[0]) {
-                avatarImageFile = this.files[0];
-                
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const previewDiv = document.createElement('div');
-                    previewDiv.className = 'image-preview';
-                    previewDiv.innerHTML = `
-                        <img src="${e.target.result}" alt="Preview">
-                        <button class="remove-btn">&times;</button>
-                    `;
-                    
-                    avatarPreview.appendChild(previewDiv);
-                    
-                    // Botón para eliminar la imagen
-                    previewDiv.querySelector('.remove-btn').addEventListener('click', function() {
-                        avatarPreview.innerHTML = '';
-                        avatarInput.value = '';
-                        avatarImageFile = null;
-                    });
-                }
-                reader.readAsDataURL(this.files[0]);
-            }
-        });
     }
 
     // Función para manejar el envío del formulario
@@ -399,18 +365,23 @@ document.addEventListener('DOMContentLoaded', function() {
         // Convertir el rating a número
         reviewData.rating = parseInt(reviewData.rating);
         
-        // Eliminamos los campos de archivo del objeto
+        // Eliminamos el campo de archivo del objeto
         delete reviewData.tattoo_image;
-        delete reviewData.avatar;
         
         try {
-            // Subir imágenes si se seleccionaron
-            if (tattooImageFile) {
-                reviewData.tattoo_image_url = await uploadImage(tattooImageFile, 'reviews', 'tattoos');
+            // Obtener usuario autenticado
+            const { data: { user } } = await supabaseClient.auth.getUser();
+            
+            if (!user) {
+                throw new Error('Debes iniciar sesión para enviar una reseña');
             }
             
-            if (avatarImageFile) {
-                reviewData.avatar_url = await uploadImage(avatarImageFile, 'reviews', 'avatars');
+            // Agregar el user_id a los datos de la reseña
+            reviewData.user_id = user.id;
+            
+            // Subir imagen de tatuaje si se seleccionó
+            if (tattooImageFile) {
+                reviewData.tattoo_image_url = await uploadImage(tattooImageFile, 'reviews', 'tattoos');
             }
             
             // Insertar la reseña en la base de datos
@@ -429,18 +400,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 star.classList.add('far');
             });
             
-            // Limpiar previsualizaciones de imágenes
+            // Limpiar previsualización de tatuaje
             document.getElementById('tattoo-preview-container').innerHTML = '';
-            document.getElementById('avatar-preview-container').innerHTML = '';
             tattooImageFile = null;
-            avatarImageFile = null;
             
             // Recargar las reseñas
             await loadReviews();
             
         } catch (error) {
             console.error('Error enviando reseña:', error);
-            showMessage('Hubo un error al enviar tu reseña. Por favor, intenta de nuevo.', 'error');
+            showMessage(error.message || 'Hubo un error al enviar tu reseña. Por favor, intenta de nuevo.', 'error');
         } finally {
             // Ocultar modal de carga
             showLoading(false);
@@ -450,18 +419,24 @@ document.addEventListener('DOMContentLoaded', function() {
     // Función para actualizar la UI según estado de autenticación
     async function updateAuthUI(user) {
         if (user) {
-            // Obtener nombre del usuario desde la tabla 'profiles'
+            // Obtener nombre y avatar del usuario desde la tabla 'profiles'
             let userName = 'Usuario';
+            let userAvatarUrl = ''; // Inicializamos como cadena vacía
             
             try {
                 const { data: profile, error } = await supabaseClient
                     .from('profiles')
-                    .select('full_name')
+                    .select('full_name, avatar_url')
                     .eq('id', user.id)
                     .single();
 
-                if (!error && profile && profile.full_name) {
-                    userName = profile.full_name;
+                if (!error && profile) {
+                    if (profile.full_name) {
+                        userName = profile.full_name;
+                    }
+                    if (profile.avatar_url) {
+                        userAvatarUrl = profile.avatar_url;
+                    }
                 } else {
                     userName = user.email || 'Usuario';
                 }
@@ -470,7 +445,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 userName = user.email || 'Usuario';
             }
 
-            // Mostrar formulario de reseñas con nombre autocompletado
+            // Mostrar formulario de reseñas con nombre autocompletado y avatar del perfil
             reviewFormContainer.innerHTML = `
                 <div class="add-review-form">
                     <h3>Deja tu reseña</h3>
@@ -480,6 +455,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     <form id="review-form">
                         <!-- Nombre oculto que se enviará automáticamente -->
                         <input type="hidden" id="client-name" name="client_name" value="${userName}" required>
+                        <!-- Avatar URL del perfil -->
+                        <input type="hidden" id="avatar-url" name="avatar_url" value="${userAvatarUrl}">
                         
                         <div class="form-group">
                             <label for="rating">Calificación</label>
@@ -514,7 +491,7 @@ document.addEventListener('DOMContentLoaded', function() {
                             <textarea id="content" name="content" rows="4" required></textarea>
                         </div>
                         
-                        <!-- Campo para subir foto del tatuaje -->
+                        <!-- Campo para subir foto del tatuaje (opcional) -->
                         <div class="form-group">
                             <label>Foto del tatuaje (opcional)</label>
                             <div class="image-preview-container" id="tattoo-preview-container"></div>
@@ -522,16 +499,6 @@ document.addEventListener('DOMContentLoaded', function() {
                                 <i class="fas fa-upload"></i> Seleccionar imagen
                             </label>
                             <input type="file" id="tattoo-image" name="tattoo_image" accept="image/*" class="file-input">
-                        </div>
-                        
-                        <!-- Campo para subir foto del cliente -->
-                        <div class="form-group">
-                            <label>Tu foto (opcional)</label>
-                            <div class="image-preview-container" id="avatar-preview-container"></div>
-                            <label class="upload-btn" for="avatar">
-                                <i class="fas fa-upload"></i> Seleccionar foto
-                            </label>
-                            <input type="file" id="avatar" name="avatar" accept="image/*" class="file-input">
                         </div>
                         
                         <button type="submit" class="submit-btn">Enviar reseña</button>
@@ -552,14 +519,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     <h3>¡Inicia sesión para dejar tu reseña!</h3>
                     <p>Para compartir tu experiencia con Josiel, necesitas tener una cuenta.</p>
                     <button class="login-action-btn" id="go-to-reservations">
-                        <i class="fas fa-sign-in-alt"></i> Ir a Reservas para Iniciar Sesión
+                        <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
                     </button>
                 </div>
             `;
             
             // Configurar botón de redirección
             document.getElementById('go-to-reservations')?.addEventListener('click', () => {
-                window.location.href = 'reservas.html?action=openLogin';
+                window.location.href = 'login.html?action=openLogin';
             });
         }
     }

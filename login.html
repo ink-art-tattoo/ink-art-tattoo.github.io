@@ -565,6 +565,11 @@
                 max-width: 100%;
             }
             
+            .login-container {
+                padding: 25px 20px;
+                max-width: 100%;
+            }
+            
             .profile-header {
                 margin-top: 30px;
             }
@@ -643,6 +648,10 @@
         
         @media (max-width: 500px) {
             .profile-container {
+                padding: 20px 15px;
+            }
+            
+            .login-container {
                 padding: 20px 15px;
             }
             
@@ -727,13 +736,13 @@
             box-shadow: 0 12px 35px rgba(0, 0, 0, 0.35);
             border: 1px solid rgba(255, 255, 255, 0.1);
             display: none;
+            position: relative;
         }
         
         .login-header {
             text-align: center;
             margin-bottom: 25px;
         }
-        
         
         .login-header p {
             color: rgba(255, 255, 255, 0.7);
@@ -860,7 +869,7 @@
         .logo-text {
             font-size: 5rem;
             font-weight: 700;
-            color: var(--color-primary);
+            color: white;
             letter-spacing: 1px;
             font-family: 'Gothice', sans-serif;
             padding: 30px;
@@ -871,14 +880,63 @@
             font-family: 'Gothice';
             color: #6CB4C1;
         }
+        
+        /* Nuevo estilo para el botón de volver en el login */
+        .login-back-home {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: var(--primary);
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+            transition: all 0.3s;
+            padding: 8px 15px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.08);
+            z-index: 10;
+        }
+        
+        .login-back-home:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 3px 10px rgba(93, 167, 182, 0.3);
+        }
+        
+        /* Ajuste para el login-header cuando hay botón de volver */
+        .login-container .login-header {
+            margin-top: 40px;
+        }
+        
+        @media (max-width: 768px) {
+            .login-back-home {
+                position: relative;
+                top: 0;
+                left: 0;
+                margin: 0 auto 20px;
+                justify-content: center;
+                width: fit-content;
+                display: block;
+            }
+            
+            .login-container .login-header {
+                margin-top: 0;
+            }
+        }
     </style>
 </head>
 <body>
     <div class="login-container" id="loginContainer">
+        <!-- Botón de volver agregado aquí -->
+        <a href="index.html" class="login-back-home">
+            <i class="fas fa-arrow-left"></i> Volver al inicio
+        </a>
+        
         <div class="login-header">
             <div class="logo">
-            <div class="logo-text">Ink<span>Art</span></div>
-        </div>
+                <div class="logo-text">Ink<span>Art</span></div>
+            </div>
             <p>Accede a tu cuenta para gestionar tu perfil</p>
         </div>
         
