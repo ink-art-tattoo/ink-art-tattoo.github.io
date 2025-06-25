@@ -2800,6 +2800,16 @@
     font-size: 1.1rem;
     color: var(--primary);
 }
+.access-btn i {
+  display: flex;
+  align-items: center;
+  
+    justify-content: center;
+    margin-top: 10px;
+    
+    
+}
+
 
 .access-btn:hover {
     background: rgba(93, 167, 182, 0.3);
@@ -2812,9 +2822,10 @@
     border-radius: 50%;
     overflow: hidden;
     cursor: pointer;
-    border: 2px solid var(--primary);
+    border: 2px solid var(--color-secondary);
     box-shadow: 0 0 10px rgba(93, 167, 182, 0.123);
     transition: all 0.3s;
+    
 }
 
 .user-avatar:hover {
