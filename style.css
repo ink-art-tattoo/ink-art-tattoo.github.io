@@ -358,17 +358,16 @@
             justify-content: center;
             position: relative;
             background: linear-gradient(to top, rgba(255, 255, 255, 0.342), rgba(94, 91, 91, 0.788)),
-                        url('/imgs/fondo-hero.webp') no-repeat center center/cover;
+                        url('/imgs/fondo.jpg') no-repeat center center/cover;
             padding: 0 5%;
-            background-attachment: fixed;
             overflow: hidden;
             
         }
         
         .dark-mode .hero {
             background: linear-gradient(to top, rgba(18, 18, 18, 0.7), rgba(18, 18, 18, 0.9)),
-                        url('/imgs/fondo-hero.webp') no-repeat center center/cover;
-                        background-attachment: fixed;
+                        url('/imgs/fondo.jpg') no-repeat center center/cover;
+                        
         
             }
 
