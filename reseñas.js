@@ -198,8 +198,12 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
     // Función para aplicar el filtro actual
+    
     function applyFilter() {
         if (currentFilter === 'all') {
+                  // RESET PAGINACIÓN AL FILTRO COMPLETO
+        totalReviews = allReviews.length;
+        totalPages = Math.ceil(totalReviews / reviewsPerPage);
             // Mostrar todas las reseñas
             renderReviewsForCurrentPage();
             updatePaginationButtons();
