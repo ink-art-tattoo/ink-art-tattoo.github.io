@@ -27,7 +27,7 @@
         }
         
         :root {
-            --primary: #5da7b6;
+            --primary: #c0a062;
             --dark: #1a1a2e;
             --light: #f8f9fa;
             --success: #28a745;
@@ -37,7 +37,7 @@
         }
         
         body {
-            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            background: linear-gradient(135deg, #1a1a2e, #1b1e25);
             color: var(--light);
             min-height: 100vh;
             display: flex;
@@ -121,7 +121,7 @@
         
         .avatar-container:hover .avatar-image {
             transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(93, 167, 182, 0.7);
+            box-shadow: 0 0 20px var(--primary);
         }
         
         .user-info {
@@ -550,7 +550,7 @@
         }
         
         ::-webkit-scrollbar-thumb:hover {
-            background: #4c919e;
+            background: var(--primary);
         }
         
         .rating-stars {
@@ -888,7 +888,7 @@
         
         .logo-text span {
             font-family: 'Gothice';
-            color: #6CB4C1;
+            color: var(--primary);
         }
         
         /* Nuevo estilo para el botón de volver en el login */

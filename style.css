@@ -11,7 +11,7 @@
     
     :root {
             --color-primary: #111111;
-            --color-secondary: #6CB4C1;
+            --color-secondary: #c0a062;
             --color-accent: #f8f9fa;
             --color-text: #333333;
             --color-light: #f5f5f5;
@@ -21,12 +21,13 @@
             --transition-speed: 0.4s;
             --menu-bg: rgba(201, 201, 201, 0.95);
             --transition: all 0.4s ease;
+            --referencia: #6CB4C1;
         }
         
         /* Dark Mode Variables */
         .dark-mode {
             --color-primary: #f0f0f0;
-            --color-secondary: #5da7b6;
+            --color-secondary: #c0a062;
             --color-accent: #1a1a1a;
             --color-text: #e0e0e0;
             --color-light: #121212;
@@ -355,18 +356,18 @@
             height: 100vh;
             display: flex;
             align-items: center;
-            justify-content: center;
+            justify-content: left;
             position: relative;
-            background: linear-gradient(to top, rgba(255, 255, 255, 0.342), rgba(94, 91, 91, 0.788)),
-                        url('/imgs/fondo.jpg') no-repeat center center/cover;
+            background: linear-gradient(to left, rgba(255,255,255,0), rgba(255,255,255,0.648)),
+                        url('/imgs/img-new/1.jpg') no-repeat center center/cover;
             padding: 0 5%;
             overflow: hidden;
             
         }
         
         .dark-mode .hero {
-            background: linear-gradient(to top, rgba(18, 18, 18, 0.7), rgba(18, 18, 18, 0.9)),
-                        url('/imgs/fondo.jpg') no-repeat center center/cover;
+            background: 
+                        url('/imgs/img-new/1.jpg') no-repeat center center/cover;
                         
         
             }
@@ -430,7 +431,7 @@
             margin-top: 50px;
             animation: bounce 2s infinite;
             transform: translateY(0);
-            opacity: 1;
+            opacity: 0;
             transition: all 0.8s ease 0.2s;
             color: var(--color-secondary);
         }
@@ -1116,7 +1117,8 @@
         
         /* Nuevo Footer Moderno */
         footer {
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            background: linear-gradient(to right, rgba(17, 17, 17, 0.9), rgba(34, 34, 34, 0.9)), 
+                        url('/imgs/img-new/3.jpg') no-repeat center center/cover;
             color: #f8fafc;
             padding: 4rem 5% 0;
             position: relative;
@@ -1124,7 +1126,8 @@
         }
         
         .dark-mode footer {
-            background: linear-gradient(135deg, #0a0f1d 0%, #141b2d 100%);
+            background: linear-gradient(to right, rgba(17, 17, 17, 0.9), rgba(34, 34, 34, 0.9)), 
+                        url('/imgs/img-new/3.jpg') no-repeat center center/cover;
         }
         
         .footer-container {
@@ -1152,7 +1155,7 @@
         }
         
         .footer-logo span {
-            color: #6CB4C1;
+            color: var(--color-secondary);
         }
         
         .footer-description {
@@ -1175,7 +1178,7 @@
             position: absolute;
             width: 50px;
             height: 2px;
-            background-color: #6CB4C1;
+            background-color: var(--color-secondary);
             bottom: 0;
             left: 0;
         }
@@ -1196,13 +1199,13 @@
         
         .footer-links li a i {
             margin-right: 10px;
-            color: #6CB4C1;
+            color: var(--color-secondary);
             font-size: 0.9rem;
             transition: transform 0.3s;
         }
         
         .footer-links li a:hover {
-            color: #6CB4C1;
+            color: var(--color-secondary);
         }
         
         .footer-links li a:hover i {
@@ -1218,7 +1221,7 @@
         
         .footer-contact li i {
             margin-right: 10px;
-            color: #6CB4C1;
+            color: var(--color-secondary);
             font-size: 1.1rem;
             margin-top: 4px;
         }
@@ -1238,7 +1241,7 @@
         
         .footer-hours li i {
             margin-right: 10px;
-            color: #6CB4C1;
+            color: white;
             font-size: 1.1rem;
             margin-top: 4px;
         }
@@ -1270,9 +1273,9 @@
         }
         
         .footer-social-icons .social-icon:hover {
-            background: #6CB4C1;
+            background: var(--color-secondary);
             transform: translateY(-5px);
-            border-color: #6CB4C1;
+            border-color: var(--color-secondary);
         }
         
         .footer-bottom {
@@ -1420,7 +1423,7 @@
         }
         
         .dark-mode .cookie-table th {
-            background-color: #5da7b6;
+            background-color: var(--color-secondary);
         }
         
         .cookie-table tr:nth-child(even) {
@@ -2305,13 +2308,14 @@
             overflow: hidden;
         }
         .dark-mode .review-card { 
-          background: #2e2e2e;
+          background: linear-gradient(to right, rgba(17, 17, 17, 0.9), rgba(34, 34, 34, 0.9)), 
+                        url('/imgs/img-new/3.jpg') no-repeat center center/cover;
           
         }
 
         .review-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 15px 30px #6CB4C1;
+            box-shadow: 0 15px 30px var(--color-secondary);
         }
 
         .review-card::before {
@@ -2321,7 +2325,7 @@
             left: 0;
             width: 5px;
             height: 100%;
-            background: linear-gradient(to bottom, #6CB4C1);
+            background: linear-gradient(to bottom, var(--color-secondary));
         }
 
         .review-header {
@@ -2630,14 +2634,14 @@
             font-family: 'Montserrat', sans-serif;
             font-size: 24px;
             margin-bottom: 10px;
-            background: linear-gradient(to right, #6CB4C1);
+            background: linear-gradient(to right, var(--color-secondary));
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
         }
         
         .modal-content p {
-            color: var(--color-primary);
+            color: white;
             font-size: 16px;
             line-height: 1.6;
         }
@@ -2649,6 +2653,7 @@
             max-width: 500px;
             width: 100%;
             font-size: 3rem;
+            color: white;
         }
         
         /* Paginación */
@@ -2760,6 +2765,32 @@
         }
 
         @media (max-width: 480px) {
+          
+          .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            background: linear-gradient(to top, rgba(228,226,223,0.453), rgba(153,153,153,0.408)),
+                        url('/imgs/back.png') no-repeat center center/cover;
+            padding: 0 5%;
+            overflow: hidden;
+            
+        }
+          
+          
+          .dark-mode .hero {
+            background: linear-gradient(to top, rgba(18,18,18,0.466), rgba(18,18,18,0.68)),
+                        url('/imgs/back.png') no-repeat center center/cover;
+                        
+        
+            }
+            
+            .scroll-indicator {
+            opacity: 1;
+        }
+          
             .review-header {
                 flex-direction: column;
                 gap: 15px;
